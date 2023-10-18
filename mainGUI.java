@@ -3,12 +3,18 @@ package COMP603_ProjectGroup13_GUI;
 import COMP603_ProjectGroup13.*;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,20 +23,23 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
 
 public class mainGUI {
 
     private ProductList productList;
-//    private Product product;
+    private Product product;
     private HashMap<String, Product> product_records;
     private Map<String, String> productCategories;
     private JFrame frame;
     private JPanel mainPanel;
     private JPanel cartPanel;
-    private DefaultListModel<String> cartProductList;
+    private DefaultListModel<Product> cartProductList;
+    private JList<Product> cartList;
     private CardLayout mainLayout;
     private JPanel pageControlPanel;
 
@@ -49,7 +58,6 @@ public class mainGUI {
 
     private JPanel createMainPanel() {
         mainPanel = new JPanel(new BorderLayout());
-        frame.add(mainPanel);
 
         pageControlPanel = new JPanel();
         mainLayout = new CardLayout();
@@ -63,12 +71,12 @@ public class mainGUI {
 
 //        JPanel logoutPanel = createExitPanel();
 //        cardPanel.add(exitPanel, "Exit");
-
         mainPanel.add(pageControlPanel, BorderLayout.CENTER);
 
         // Add Button Panel at the bottom
         JPanel buttonPanel = createButtonPanel();
         frame.add(buttonPanel, BorderLayout.SOUTH);
+        frame.add(mainPanel);
 
         return mainPanel;
     }
@@ -92,13 +100,13 @@ public class mainGUI {
 
     private JPanel createPurchasePanel() {
         JPanel purchasePanel = new JPanel(new BorderLayout());
-        frame.setSize(800, 600);
+        frame.setSize(900, 600);
         frame.setLocationRelativeTo(null);
 
         JPanel categoriesPanel = addProductsCatagories();
         purchasePanel.add(categoriesPanel, BorderLayout.WEST);
         this.addCartPanel();
-        
+
         JPanel removePanel = this.removeProductFromCart();
         purchasePanel.add(removePanel, BorderLayout.EAST);
 
@@ -111,7 +119,7 @@ public class mainGUI {
         // Remove selected item from the cartListModel
         cartPanel = new JPanel(new BorderLayout());
         cartProductList = new DefaultListModel<>();
-        JList<String> cartList = new JList<>(cartProductList);
+        JList<Product> cartList = new JList<>(cartProductList);
         cartPanel.add(new JScrollPane(cartList), BorderLayout.CENTER);
 
         JButton removeButton = new JButton("Remove Product");
@@ -134,17 +142,6 @@ public class mainGUI {
         return removePanel;
     }
 
-    private JPanel returnButton() {
-        JPanel returnPanel = new JPanel();
-
-        // Add a return button
-        JButton returnButton = new JButton("Return to Categories");
-        returnButton.addActionListener(e -> mainLayout.show(pageControlPanel, "Categories"));
-
-        returnPanel.add(returnButton, BorderLayout.SOUTH);
-
-        return returnPanel;
-    }
 
     private JPanel createPaymentPanel() {
         JPanel paymentPanel = new JPanel(new BorderLayout());
@@ -199,7 +196,7 @@ public class mainGUI {
 
     private JPanel addProductsCatagories() {
         JPanel categoriesPanel = new JPanel(new GridLayout(4, 2));
-        
+
         productList = new ProductList();
         product_records = productList.getProduct_records();
 
@@ -232,9 +229,20 @@ public class mainGUI {
         return categoriesPanel;
     }
 
+    private JPanel returnButton() {
+        JPanel returnPanel = new JPanel();
+
+        // Add a return button
+        JButton returnButton = new JButton("Return to Categories");
+        returnButton.addActionListener(e -> mainLayout.show(pageControlPanel, "Categories"));
+
+        returnPanel.add(returnButton, BorderLayout.SOUTH);
+
+        return returnPanel;
+    }
+    
     private void showDetailedProductPanel(String categoryId) {
         JPanel productPanel = new JPanel(new GridLayout(0, 2));
-//        Product productDetail;
 
         for (Product products : product_records.values()) {
             if (products.getItem_id().contains(categoryId)) {
@@ -242,50 +250,41 @@ public class mainGUI {
                 productButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-//                        productDetail = new Product(products.getItem_id(), products.getItem(), products.getItemPrice(), String.valueOf(product.get_quantity()));
-                        String itemName = products.getItem();
-                        cartProductList.addElement(itemName);
-                        updateCartPanel();
+                        addToCart(products.getItem_id(), products.getItem(), products.getItemPrice(), products.getCategory());
                     }
                 });
                 productPanel.add(productButton);
             }
         }
-        
+
         JPanel returnPanel = this.returnButton();
-        productPanel.add(returnPanel);         
+        productPanel.add(returnPanel, BorderLayout.SOUTH);
 
         pageControlPanel.removeAll();
         pageControlPanel.add(new JScrollPane(productPanel), "Products");
         pageControlPanel.revalidate();
-        pageControlPanel.repaint();    
+        pageControlPanel.repaint();
+    }
+
+    private DefaultListModel<Product> addToCart(String itemId, String itemName, double itemPrice, String categories) {
+        product = new Product(itemId, itemName, itemPrice, categories);
+        cartProductList.addElement(product);
+        cartList.setModel(cartProductList);
+        return cartProductList;
     }
 
     private void addCartPanel() {
         cartPanel = new JPanel(new BorderLayout());
-        cartPanel.setPreferredSize(new Dimension(250, 600));
+        cartPanel.setPreferredSize(new Dimension(400, 600));
         cartProductList = new DefaultListModel<>();
-        JList<String> cartList = new JList<>(cartProductList);
+        cartList = new JList<>(cartProductList);
         JScrollPane scrollPane = new JScrollPane(cartList);
 
         cartPanel.add(scrollPane, BorderLayout.CENTER);
 
         frame.add(cartPanel, BorderLayout.EAST);
     }
-    
-    private void updateCartPanel() {
-        
-        cartPanel.removeAll();
 
-        // Add the updated cart items to the cart panel
-        JList<String> cartList = new JList<>(cartProductList);
-        JScrollPane scrollPane = new JScrollPane(cartList);
-        cartPanel.add(scrollPane, BorderLayout.CENTER);
-
-        cartPanel.revalidate();
-        cartPanel.repaint();
-    }
-    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new mainGUI());
     }
