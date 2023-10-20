@@ -29,7 +29,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-public class mainGUI {
+public class SaleProcessGUI {
 
     private ProductList productList;
     private Product product;
@@ -43,7 +43,7 @@ public class mainGUI {
     private CardLayout mainLayout;
     private JPanel pageControlPanel;
 
-    public mainGUI() {
+    public SaleProcessGUI() {
         initializeFrame();
         createMainPanel();
         frame.setVisible(true);
@@ -286,6 +286,6 @@ public class mainGUI {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new mainGUI());
+        SwingUtilities.invokeLater(() -> new SaleProcessGUI());
     }
 }
