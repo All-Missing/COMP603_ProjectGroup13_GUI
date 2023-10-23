@@ -229,19 +229,32 @@ public class SaleProcessGUI {
         return categoriesPanel;
     }
 
+//    private JPanel returnButton() {
+//        JPanel returnPanel = new JPanel();
+//
+//        // Add a return button
+//        JButton returnButton = new JButton("Return to Categories");
+//        returnButton.addActionListener(e -> mainLayout.show(pageControlPanel, "Categories"));
+//
+//        returnPanel.add(returnButton, BorderLayout.SOUTH);
+//
+//        return returnPanel;
+//    }
+    
     private JPanel returnButton() {
         JPanel returnPanel = new JPanel();
-
+        
+        
         // Add a return button
         JButton returnButton = new JButton("Return to Categories");
         returnButton.addActionListener(e -> mainLayout.show(pageControlPanel, "Categories"));
 
-        returnPanel.add(returnButton, BorderLayout.SOUTH);
+        returnPanel.add(returnButton); // Add the returnButton to the returnPanel
+        return returnPanel; // Return the returnPanel
+}
 
-        return returnPanel;
-    }
     
-    private void showDetailedProductPanel(String categoryId) {
+        private void showDetailedProductPanel(String categoryId) {
         JPanel productPanel = new JPanel(new GridLayout(0, 2));
 
         for (Product products : product_records.values()) {
@@ -265,6 +278,7 @@ public class SaleProcessGUI {
         pageControlPanel.revalidate();
         pageControlPanel.repaint();
     }
+
 
     private DefaultListModel<Product> addToCart(String itemId, String itemName, double itemPrice, String categories) {
         product = new Product(itemId, itemName, itemPrice, categories);
