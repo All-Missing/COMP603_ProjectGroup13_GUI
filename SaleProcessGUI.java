@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class mainGUI {
+public class SaleProcessGUI {
 
     private PurchaseGUI purchaseGUI;
     private PaymentGUI paymentGUI;
@@ -14,8 +14,8 @@ public class mainGUI {
     private Control control;
     private JFrame frame;
     private JPanel mainPanel;
-
-    public mainGUI() {
+    
+    public SaleProcessGUI() {
         this.control = new Control();
         this.cartGUI = new CartGUI(control);
         this.purchaseGUI = new PurchaseGUI(control, cartGUI);
@@ -80,6 +80,6 @@ public class mainGUI {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new mainGUI());
+        SwingUtilities.invokeLater(() -> new SaleProcessGUI());
     }
 }

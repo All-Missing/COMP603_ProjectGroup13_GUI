@@ -1,0 +1,116 @@
+package COMP603_ProjectGroup13_GUI;
+
+import COMP603_ProjectGroup13.Staff_Record;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JFrame;
+import javax.swing.*;
+
+public class LoginGUI extends JFrame {
+    
+    private static final int ROW_AREA = 10;
+    private static final int COLUMN_AREA = 20;
+    
+    private JTextArea logArea;    
+    private JComboBox<String> nameCombo;
+    private JTextField userNameField;
+    private JPasswordField pwdField;
+    private JButton loginButton;
+    private JButton clearButton;  
+    private JLabel userNameLabel;
+    private JLabel userPwdLabel;
+    private JPanel northPanel;
+    private JPanel southPanel;
+    private Staff_Record staffRecord;
+    
+    public LoginGUI() {
+        staffRecord = new Staff_Record();
+        initComponents();
+        initPanels();
+        initActionPerforms();
+    }
+    
+    //Gather components
+    public void initComponents() {                     
+        userNameLabel = new JLabel("UserName:", SwingConstants.RIGHT);                        
+        userPwdLabel = new JLabel("Password:", SwingConstants.RIGHT);
+        userNameField = new JTextField();
+        pwdField = new JPasswordField();
+        logArea = new JTextArea(ROW_AREA, COLUMN_AREA);        
+        loginButton = new JButton("Login");
+        clearButton = new JButton("Clear");                
+    }
+    
+    //Initialize JPanel
+    public void initPanels() {            
+        
+        //North JPanel
+        northPanel = new JPanel();
+        northPanel.setLayout(new GridLayout(2, 2));
+        northPanel.add(userNameLabel);
+        northPanel.add(userNameField);
+        northPanel.add(userPwdLabel);
+        northPanel.add(pwdField);                
+        add(northPanel, BorderLayout.NORTH);
+        
+        //Center JPanel
+        JScrollPane scrollPane = new JScrollPane(logArea);
+        add(scrollPane, BorderLayout.CENTER);
+        
+        //South JPanel
+        southPanel = new JPanel();
+        southPanel.setLayout(new GridLayout(1, 2));
+        southPanel.add(loginButton);
+        southPanel.add(clearButton);        
+        add(southPanel, BorderLayout.SOUTH);
+        
+        this.setSize(400, 400);
+        this.setTitle("Staff Login");
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setVisible(true);
+    }
+    
+    //Initialize actionListeners 
+    public void initActionPerforms() {
+        //Register login button
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                boolean isLoginValid = false;                                 
+                HashMap<String, String> staffList = staffRecord.getStaff_list();
+                for (Map.Entry<String, String> entry: staffList.entrySet()) {
+                    String userName = entry.getKey();
+                    String userPwd = entry.getValue();
+                    if (userName.equalsIgnoreCase(userNameField.getText().trim()) && userPwd.equals(pwdField.getText().trim())) {
+                        System.out.println("Login succeed");
+                        logArea.append("This user name:"+userNameField.getText()+" login succeed!\n");
+                        isLoginValid = true;
+                        break;
+                    }                                                            
+                }
+                if (!isLoginValid)
+                    logArea.append("Login failed! Please check your username and password again!\n");               
+            }
+        });
+        
+        //Register clear button
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logArea.setText("");
+            }
+        });
+    }
+    
+    public static void main(String[] args) {
+        LoginGUI guiFrame = new LoginGUI();
+    }
+        
+}
+
