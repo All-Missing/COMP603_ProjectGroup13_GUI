@@ -27,6 +27,10 @@ public class Control {
         this.mainLayout = new CardLayout();
         this.pageControlPanel.setLayout(mainLayout);
     }
+    
+    public int incrementCardOrderId(int orderID){
+        return this.cartOrderID++;
+    }
 
     public int getCartOrderID() {
         return cartOrderID;

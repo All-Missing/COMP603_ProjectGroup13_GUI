@@ -38,7 +38,7 @@ public class CartGUI {
     public JList<Product> getCartList() {
         return this.cartList;
     }
-    
+
     public String cartOutputString() {
         StringBuilder cartTable = new StringBuilder();
         cartTable.append(" CartID: 1\n");
@@ -76,7 +76,7 @@ public class CartGUI {
         this.addToCart("SA002", "Foods in the", 2.34, "Product");
 
         cartTextArea = new JTextArea();
-        cartTextArea.setEditable(false);
+//        cartTextArea.setEditable(false);
         control.setFont(cartTextArea);
         this.updateCartProductList();
 
@@ -135,6 +135,7 @@ public class CartGUI {
 
             if (response == JOptionPane.YES_OPTION) {
                 this.getCartProductList().removeAllElements();
+                this.updateCartProductList();
                 JOptionPane.showMessageDialog(cartPanel,
                         "All products has been removed from the cart.",
                         "Cart Cleared", JOptionPane.INFORMATION_MESSAGE);
