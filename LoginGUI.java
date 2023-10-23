@@ -110,6 +110,8 @@ public class LoginGUI extends JFrame {
                         saleProcessGUI = new SaleProcessGUI();
 
                         //When log out, this area should be able to read log out succeed.
+                        
+                        //When log out, this area should be able to read log out succeed. Implement this
                         isLoginValid = true;
                         break;
                     }

@@ -76,6 +76,8 @@ public class SaleProcessGUI {
         JButton exitButton = control.createButton("Exit");
 
 //        purchaseButton.addActionListener(e -> control.showCard("Login"));
+        
+        
         purchaseButton.addActionListener(e -> control.showCard("Purchase"));
         paymentButton.addActionListener(e -> control.showCard("Payment"));
         exitButton.addActionListener(e -> control.showCard("Exit"));
@@ -83,6 +85,7 @@ public class SaleProcessGUI {
 //        buttonPanel.add(loginButton);
         buttonPanel.add(purchaseButton);
         buttonPanel.add(paymentButton);
+        //add searching features 
         buttonPanel.add(exitButton);
         return buttonPanel;
     }
