@@ -64,7 +64,6 @@ public class CartGUI {
     public DefaultListModel<Product> addToCart(String itemId, String itemName, double itemPrice, String categories) {
         this.product = new Product(itemId, itemName, itemPrice, categories);
         this.cartProductList.addElement(product);
-//        this.cartList.setModel(cartProductList);
         this.updateCartProductList();
         return cartProductList;
     }
@@ -76,7 +75,7 @@ public class CartGUI {
         this.addToCart("SA002", "Foods in the", 2.34, "Product");
 
         cartTextArea = new JTextArea();
-//        cartTextArea.setEditable(false);
+        cartTextArea.setEditable(false);
         control.setFont(cartTextArea);
         this.updateCartProductList();
 
