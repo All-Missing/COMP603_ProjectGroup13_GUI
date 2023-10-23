@@ -14,11 +14,13 @@ public class SaleProcessGUI {
     private Control control;
     private JFrame frame;
     private JPanel mainPanel;
+//    private LoginGUI loginGUI;
 
 
     public SaleProcessGUI() {
         this.control = new Control();
         this.cartGUI = new CartGUI(control);
+//        this.loginGUI = new LoginGUI();
         this.purchaseGUI = new PurchaseGUI(control, cartGUI);
         this.paymentGUI = new PaymentGUI(control, cartGUI);
         initializeFrame();
@@ -54,10 +56,12 @@ public class SaleProcessGUI {
     }
 
     public void createPage() {
+//        JPanel loginPanel = loginGUI.createLoginPanel();
         JPanel purchasePanel = purchaseGUI.createPurchasePanel();
         JPanel paymentPanel = paymentGUI.createPaymentPanel();
 //        JPanel logoutPanel = createExitPanel();
 
+//        control.addPagePanel(loginPanel, "Login");
         control.addPagePanel(purchasePanel, "Purchase");
         control.addPagePanel(paymentPanel, "Payment");
 //        this.addPagePanel(logoutPanel, "LogOut");
@@ -66,14 +70,17 @@ public class SaleProcessGUI {
     //login, purchase, payment, exit buttons
     public JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel();
+//        JButton loginButton = control.createButton("Login");
         JButton purchaseButton = control.createButton("Purchase");
         JButton paymentButton = control.createButton("Payment");
         JButton exitButton = control.createButton("Exit");
 
+//        purchaseButton.addActionListener(e -> control.showCard("Login"));
         purchaseButton.addActionListener(e -> control.showCard("Purchase"));
         paymentButton.addActionListener(e -> control.showCard("Payment"));
         exitButton.addActionListener(e -> control.showCard("Exit"));
 
+//        buttonPanel.add(loginButton);
         buttonPanel.add(purchaseButton);
         buttonPanel.add(paymentButton);
         buttonPanel.add(exitButton);

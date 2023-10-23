@@ -45,7 +45,7 @@ public class PaymentGUI {
         //test
         JButton purchaseButton = control.createButton("product");
         purchaseButton.addActionListener(e -> cartGUI.addToCart("SA001", "Foos", 2.3, "Product"));
-        
+
         JButton cancelCartButton = control.createButton("Cancel Cart");
         cancelCartButton.addActionListener(e -> cancelCart());
 
@@ -56,7 +56,7 @@ public class PaymentGUI {
         buttonPanel.add(cashButton, BorderLayout.WEST);
         buttonPanel.add(refundButton);
         buttonPanel.add(cancelCartButton);
-        
+
         //test
         buttonPanel.add(purchaseButton);
 
@@ -118,6 +118,7 @@ public class PaymentGUI {
 
         if (cancelCartPrompt == JOptionPane.YES_OPTION) {
             cartGUI.getCartProductList().clear();
+            cartGUI.updateCartProductList();
 //            updateCartPanel();
         }
     }

@@ -76,6 +76,7 @@ public class Control {
         return button;
     }
 
+    //bug return button not working
     public JPanel returnButton() {
         JPanel returnPanel = new JPanel();
 

@@ -33,12 +33,24 @@ public class PurchaseGUI {
 
         JPanel categoriesPanel = addProductsCatagories();
         purchasePanel.add(categoriesPanel, BorderLayout.CENTER);
+        
+        //add reserch here 
+        JPanel reserchPanel = this.addReserchFunction();
+        purchasePanel.add(reserchPanel, BorderLayout.SOUTH);
+        
 //        JPanel categoriesPanel = addProductPanel("SA");
 //        purchasePanel.add(categoriesPanel, BorderLayout.CENTER);
         
         return purchasePanel;
     }
-
+    
+    public JPanel addReserchFunction() {
+        JPanel reserchPanel = new JPanel(new BorderLayout());
+        
+        
+        return reserchPanel;
+    }
+    
     public JPanel addProductsCatagories() {
         JPanel categoriesPanel = new JPanel(new GridLayout(4, 2));
 
