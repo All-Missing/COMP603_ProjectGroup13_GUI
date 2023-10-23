@@ -42,6 +42,10 @@ public class PaymentGUI {
         JButton cashButton = control.createButton("Cash");
         cashButton.addActionListener(e -> handleCardPayment());
 
+        //test
+        JButton purchaseButton = control.createButton("product");
+        purchaseButton.addActionListener(e -> cartGUI.addToCart("SA001", "Foos", 2.3, "Product"));
+        
         JButton cancelCartButton = control.createButton("Cancel Cart");
         cancelCartButton.addActionListener(e -> cancelCart());
 
@@ -52,6 +56,9 @@ public class PaymentGUI {
         buttonPanel.add(cashButton, BorderLayout.WEST);
         buttonPanel.add(refundButton);
         buttonPanel.add(cancelCartButton);
+        
+        //test
+        buttonPanel.add(purchaseButton);
 
         return buttonPanel;
     }
@@ -74,6 +81,7 @@ public class PaymentGUI {
                 saveFileRecordGUI.addCashierRecord(cartOrderId, cartGUI.getCartProductList());
                 saveFileRecordGUI.updateCashierRecord();
                 cartGUI.getCartProductList().removeAllElements();
+                control.incrementCardOrderId(Integer.valueOf(cartOrderId));
                 cartGUI.updateCartProductList();
             } else {
                 int option = JOptionPane.showConfirmDialog(cardPayment,
