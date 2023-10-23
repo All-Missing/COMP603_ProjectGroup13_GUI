@@ -15,6 +15,7 @@ public class SaleProcessGUI {
     private JFrame frame;
     private JPanel mainPanel;
 
+
     public SaleProcessGUI() {
         this.control = new Control();
         this.cartGUI = new CartGUI(control);

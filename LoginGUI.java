@@ -27,9 +27,9 @@ public class LoginGUI extends JFrame {
     private JPanel northPanel;
     private JPanel southPanel;
     private Staff_Record staffRecord;
+    private SaleProcessGUI saleProcessGUI;
     
     public LoginGUI() {
-        staffRecord = new Staff_Record();
         initComponents();
         initPanels();
         initActionPerforms();
@@ -81,15 +81,20 @@ public class LoginGUI extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                staffRecord = new Staff_Record();
+                HashMap<String, String> staffList = staffRecord.getStaff_list();
                 
                 boolean isLoginValid = false;                                 
-                HashMap<String, String> staffList = staffRecord.getStaff_list();
                 for (Map.Entry<String, String> entry: staffList.entrySet()) {
                     String userName = entry.getKey();
                     String userPwd = entry.getValue();
+                    //Check username and password login
                     if (userName.equalsIgnoreCase(userNameField.getText().trim()) && userPwd.equals(pwdField.getText().trim())) {
                         System.out.println("Login succeed");
                         logArea.append("This user name:"+userNameField.getText()+" login succeed!\n");
+                        saleProcessGUI = new SaleProcessGUI();
+                        
+                        //When log out, this area should be able to read log out succeed.
                         isLoginValid = true;
                         break;
                     }                                                            
