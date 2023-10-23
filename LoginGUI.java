@@ -94,7 +94,7 @@ public class LoginGUI extends JFrame {
                         logArea.append("This user name:"+userNameField.getText()+" login succeed!\n");
                         saleProcessGUI = new SaleProcessGUI();
                         
-                        //When log out, this area should be able to read log out succeed.
+                        //When log out, this area should be able to read log out succeed. Implement this
                         isLoginValid = true;
                         break;
                     }                                                            
