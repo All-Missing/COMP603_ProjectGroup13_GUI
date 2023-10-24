@@ -44,6 +44,9 @@ public class PaymentGUI {
 
         JButton cashButton = control.createButton("Cash");
         cashButton.addActionListener(e -> handleCardPayment());
+        
+        JButton refundButton = control.createButton("Refund");
+        cashButton.addActionListener(e -> refund());
 
         JButton cancelCartButton = control.createButton("Cancel Cart");
         cancelCartButton.addActionListener(e -> cancelCart());
@@ -51,9 +54,12 @@ public class PaymentGUI {
         //test
         JButton purchaseButton = control.createButton("product");
         purchaseButton.addActionListener(e -> cartGUI.addToCart("SA001", "Foos", 2.3, "Product"));
+
         buttonPanel.add(cardButton, BorderLayout.WEST);
         buttonPanel.add(cashButton, BorderLayout.WEST);
+        buttonPanel.add(refundButton, BorderLayout.WEST);
         buttonPanel.add(cancelCartButton,BorderLayout.WEST);
+
         //test
         buttonPanel.add(purchaseButton);
 
@@ -101,6 +107,10 @@ public class PaymentGUI {
     public void handleCashPayment() {
         double totalCost = control.calculateTotalCost(cartGUI.getCartProductList());
 
+    }
+    
+    public void refund() {
+        this.saveFileRecordGUI.getRefundOrder();
     }
 
     public void cancelCart() {

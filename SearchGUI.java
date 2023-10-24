@@ -1,7 +1,7 @@
 package COMP603_ProjectGroup13_GUI;
 
 import COMP603_ProjectGroup13.Product;
-import COMP603_ProjectGroup13_DB.RetrieveCashierDB;
+//import COMP603_ProjectGroup13_DB.RetrieveCashierDB;
 import java.awt.GridLayout;
 import java.util.List;
 import javax.swing.JLabel;
@@ -11,11 +11,11 @@ import javax.swing.JPanel;
 public class SearchGUI {
     
     private List<Product> productListDB;
-    private RetrieveCashierDB retrieveDB;
+//    private RetrieveCashierDB retrieveDB;
     
     
     public SearchGUI() {
-        productListDB = retrieveDB.RetrieveProductList();
+//        productListDB = retrieveDB.RetrieveProductList();
         
     }
     

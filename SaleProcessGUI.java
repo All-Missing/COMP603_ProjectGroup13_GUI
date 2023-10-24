@@ -27,6 +27,7 @@ public class SaleProcessGUI {
         frame = new JFrame("Sale Process");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(900, 600);        
+        frame.setLocationRelativeTo(null);
         createMainPanel();
 //        addCategoriesPanel();
         frame.setVisible(true);

@@ -2,7 +2,7 @@ package COMP603_ProjectGroup13_GUI;
 
 import COMP603_ProjectGroup13.Product;
 import COMP603_ProjectGroup13.ProductList;
-import COMP603_ProjectGroup13_DB.RetrieveCashierDB;
+//import COMP603_ProjectGroup13_DB.RetrieveCashierDB;
 import COMP603_ProjectGroup13.Product;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -22,7 +22,7 @@ public class PurchaseGUI {
 
     private Map<String, String> productCategories;
     private ProductList productList;
-    private RetrieveCashierDB retrieveDB;
+//    private RetrieveCashierDB retrieveDB;
     private List<Product> productListDB;
     private HashMap<String, Product> product_records;
     private Control control;
@@ -36,7 +36,7 @@ public class PurchaseGUI {
         this.productCategories = new HashMap<>();
         this.productList = new ProductList();
         this.product_records = productList.getProduct_records();
-        this.retrieveDB = new RetrieveCashierDB();
+//        this.retrieveDB = new RetrieveCashierDB();
         this.productListDB = new ArrayList<>();
         
     }

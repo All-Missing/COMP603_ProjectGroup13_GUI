@@ -59,14 +59,14 @@ public class SaveFileRecordGUI {
     public JPanel addCheckCartRecord() {
         JPanel cartRecordPanel = new JPanel(new BorderLayout());
 
-        this.CashierRecordTextArea = new JTextArea();
-        this.CashierRecordTextArea.setEditable(true);
+        CashierRecordTextArea = new JTextArea();
         control.setFont(this.CashierRecordTextArea);
+        this.CashierRecordTextArea.setEditable(true);
 
-        JPanel refundPurchase = this.saveRemoveRefundOrder();
-        
-        cartRecordPanel.setPreferredSize(new Dimension(400, 200));
-        cartRecordPanel.add(new JScrollPane(this.CashierRecordTextArea), BorderLayout.NORTH);
+        JPanel refundPurchase = this.getRefundOrder();
+                
+        this.CashierRecordTextArea.setPreferredSize(new Dimension(400, 200));
+        cartRecordPanel.add(new JScrollPane(CashierRecordTextArea), BorderLayout.CENTER);
         cartRecordPanel.add(refundPurchase, BorderLayout.SOUTH);
 
         this.updateCashierRecord();
@@ -74,40 +74,23 @@ public class SaveFileRecordGUI {
         return cartRecordPanel;
     }
 
-    public JPanel saveRemoveRefundOrder() {
+    public JPanel getRefundOrder() {
         JPanel refundOrderPanel = new JPanel(new BorderLayout());
 
-        JButton refundOrderButton = control.createButton("Refund");
+//        JButton refundOrderButton = control.createButton("Refund");
 
-        refundOrderButton.addActionListener((ActionEvent e) -> {
-            CashierRecordTextArea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
-                    int index = CashierRecordTextArea.viewToModel2D(e.getPoint());
-                    try {
-                        int line = CashierRecordTextArea.getLineOfOffset(index);
-                        
-                        cashier_Record_List.remove(line);
-
-                    } catch (Exception ex) {
-                        System.out.println(ex);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(refundOrderPanel, "Please select an item to delete.",
-                            "Delete Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            });
+//        refundOrderButton.addActionListener((ActionEvent e) -> {
+            control.RefundOrder(CashierRecordTextArea, refundOrderPanel, refund_Record_List, cashier_Record_List);
             this.updateCashierRecord();
 
 //                    JOptionPane.showMessageDialog(refundOrderPanel, "Please selected cart for to be refund.",
 //                            "Refund Puchase", JOptionPane.ERROR_MESSAGE);
 //                }
-            refundOrderPanel.add(refundOrderButton, BorderLayout.CENTER);
+//            refundOrderPanel.add(refundOrderButton, BorderLayout.SOUTH);
 
-        });
-        return null;
+//        });
+        
+        return refundOrderPanel;
     }
 
     public String cartRecordOutputString() {
