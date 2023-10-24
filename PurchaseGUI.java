@@ -48,8 +48,8 @@ public class PurchaseGUI {
         purchasePanel.add(categoriesPanel, BorderLayout.CENTER);
         
         //add research panel here 
-        JPanel searchPanel = this.addResearchFunction();
-        purchasePanel.add(searchPanel, BorderLayout.SOUTH);
+//        JPanel searchPanel = this.addResearchFunction();
+//        purchasePanel.add(searchPanel, BorderLayout.SOUTH);
         
         
 //        JPanel categoriesPanel = addProductPanel("SA");
