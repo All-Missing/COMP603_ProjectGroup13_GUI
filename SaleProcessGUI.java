@@ -59,7 +59,7 @@ public class SaleProcessGUI {
 
     public void addPage() {
         JPanel purchasePanel = purchaseGUI.createPurchasePanel();
-        JPanel paymentPanel = paymentGUI.createPaymentButtonsPanel();
+        JPanel paymentPanel = paymentGUI.createPaymentPanel();
 //        JPanel cartPanel = cartGUI.createCartPanel();
 
         control.addPagePanel(purchasePanel, "Purchase");
