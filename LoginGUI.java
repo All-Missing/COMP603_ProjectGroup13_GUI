@@ -31,10 +31,10 @@ public class LoginGUI extends JFrame {
     private Control control;
 
     public LoginGUI() {
+        this.control = new Control();
         initComponents();
         initPanels();
         initActionPerforms();
-        this.control = new Control();
     }
 
     public JPanel createLoginPanel() {

@@ -45,20 +45,28 @@ public class PurchaseGUI {
         JPanel purchasePanel = new JPanel(new BorderLayout());
 
         JPanel categoriesPanel = addProductsCategories();        
-        purchasePanel.add(categoriesPanel, BorderLayout.CENTER);
-        
-        //add research panel here 
-//        JPanel searchPanel = this.addResearchFunction();
-//        purchasePanel.add(searchPanel, BorderLayout.SOUTH);
-        
-        
-//        JPanel categoriesPanel = addProductPanel("SA");
-//        purchasePanel.add(categoriesPanel, BorderLayout.CENTER);
-        
+        purchasePanel.add(categoriesPanel, BorderLayout.CENTER);                              
+
+        //add reserch here 
+//        JPanel reserchPanel = this.addReserchFunction();
+//        purchasePanel.add(reserchPanel, BorderLayout.SOUTH);
+//        control.addPagePanel(purchasePanel, "Purchase");
+
+        control.addPagePanel(categoriesPanel, "Categories");
+
         return purchasePanel;
     }
          
+
+
+    public JPanel addReserchFunction() {
+        JPanel reserchPanel = new JPanel(new BorderLayout());
+
+        return reserchPanel;
+    }
+
     public JPanel addProductsCategories() {
+        JPanel managePanel = new JPanel(new BorderLayout());
         JPanel categoriesPanel = new JPanel(new GridLayout(4, 2));
         
         productCategories.put("PI", "Pies");
@@ -75,24 +83,22 @@ public class PurchaseGUI {
             String categoryName = entry.getValue();
 
             JButton categoryButton = control.createButton(categoryName);
-            categoryButton.addActionListener((ActionEvent e) -> {
-                addProductPanel(categoryId);
-                //Return catagories card
-                control.showCard("Categories");
-            });            
-            categoriesPanel.add(categoryButton, BorderLayout.CENTER);        
-        }                        
-        control.addPagePanel(categoriesPanel, "Categories");
-        
-        JButton returnButton = control.createButton("Return to Main");
-        returnButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                control.showCard("Categories");
-            }
-        });        
-        categoriesPanel.add(returnButton, BorderLayout.SOUTH);
-        
+            categoryButton.addActionListener((ActionEvent e) -> {            
+                try {
+                    System.out.println("Categories button is clicked");
+                    System.out.println(categoryId);
+                    JPanel productPanel = this.addProductPanel(categoryId);
+                    control.addPagePanel(productPanel, "Product");
+                    control.showCard("Product");
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
+            });
+            categoriesPanel.add(categoryButton);
+        }
+
+        managePanel.add(categoriesPanel, BorderLayout.CENTER);
+
         return categoriesPanel;
     }
 
@@ -103,37 +109,38 @@ public class PurchaseGUI {
 
         JPanel returnPanel = control.returnButton(); // Invoke the returnButton method
 
-        JPanel productContainerPanel = new JPanel(new BorderLayout());
+        JPanel productContainerPanel = new JPanel();
         productContainerPanel.add(productPanel, BorderLayout.CENTER);
         productContainerPanel.add(returnPanel, BorderLayout.SOUTH);
-
-        control.getPageControlPanel().removeAll();
-        control.addPagePanel(productContainerPanel, "Products");
-        control.getPageControlPanel().revalidate();
-        control.getPageControlPanel().repaint();
-
+        
+//        productPanel.add(productPanel, BorderLayout.CENTER);
+//        productPanel.add(returnPanel, BorderLayout.SOUTH);
+        
         return productContainerPanel;
     }
 
-
-    public void createProductButton(JPanel productPanel, String categoryId) {
+    public void createProductButton(JPanel panel, String categoryId) {
         for (Product products : product_records.values()) {
             if (products.getItem_id().contains(categoryId)) {
                 String itemName = products.getItem();
+
+                System.out.println(itemName);
+                System.out.println("Try add product button");
 
                 JButton productButton = control.createButton(itemName);
                 productButton.addActionListener((ActionEvent e) -> {
                     SwingUtilities.invokeLater(() -> {
                         try {
+                            System.out.println("Product button is clicked");
                             cartGUI.addToCart(products.getItem_id(), products.getItem(),
                                     products.getItemPrice(), products.getCategory());
                         } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(productPanel, "No product found from this categories.",
+                            JOptionPane.showMessageDialog(panel, "No product found from this categories.",
                                     "No Product Found", JOptionPane.ERROR_MESSAGE);
                         }
                     });
                 });
-                productPanel.add(productButton);
+                panel.add(productButton);
             }
         }
     }

@@ -4,7 +4,8 @@ import COMP603_ProjectGroup13.Product;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.util.Collections;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListModel;
@@ -17,10 +18,10 @@ import javax.swing.SwingUtilities;
 
 public class SaveFileRecordGUI {
 
-    private JTextArea CashierRecordTextArea;
 //    private DefaultListModel<String> cashier_Record;
     private Map<String, DefaultListModel<Product>> cashier_Record_List;
     private Map<String, Map<String, DefaultListModel<Product>>> refund_Record_List;
+    private JTextArea CashierRecordTextArea;
     private Control control;
     private CartGUI cartGUI;
 
@@ -58,13 +59,14 @@ public class SaveFileRecordGUI {
     public JPanel addCheckCartRecord() {
         JPanel cartRecordPanel = new JPanel(new BorderLayout());
 
-        CashierRecordTextArea = new JTextArea();
-        CashierRecordTextArea.setEditable(false);
-        control.setFont(CashierRecordTextArea);
+        this.CashierRecordTextArea = new JTextArea();
+        this.CashierRecordTextArea.setEditable(true);
+        control.setFont(this.CashierRecordTextArea);
 
         JPanel refundPurchase = this.saveRemoveRefundOrder();
+        
         cartRecordPanel.setPreferredSize(new Dimension(400, 200));
-        cartRecordPanel.add(new JScrollPane(CashierRecordTextArea), BorderLayout.CENTER);
+        cartRecordPanel.add(new JScrollPane(this.CashierRecordTextArea), BorderLayout.NORTH);
         cartRecordPanel.add(refundPurchase, BorderLayout.SOUTH);
 
         this.updateCashierRecord();
@@ -78,50 +80,34 @@ public class SaveFileRecordGUI {
         JButton refundOrderButton = control.createButton("Refund");
 
         refundOrderButton.addActionListener((ActionEvent e) -> {
-            for (Map.Entry<String, DefaultListModel<Product>> entry : this.getCashier_Record_List().entrySet()) {
-                String cartId = entry.getKey();
+            CashierRecordTextArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
+                    int index = CashierRecordTextArea.viewToModel2D(e.getPoint());
+                    try {
+                        int line = CashierRecordTextArea.getLineOfOffset(index);
+                        
+                        cashier_Record_List.remove(line);
 
-                String selectedOrder = this.getSelectedCart(CashierRecordTextArea);
+                    } catch (Exception ex) {
+                        System.out.println(ex);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(refundOrderPanel, "Please select an item to delete.",
+                            "Delete Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
+            this.updateCashierRecord();
 
-                if (selectedOrder != null) {
-                    this.addRefundRecord(selectedOrder, cashier_Record_List);
-                    this.getCashier_Record_List().remove(selectedOrder);
-//                    JOptionPane.showMessageDialog(refundOrderPanel, "This order has been refund.",
-//                            "Succesfully Refund", JOptionPane.ERROR_MESSAGE);
-                } 
-//                else {
 //                    JOptionPane.showMessageDialog(refundOrderPanel, "Please selected cart for to be refund.",
 //                            "Refund Puchase", JOptionPane.ERROR_MESSAGE);
 //                }
-            }
+            refundOrderPanel.add(refundOrderButton, BorderLayout.CENTER);
+
         });
-
-        refundOrderPanel.add(refundOrderButton, BorderLayout.CENTER);
-
-        return refundOrderPanel;
-    }
-
-    public String getSelectedCart(JTextArea CashierRecordTextArea) {
-        String selectedCart = this.CashierRecordTextArea.getText();
-
-        String[] lines = selectedCart.split("\n");
-
-        for (String line : lines) {
-            String[] parts = line.split(": ");
-            if (parts.length == 2) {
-                String orderId = parts[0].trim();
-                if (this.isSelected(line)) {
-                    return orderId;
-                }
-            }
-        }
-   
-    return null;
-    }
-
-
-    public boolean isSelected(String line) {
-        return false;
+        return null;
     }
 
     public String cartRecordOutputString() {

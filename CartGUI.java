@@ -3,7 +3,6 @@ package COMP603_ProjectGroup13_GUI;
 import COMP603_ProjectGroup13.Product;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.text.DecimalFormat;
 import javax.swing.DefaultListModel;
@@ -39,9 +38,14 @@ public class CartGUI {
         return this.cartList;
     }
 
+    public JTextArea getCartTextArea() {
+        return this.cartTextArea;
+    }
+
     public String cartOutputString() {
+        String currentCartID = String.valueOf(control.getCartOrderID());
         StringBuilder cartTable = new StringBuilder();
-        cartTable.append(" CartID: 1\n");
+        cartTable.append(String.format(" CartID: %-5s\n", currentCartID));
         cartTable.append(String.format(" %-35s%-10s %-5s\n", "Item", "Price", "Cost"));
 
         for (int i = 0; i < this.getCartProductList().size(); i++) {
@@ -64,19 +68,21 @@ public class CartGUI {
     public DefaultListModel<Product> addToCart(String itemId, String itemName, double itemPrice, String categories) {
         this.product = new Product(itemId, itemName, itemPrice, categories);
         this.cartProductList.addElement(product);
+        System.out.println("Product is add to cart");
         this.updateCartProductList();
         return cartProductList;
     }
 
-    public JPanel addCartPanel() {
+    public JPanel createCartPanel() {
         this.cartPanel = new JPanel(new BorderLayout());
 
         this.addToCart("SA001", "Food", 2.34, "Product");
         this.addToCart("SA002", "Foods in the", 2.34, "Product");
 
         cartTextArea = new JTextArea();
-        cartTextArea.setEditable(false);
+        cartTextArea.setEditable(true);
         control.setFont(cartTextArea);
+
         this.updateCartProductList();
 
         JPanel removePanel = this.removeProductFromCart();
@@ -98,47 +104,22 @@ public class CartGUI {
         JButton removeAllElementButton = control.createButton("Remove All Product");
 
         removeOneElementButton.addActionListener((ActionEvent e) -> {
-            removeElement();
+            control.removeElementIndex(cartTextArea, 2, cartPanel, this.getCartProductList());
+            this.updateCartProductList();
         });
 
         removeAllElementButton.addActionListener((ActionEvent e) -> {
-            removeAll();
+            control.removeAllElement(cartProductList, cartPanel);
+            this.updateCartProductList();
+            
+            JOptionPane.showMessageDialog(cartPanel,
+                        "All products has been removed from the cart.",
+                        "Cart Cleared", JOptionPane.INFORMATION_MESSAGE);
         });
 
         removePanel.add(removeOneElementButton, BorderLayout.CENTER);
         removePanel.add(removeAllElementButton, BorderLayout.SOUTH);
 
         return removePanel;
-    }
-
-    public void removeElement() {
-        int selectedIndex = this.getCartList().getSelectedIndex();
-        if (selectedIndex != -1) {
-            this.getCartProductList().removeElementAt(selectedIndex);
-        } else {
-            JOptionPane.showMessageDialog(cartPanel, "Please select an item to delete from the cart.",
-                    "Delete Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    public void removeAll() {
-        if (this.getCartProductList().isEmpty()) {
-            JOptionPane.showMessageDialog(cartPanel,
-                    "Cart is already empty.",
-                    "Empty Cart", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-
-            int response = JOptionPane.showConfirmDialog(cartPanel,
-                    "Are you sure you want to remove all products from the cart?",
-                    "Confirm Removal", JOptionPane.YES_NO_OPTION);
-
-            if (response == JOptionPane.YES_OPTION) {
-                this.getCartProductList().removeAllElements();
-                this.updateCartProductList();
-                JOptionPane.showMessageDialog(cartPanel,
-                        "All products has been removed from the cart.",
-                        "Cart Cleared", JOptionPane.INFORMATION_MESSAGE);
-            }
-        }
     }
 }
