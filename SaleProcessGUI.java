@@ -14,13 +14,10 @@ public class SaleProcessGUI {
     private Control control;
     private JFrame frame;
     private JPanel mainPanel;
-//    private LoginGUI loginGUI;
-
 
     public SaleProcessGUI() {
         this.control = new Control();
         this.cartGUI = new CartGUI(control);
-//        this.loginGUI = new LoginGUI();
         this.purchaseGUI = new PurchaseGUI(control, cartGUI);
         this.paymentGUI = new PaymentGUI(control, cartGUI);
         initializeFrame();
@@ -29,15 +26,19 @@ public class SaleProcessGUI {
     public void initializeFrame() {
         frame = new JFrame("Sale Process");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(900, 600);
-        frame.setLocationRelativeTo(null);
+        frame.setSize(900, 600);        
         createMainPanel();
+//        addCategoriesPanel();
         frame.setVisible(true);
     }
 
     public JPanel createMainPanel() {
         mainPanel = new JPanel(new BorderLayout());
 
+         // Add the "Categories" panel to the pageControlPanel
+//        JPanel categoriesPanel = new JPanel();
+//        control.addPagePanel(categoriesPanel, "Categories");
+        
         this.createPage();
 
         JPanel cartPanel = cartGUI.addCartPanel();
@@ -56,39 +57,44 @@ public class SaleProcessGUI {
     }
 
     public void createPage() {
-//        JPanel loginPanel = loginGUI.createLoginPanel();
         JPanel purchasePanel = purchaseGUI.createPurchasePanel();
         JPanel paymentPanel = paymentGUI.createPaymentPanel();
-//        JPanel logoutPanel = createExitPanel();
-
-//        control.addPagePanel(loginPanel, "Login");
+        
         control.addPagePanel(purchasePanel, "Purchase");
         control.addPagePanel(paymentPanel, "Payment");
-//        this.addPagePanel(logoutPanel, "LogOut");
     }
 
-    //login, purchase, payment, exit buttons
     public JPanel createButtonPanel() {
+        
         JPanel buttonPanel = new JPanel();
-//        JButton loginButton = control.createButton("Login");
+        
+        JButton searchButton = control.createButton("Search");
         JButton purchaseButton = control.createButton("Purchase");
         JButton paymentButton = control.createButton("Payment");
         JButton exitButton = control.createButton("Exit");
 
-//        purchaseButton.addActionListener(e -> control.showCard("Login"));
-        
-        
+        searchButton.addActionListener(e -> control.showCard("Search"));
         purchaseButton.addActionListener(e -> control.showCard("Purchase"));
         paymentButton.addActionListener(e -> control.showCard("Payment"));
         exitButton.addActionListener(e -> control.showCard("Exit"));
 
-//        buttonPanel.add(loginButton);
+        buttonPanel.add(searchButton);
         buttonPanel.add(purchaseButton);
         buttonPanel.add(paymentButton);
-        //add searching features 
         buttonPanel.add(exitButton);
+        
+        // Add a "Return to Categories" button here
+//        JButton returnButton = control.createButton("Return to Categories");
+//        returnButton.addActionListener(e -> control.showCard("Categories"));
+//        buttonPanel.add(returnButton);
+        
         return buttonPanel;
     }
+
+//    public void addCategoriesPanel() {
+//        JPanel categoriesPanel = new JPanel();
+//        control.addPagePanel(categoriesPanel, "Categories");
+//    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new SaleProcessGUI());

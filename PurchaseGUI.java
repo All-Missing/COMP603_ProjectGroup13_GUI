@@ -2,12 +2,18 @@ package COMP603_ProjectGroup13_GUI;
 
 import COMP603_ProjectGroup13.Product;
 import COMP603_ProjectGroup13.ProductList;
+import COMP603_ProjectGroup13_DB.RetrieveCashierDB;
+import COMP603_ProjectGroup13.Product;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -16,44 +22,45 @@ public class PurchaseGUI {
 
     private Map<String, String> productCategories;
     private ProductList productList;
+    private RetrieveCashierDB retrieveDB;
+    private List<Product> productListDB;
     private HashMap<String, Product> product_records;
     private Control control;
-    private CartGUI cartGUI;
-
+    private CartGUI cartGUI;   
+    private SearchGUI searchGUI;
+    
     public PurchaseGUI(Control control, CartGUI cartGUI) {
         this.control = control;
         this.cartGUI = cartGUI;
+        this.searchGUI = new SearchGUI();
         this.productCategories = new HashMap<>();
         this.productList = new ProductList();
         this.product_records = productList.getProduct_records();
+        this.retrieveDB = new RetrieveCashierDB();
+        this.productListDB = new ArrayList<>();
+        
     }
 
     public JPanel createPurchasePanel() {
         JPanel purchasePanel = new JPanel(new BorderLayout());
 
-        JPanel categoriesPanel = addProductsCatagories();
+        JPanel categoriesPanel = addProductsCategories();        
         purchasePanel.add(categoriesPanel, BorderLayout.CENTER);
         
-        //add reserch here 
-        JPanel reserchPanel = this.addReserchFunction();
-        purchasePanel.add(reserchPanel, BorderLayout.SOUTH);
+        //add research panel here 
+        JPanel searchPanel = this.addResearchFunction();
+        purchasePanel.add(searchPanel, BorderLayout.SOUTH);
+        
         
 //        JPanel categoriesPanel = addProductPanel("SA");
 //        purchasePanel.add(categoriesPanel, BorderLayout.CENTER);
         
         return purchasePanel;
     }
-    
-    public JPanel addReserchFunction() {
-        JPanel reserchPanel = new JPanel(new BorderLayout());
-        
-        
-        return reserchPanel;
-    }
-    
-    public JPanel addProductsCatagories() {
+         
+    public JPanel addProductsCategories() {
         JPanel categoriesPanel = new JPanel(new GridLayout(4, 2));
-
+        
         productCategories.put("PI", "Pies");
         productCategories.put("SA", "Savouries");
         productCategories.put("MD", "Muffins & Donuts");
@@ -70,13 +77,22 @@ public class PurchaseGUI {
             JButton categoryButton = control.createButton(categoryName);
             categoryButton.addActionListener((ActionEvent e) -> {
                 addProductPanel(categoryId);
-            });
-            categoriesPanel.add(categoryButton);
-
-        }
-
+                //Return catagories card
+                control.showCard("Categories");
+            });            
+            categoriesPanel.add(categoryButton, BorderLayout.CENTER);        
+        }                        
         control.addPagePanel(categoriesPanel, "Categories");
-
+        
+        JButton returnButton = control.createButton("Return to Main");
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                control.showCard("Categories");
+            }
+        });        
+        categoriesPanel.add(returnButton, BorderLayout.SOUTH);
+        
         return categoriesPanel;
     }
 
@@ -85,7 +101,7 @@ public class PurchaseGUI {
 
         this.createProductButton(productPanel, categoryId);
 
-        JPanel returnPanel = control.returnButton();
+        JPanel returnPanel = control.returnButton(); // Invoke the returnButton method
 
         JPanel productContainerPanel = new JPanel(new BorderLayout());
         productContainerPanel.add(productPanel, BorderLayout.CENTER);
@@ -98,6 +114,7 @@ public class PurchaseGUI {
 
         return productContainerPanel;
     }
+
 
     public void createProductButton(JPanel productPanel, String categoryId) {
         for (Product products : product_records.values()) {
@@ -120,4 +137,5 @@ public class PurchaseGUI {
             }
         }
     }
+        
 }

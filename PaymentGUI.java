@@ -28,6 +28,9 @@ public class PaymentGUI {
         JPanel paymentContainerPanel = new JPanel(new BorderLayout());
         paymentContainerPanel.add(paymentPanel);
         paymentContainerPanel.add(paymentButtonsPanel, BorderLayout.CENTER);
+        
+        JPanel returnPanel = control.returnButton();
+        paymentButtonsPanel.add(returnPanel, BorderLayout.SOUTH);
         paymentContainerPanel.add(checkPreviousCartPanel, BorderLayout.SOUTH);
 
         return paymentContainerPanel;
@@ -55,8 +58,7 @@ public class PaymentGUI {
         buttonPanel.add(cardButton, BorderLayout.WEST);
         buttonPanel.add(cashButton, BorderLayout.WEST);
         buttonPanel.add(refundButton);
-        buttonPanel.add(cancelCartButton);
-
+        buttonPanel.add(cancelCartButton);        
         //test
         buttonPanel.add(purchaseButton);
 

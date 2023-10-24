@@ -17,6 +17,7 @@ public class Control {
     private int cartOrderID = 0;
     private double totalCost;
     private CardLayout mainLayout;
+    private SaleProcessGUI saleGUI;
     private JPanel pageControlPanel;
     private Font font;
 
@@ -27,8 +28,8 @@ public class Control {
         this.mainLayout = new CardLayout();
         this.pageControlPanel.setLayout(mainLayout);
     }
-    
-    public int incrementCardOrderId(int orderID){
+
+    public int incrementCardOrderId(int orderID) {
         return this.cartOrderID++;
     }
 
@@ -59,6 +60,7 @@ public class Control {
 
     public void showCard(String cardName) {
         mainLayout.show(pageControlPanel, cardName);
+//        mainLayout.next(pageControlPanel);
     }
 
     public double calculateTotalCost(DefaultListModel<Product> cartProductList) {
@@ -76,24 +78,17 @@ public class Control {
         return button;
     }
 
-    //bug return button not working
+    // Return button should work correctly now
     public JPanel returnButton() {
         JPanel returnPanel = new JPanel();
 
         // Add a return button
-        JButton returnButton = new JButton("Return to Categories");
-        returnButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mainLayout.show(pageControlPanel, "Categories");
+        JButton returnButton = createButton("Return to Categories");
+        returnButton.addActionListener(e -> showCard("Categories"));
 
-            }
-        });
-
-//        returnButton.addActionListener(e -> mainLayout.show(pageControlPanel, "Categories"));
         returnPanel.add(returnButton);
 
         return returnPanel;
-    }
+}
 
 }
