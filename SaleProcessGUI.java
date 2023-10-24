@@ -51,7 +51,7 @@ public class SaleProcessGUI {
         // Add Button Panel at the bottom
         JPanel buttonPanel = control.createMainButtonPanel();
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-
+        
         frame.add(mainPanel, BorderLayout.CENTER);
 
         return mainPanel;

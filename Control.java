@@ -47,9 +47,7 @@ public class Control {
             String currentCart = entry.getKey();
             currentCartId = Integer.parseInt(currentCart);
             for(int i = 0; i <= currentCartId; i++)
-            {
-               this.cartOrderID = i;
-            }
+               this.cartOrderID = i;            
         }
         return this.cartOrderID;
     }
@@ -213,7 +211,6 @@ public class Control {
             }
         });
     }
-
 
     public void removeAllElement(DefaultListModel<Product> list, JPanel panel) {
         if (list.isEmpty()) {
