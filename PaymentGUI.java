@@ -25,12 +25,15 @@ public class PaymentGUI {
         JPanel paymentButtonsPanel = this.createPaymentButtonsPanel();
         JPanel checkPreviousCartPanel = saveFileRecordGUI.addCheckCartRecord();
 
-        JPanel paymentContainerPanel = new JPanel(new BorderLayout());
-        paymentContainerPanel.add(paymentPanel);
-        paymentContainerPanel.add(paymentButtonsPanel, BorderLayout.CENTER);
-        paymentContainerPanel.add(checkPreviousCartPanel, BorderLayout.SOUTH);
+//        JPanel paymentContainerPanel = new JPanel(new BorderLayout());
+//        paymentContainerPanel.add(paymentPanel, BorderLayout.WEST);
+        paymentPanel.add(paymentButtonsPanel, BorderLayout.CENTER);
+        paymentPanel.add(checkPreviousCartPanel, BorderLayout.SOUTH);
 
-        return paymentContainerPanel;
+//        control.showCard("Cart");
+//        control.addPagePanel(paymentPanel, "Payment");
+        
+        return paymentPanel;
     }
 
     public JPanel createPaymentButtonsPanel() {
@@ -42,20 +45,16 @@ public class PaymentGUI {
         JButton cashButton = control.createButton("Cash");
         cashButton.addActionListener(e -> handleCardPayment());
 
+        JButton cancelCartButton = control.createButton("Cancel Cart");
+        cancelCartButton.addActionListener(e -> cancelCart());
+        
         //test
         JButton purchaseButton = control.createButton("product");
         purchaseButton.addActionListener(e -> cartGUI.addToCart("SA001", "Foos", 2.3, "Product"));
 
-        JButton cancelCartButton = control.createButton("Cancel Cart");
-        cancelCartButton.addActionListener(e -> cancelCart());
-
-        JButton refundButton = control.createButton("Refund");
-        refundButton.addActionListener(e -> handleRefund());
-
         buttonPanel.add(cardButton, BorderLayout.WEST);
         buttonPanel.add(cashButton, BorderLayout.WEST);
-        buttonPanel.add(refundButton);
-        buttonPanel.add(cancelCartButton);
+        buttonPanel.add(cancelCartButton,BorderLayout.WEST);
 
         //test
         buttonPanel.add(purchaseButton);
@@ -66,22 +65,24 @@ public class PaymentGUI {
     public void handleCardPayment() {
         JPanel cardPayment = new JPanel(new BorderLayout());
         double totalCost = control.calculateTotalCost(cartGUI.getCartProductList());
-        String cartOrderId = Integer.toString(control.getCartOrderID());
-
+        String cartOrderId = String.valueOf(control.getCartOrderID());
+        
+        System.out.println(cartOrderId);
         String inputAmount = JOptionPane.showInputDialog(cardPayment,
                 "Total Price: $" + totalCost + "\nPayment Method: Eftpos" + "\nEnter Payment Amount:");
 
         try {
-            double paymentAmount = Double.parseDouble(inputAmount);
+            double paymentAmount = Double.valueOf(inputAmount);
 
             if (paymentAmount >= totalCost) {
                 JOptionPane.showMessageDialog(cardPayment, "Payment successful! Thank you for your purchase.",
                         "Payment Success", JOptionPane.INFORMATION_MESSAGE);
 
                 saveFileRecordGUI.addCashierRecord(cartOrderId, cartGUI.getCartProductList());
+                control.incrementedCartOrderId(saveFileRecordGUI.getCashier_Record_List());
                 saveFileRecordGUI.updateCashierRecord();
+                
                 cartGUI.getCartProductList().removeAllElements();
-                control.incrementCardOrderId(Integer.valueOf(cartOrderId));
                 cartGUI.updateCartProductList();
             } else {
                 int option = JOptionPane.showConfirmDialog(cardPayment,
@@ -104,11 +105,6 @@ public class PaymentGUI {
 
     }
 
-    public void handleRefund() {
-        double totalCost = control.calculateTotalCost(cartGUI.getCartProductList());
-
-    }
-
     public void cancelCart() {
         JPanel cancelCart = new JPanel(new BorderLayout());
 
@@ -119,8 +115,8 @@ public class PaymentGUI {
         if (cancelCartPrompt == JOptionPane.YES_OPTION) {
             cartGUI.getCartProductList().clear();
             cartGUI.updateCartProductList();
-//            updateCartPanel();
         }
     }
 
+    
 }
