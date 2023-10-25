@@ -31,8 +31,7 @@ public class PurchaseGUI {
     
     public PurchaseGUI(Control control, CartGUI cartGUI) {
         this.control = control;
-        this.cartGUI = cartGUI;
-        this.searchGUI = new SearchGUI();
+        this.cartGUI = cartGUI;        
         this.productCategories = new HashMap<>();
         this.productList = new ProductList();
         this.product_records = productList.getProduct_records();
