@@ -11,6 +11,7 @@ public class SaleProcessGUI {
     private CartGUI cartGUI;
     private PurchaseGUI purchaseGUI;
     private PaymentGUI paymentGUI;
+    private SearchGUI searchGUI;
     private JFrame frame;
     private JPanel mainPanel;
 //    private LoginGUI loginGUI;
@@ -18,6 +19,7 @@ public class SaleProcessGUI {
     public SaleProcessGUI() {
         this.control = new Control();
         this.cartGUI = new CartGUI(control);
+        this.searchGUI = new SearchGUI(control);
         this.purchaseGUI = new PurchaseGUI(control, cartGUI);
         this.paymentGUI = new PaymentGUI(control, cartGUI);
         initializeFrame();
@@ -60,8 +62,9 @@ public class SaleProcessGUI {
     public void addPage() {
         JPanel purchasePanel = purchaseGUI.createPurchasePanel();
         JPanel paymentPanel = paymentGUI.createPaymentPanel();
+        JPanel searchPanel = searchGUI.CreateSearchPanel();
 //        JPanel cartPanel = cartGUI.createCartPanel();
-
+        control.addPagePanel(searchPanel, "Search");
         control.addPagePanel(purchasePanel, "Purchase");
         control.addPagePanel(paymentPanel, "Payment");
 //        control.addPagePanel(cartPanel, "Cart");
