@@ -20,9 +20,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-
 public class SearchGUI extends JFrame {
-    
+
     private static final int ROW_AREA = 20;
     private static final int COLUMN_AREA = 40;
 
