@@ -50,41 +50,66 @@ public class SearchGUI extends JFrame {
         conn = dbManager.getCashierDBConnection();        
         this.retrieveDB = new RetrieveCashierDB();
         this.productListDB = retrieveDB.RetrieveProductList();
-        this.control = control;         
-    }
-    
-    public JPanel CreateSearchPanel() {
-        JPanel getSearchPanel = new JPanel();
-        JPanel getComponent = this.initComponents();
-        getSearchPanel.add(getComponent, BorderLayout.CENTER);        
 
-        return getSearchPanel;
+//    public JPanel initComponents() {
+//        JPanel getComponent = new JPanel();
+//        //Why I cant call control object to invoke createButton
+//        searchListButton = new JButton("Search List");
+//        searchItemButton = control.createButton("Search Item");
+//        clearButton = control.createButton("Clear");
+//        returnButton = control.createButton("Return");
+////        this.searchItemButton = new JButton("Search Item");
+////        this.clearButton = new JButton("Clear");
+////        this.returnButton = new JButton("Return");
+//        this.searchLabel = new JLabel("Search:");
+//        this.searchTextField = new JTextField(20);
+//        searchTextField.setText("Enter itemID or item name...");
+//        this.searchTextArea = new JTextArea(ROW_AREA, COLUMN_AREA);        
+//        
+//        initPanels();
+//        initActionPerforms();
+//        
+//        return getComponent;
+//    }
     }
     
-    public JPanel getSearchButtonPanel() {
-        return this.searchPanel;
-    }
-    
-    public JPanel initComponents() {
-        JPanel getComponent = new JPanel();
+    public void initComponents() {        
         //Why I cant call control object to invoke createButton
-        searchListButton = new JButton("Search List");
+        searchListButton = control.createButton("Search List");
         searchItemButton = control.createButton("Search Item");
         clearButton = control.createButton("Clear");
         returnButton = control.createButton("Return");
+
+//        this.searchListButton = new JButton("Search List");
 //        this.searchItemButton = new JButton("Search Item");
 //        this.clearButton = new JButton("Clear");
 //        this.returnButton = new JButton("Return");
         this.searchLabel = new JLabel("Search:");
         this.searchTextField = new JTextField(20);
         searchTextField.setText("Enter itemID or item name...");
-        this.searchTextArea = new JTextArea(ROW_AREA, COLUMN_AREA);        
-        
-        initPanels();
-        initActionPerforms();
-        
-        return getComponent;
+        this.searchTextArea = new JTextArea(ROW_AREA, COLUMN_AREA);         
     }
+    
+//    public JPanel initComponents() {
+//        JPanel getComponent = new JPanel();
+//        //Why I cant call control object to invoke createButton
+//        searchListButton = new JButton("Search List");
+//        searchItemButton = control.createButton("Search Item");
+//        clearButton = control.createButton("Clear");
+//        returnButton = control.createButton("Return");
+////        this.searchItemButton = new JButton("Search Item");
+////        this.clearButton = new JButton("Clear");
+////        this.returnButton = new JButton("Return");
+//        this.searchLabel = new JLabel("Search:");
+//        this.searchTextField = new JTextField(20);
+//        searchTextField.setText("Enter itemID or item name...");
+//        this.searchTextArea = new JTextArea(ROW_AREA, COLUMN_AREA);        
+//        
+//        initPanels();
+//        initActionPerforms();
+//        
+//        return getComponent;
+//    }
     
     public void initPanels() {                
         
