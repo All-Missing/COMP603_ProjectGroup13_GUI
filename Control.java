@@ -5,6 +5,7 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.Stack;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -46,9 +48,8 @@ public class Control {
         for (Map.Entry<String, DefaultListModel<Product>> entry : cashier_Record_List.entrySet()) {
             String currentCart = entry.getKey();
             currentCartId = Integer.parseInt(currentCart);
-            for(int i = 0; i <= currentCartId; i++)
-            {
-               this.cartOrderID = i;
+            for (int i = 0; i <= currentCartId; i++) {
+                this.cartOrderID = i;
             }
         }
         return this.cartOrderID;
@@ -82,6 +83,10 @@ public class Control {
     public void showCard(String cardName) {
         mainLayout.show(this.getPageControlPanel(), cardName);
     }
+    
+    public void closeFrame(JFrame frame) {
+        frame.dispose();
+    }
 
     public double calculateTotalCost(DefaultListModel<Product> cartProductList) {
         this.totalCost = 0;
@@ -100,32 +105,44 @@ public class Control {
 
     // Return button should work correctly now
     //login, purchase, payment, exit buttons
-    public JPanel createMainButtonPanel() {
-        JPanel buttonPanel = new JPanel();
-//        JButton loginButton = control.createButton("Login");
-        JButton purchaseButton = this.createButton("Purchase");
-        JButton paymentButton = this.createButton("Payment");
-        JButton exitButton = this.createButton("Exit");
-
-//        purchaseButton.addActionListener(e -> control.showCard("Login"));
-//        purchaseButton.addActionListener(e -> this.showCard("Purchase"));
-        purchaseButton.addActionListener(e -> this.showCard("Categories"));
-        paymentButton.addActionListener(e -> this.showCard("Payment"));
-        exitButton.addActionListener(e -> this.showCard("Exit"));
-
-//        buttonPanel.add(loginButton);
-        buttonPanel.add(purchaseButton);
-        buttonPanel.add(paymentButton);
-        //add searching features 
-        buttonPanel.add(exitButton);
-
-        return buttonPanel;
+//    public JPanel createMainButtonPanel() {
+//        JPanel buttonPanel = new JPanel();
+////        JButton loginButton = control.createButton("Login");
+//        JButton purchaseButton = this.createButton("Purchase");
+//        JButton paymentButton = this.createButton("Payment");
+//        JButton exitButton = this.createButton("Exit");
+//
+////        purchaseButton.addActionListener(e -> control.showCard("Login"));
+////        purchaseButton.addActionListener(e -> this.showCard("Purchase"));
+//        purchaseButton.addActionListener(e -> this.showCard("Categories"));
+//        paymentButton.addActionListener(e -> this.showCard("Payment"));
+//        paymentButton.addActionListener(e -> this.showCard("Exit"));
+////        exitButton.addActionListener(e -> this.);
+//
+////        buttonPanel.add(loginButton);
+//        buttonPanel.add(purchaseButton);
+//        buttonPanel.add(paymentButton);
+//        //add searching features 
+//        buttonPanel.add(exitButton);
+//
+//        return buttonPanel;
+//    }
+    public void clearButton(JButton clearButton, JTextArea area) {
+        //Register clear button
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                area.setText("");
+            }
+        });
     }
+    
+    
 
     //bug return button not working
     public JPanel returnButton() {
-        
-        JPanel returnPanel = new JPanel();                
+
+        JPanel returnPanel = new JPanel();
         JButton returnButton = new JButton("Return to Categories");
 //        returnButton.addActionListener(new ActionListener() {
         returnButton.addActionListener((ActionEvent e) -> {
@@ -135,7 +152,7 @@ public class Control {
         returnPanel.add(returnButton);
 
         return returnPanel;
-}
+    }
 
     public void removeElementIndex(JTextArea textArea, int indexAdjust, JPanel panel, DefaultListModel<Product> list) {
         textArea.addMouseListener(new MouseAdapter() {
@@ -159,7 +176,7 @@ public class Control {
             }
         });
     }
-    
+
     public void RefundOrder(JTextArea textArea, JPanel panel, Map<String, Map<String, DefaultListModel<Product>>> listAdd, Map<String, DefaultListModel<Product>> listRemove) {
         textArea.addMouseListener(new MouseAdapter() {
             @Override
@@ -169,6 +186,25 @@ public class Control {
                     try {
                         String lineToRemove = String.valueOf(textArea.getLineOfOffset(getLine));
 
+//                        int highestOrderID = 0;
+//                        try {
+//                            for (Map.Entry<String, DefaultListModel<Product>> entry : listRemove.entrySet()) {
+//                                String cardOrderID = entry.getKey();
+//                            BufferedReader br = new BufferedReader(new FileReader("./file_records/BillOrder_Records.txt"));
+//                            String line = "";
+//                            while ((line = br.readLine()) != null) {
+//                                if (line.startsWith("OrderID: ")) {
+//                                    int currentShiftID = Integer.parseInt(line.split(" ")[1]);
+//                                    if (currentShiftID > highestOrderID) {
+//                                        highestOrderID = currentShiftID;
+//                                    }
+//                                }
+//                            }
+//                            }
+//                            br.close();
+//                        } catch (IOException ie) {
+//                            ie.printStackTrace();
+//                        }
                         int start = Utilities.getRowStart(textArea, getLine);
                         int end = Utilities.getRowEnd(textArea, getLine);
                         String lineText = textArea.getText(start, end - start).trim();
@@ -179,8 +215,8 @@ public class Control {
                         if (matcher.find()) {
                             int cartId = Integer.parseInt(matcher.group(1));
 
-                            System.out.println("Cart ID: " + cartId);
-                                Map<String, DefaultListModel<Product>> dataStoreToMove = new HashMap<>();
+                            System.out.println(cartId);
+                            Map<String, DefaultListModel<Product>> dataStoreToMove = new HashMap<>();
 
                             for (Map.Entry<String, DefaultListModel<Product>> entry : listRemove.entrySet()) {
                                 String cardOrderID = entry.getKey();
@@ -213,7 +249,6 @@ public class Control {
             }
         });
     }
-
 
     public void removeAllElement(DefaultListModel<Product> list, JPanel panel) {
         if (list.isEmpty()) {

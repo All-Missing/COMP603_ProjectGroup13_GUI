@@ -26,13 +26,10 @@ public class PaymentGUI {
         JPanel checkPreviousCartPanel = saveFileRecordGUI.addCheckCartRecord();
 //        JPanel paymentContainerPanel = new JPanel(new BorderLayout());
 //        paymentContainerPanel.add(paymentPanel, BorderLayout.WEST);
+
         paymentPanel.add(paymentButtonsPanel, BorderLayout.CENTER);
         paymentPanel.add(checkPreviousCartPanel, BorderLayout.SOUTH);
 
-
-//        control.showCard("Cart");
-//        control.addPagePanel(paymentPanel, "Payment");
-        
         return paymentPanel;
     }
 
