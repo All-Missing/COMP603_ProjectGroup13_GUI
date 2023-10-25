@@ -111,6 +111,5 @@ public class PaymentGUI {
             cartGUI.updateCartProductList();
         }
     }
-
     
 }

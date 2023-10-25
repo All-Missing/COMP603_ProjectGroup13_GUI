@@ -150,20 +150,4 @@ public class SaveFileRecordGUI {
                     "Error save file", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    public String cartRecordOutputString() {
-        StringBuilder content = new StringBuilder();
-
-        for (Map.Entry<String, DefaultListModel<Product>> entry : this.getCashier_Record_List().entrySet()) {
-            String cartId = entry.getKey();
-            DefaultListModel<Product> productLists = entry.getValue();
-
-            double totalCost = control.calculateTotalCost(productLists);
-
-            content.append("Cart ID: ").append(cartId).append("\t Total Cost: $").append(totalCost).append("\n");
-        }
-
-        return content.toString();
-    }
-
 }

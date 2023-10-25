@@ -26,9 +26,9 @@ public class PurchaseGUI {
     private List<Product> productListDB;
     private HashMap<String, Product> product_records;
     private Control control;
-    private CartGUI cartGUI;
+    private CartGUI cartGUI;   
     private SearchGUI searchGUI;
-
+    
     public PurchaseGUI(Control control, CartGUI cartGUI) {
         this.control = control;
         this.cartGUI = cartGUI;        
@@ -37,24 +37,37 @@ public class PurchaseGUI {
         this.product_records = productList.getProduct_records();
         this.retrieveDB = new RetrieveCashierDB();
         this.productListDB = new ArrayList<>();
-
+        
     }
 
     public JPanel createPurchasePanel() {
         JPanel purchasePanel = new JPanel(new BorderLayout());
 
+<<<<<<< HEAD
         JPanel categoriesPanel = this.addProductsCategories();
         purchasePanel.add(categoriesPanel, BorderLayout.CENTER);
         
+=======
+        JPanel categoriesPanel = addProductsCategories();        
+        purchasePanel.add(categoriesPanel, BorderLayout.CENTER);                              
+
+        //add reserch here 
+//        JPanel reserchPanel = this.addReserchFunction();
+//        purchasePanel.add(reserchPanel, BorderLayout.SOUTH);
+//        control.addPagePanel(purchasePanel, "Purchase");
+
+>>>>>>> 496348785df373fc5d2190098c7ea85c845fde07
         control.addPagePanel(categoriesPanel, "Categories");
 
         return purchasePanel;
     }
+         
+
 
     public JPanel addProductsCategories() {
         JPanel managePanel = new JPanel(new BorderLayout());
         JPanel categoriesPanel = new JPanel(new GridLayout(4, 2));
-
+        
         productCategories.put("PI", "Pies");
         productCategories.put("SA", "Savouries");
         productCategories.put("MD", "Muffins & Donuts");
@@ -69,7 +82,7 @@ public class PurchaseGUI {
             String categoryName = entry.getValue();
 
             JButton categoryButton = control.createButton(categoryName);
-            categoryButton.addActionListener((ActionEvent e) -> {
+            categoryButton.addActionListener((ActionEvent e) -> {            
                 try {
                     System.out.println("Categories button is clicked");
                     System.out.println(categoryId);
@@ -123,5 +136,5 @@ public class PurchaseGUI {
             }
         }
     }
-
+        
 }
