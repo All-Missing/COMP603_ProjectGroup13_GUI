@@ -32,7 +32,6 @@ public class SearchGUI extends JFrame {
     private Product product;
     private List<Product> productListDB;
     private RetrieveCashierDB retrieveDB;
-//    private JPanel searchPanel;
     private JTextArea searchTextArea;
     private JTextField searchTextField;
     private JPanel searchPanel;
