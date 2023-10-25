@@ -71,7 +71,7 @@ public class SaleProcessGUI {
 
     public JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel();
-
+        
         JPanel PurchaseButtonPanel = this.createMainControlButton("Purchase", "Purchase");
         JPanel PaymentButtonPanel = this.createMainControlButton("Payment", "Payment");
         JPanel ExitButtonPanel = this.createMainControlButton("Exit", "Exit");
@@ -101,12 +101,13 @@ public class SaleProcessGUI {
 
     public void addSalePage() {
 //        JPanel salePanel = new JPanel(new BorderLayout());
-
+//        JPanel searchPanel = SearchGUI();
         JPanel purchasePanel = purchaseGUI.createPurchasePanel();
         JPanel paymentPanel = paymentGUI.createPaymentPanel();
         JPanel cartPanel = cartGUI.createCartPanel();
         JPanel exitPanel = exitGUI.createLogOutPanel(frame);
-
+        
+        
         control.addPagePanel(purchasePanel, "Purchase");
         control.addPagePanel(paymentPanel, "Payment");
         control.addPagePanel(cartPanel, "Cart");

@@ -45,24 +45,10 @@ public class PurchaseGUI {
 
         JPanel categoriesPanel = addProductsCategories();        
         purchasePanel.add(categoriesPanel, BorderLayout.CENTER);                              
-
-        //add reserch here 
-//        JPanel reserchPanel = this.addReserchFunction();
-//        purchasePanel.add(reserchPanel, BorderLayout.SOUTH);
-//        control.addPagePanel(purchasePanel, "Purchase");
-
         control.addPagePanel(categoriesPanel, "Categories");
 
         return purchasePanel;
-    }
-         
-
-
-    public JPanel addReserchFunction() {
-        JPanel reserchPanel = new JPanel(new BorderLayout());
-
-        return reserchPanel;
-    }
+    }         
 
     public JPanel addProductsCategories() {
         JPanel managePanel = new JPanel(new BorderLayout());
