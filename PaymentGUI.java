@@ -1,6 +1,5 @@
 package COMP603_ProjectGroup13_GUI;
 
-import COMP603_ProjectGroup13.SaleProcess;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import javax.swing.JButton;
@@ -27,10 +26,13 @@ public class PaymentGUI {
         JPanel checkPreviousCartPanel = saveFileRecordGUI.addCheckCartRecord();
 //        JPanel paymentContainerPanel = new JPanel(new BorderLayout());
 //        paymentContainerPanel.add(paymentPanel, BorderLayout.WEST);
-
         paymentPanel.add(paymentButtonsPanel, BorderLayout.CENTER);
         paymentPanel.add(checkPreviousCartPanel, BorderLayout.SOUTH);
 
+
+//        control.showCard("Cart");
+//        control.addPagePanel(paymentPanel, "Payment");
+        
         return paymentPanel;
     }
 
@@ -81,9 +83,8 @@ public class PaymentGUI {
                         "Payment Success", JOptionPane.INFORMATION_MESSAGE);
 
                 saveFileRecordGUI.addCashierRecord(cartOrderId, cartGUI.getCartProductList());
-//                saveFileRecordGUI.updateCashierRecord();
-                
-                control.incrementedCartOrderId();
+                control.incrementedCartOrderId(saveFileRecordGUI.getCashier_Record_List());
+                saveFileRecordGUI.updateCashierRecord();
                 
                 cartGUI.getCartProductList().removeAllElements();
                 cartGUI.updateCartProductList();

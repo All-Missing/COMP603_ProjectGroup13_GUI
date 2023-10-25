@@ -83,6 +83,7 @@ public class CartGUI {
         cartTextArea.setEditable(true);
         control.setFont(cartTextArea);
 
+        this.updateCartProductList();
 
         JPanel removePanel = this.removeProductFromCart();
 
@@ -92,7 +93,6 @@ public class CartGUI {
         cartContainerPanel.add(removePanel, BorderLayout.SOUTH);
 
         this.cartPanel.add(cartContainerPanel, BorderLayout.EAST);
-        this.updateCartProductList();
 
         return this.cartPanel;
     }
