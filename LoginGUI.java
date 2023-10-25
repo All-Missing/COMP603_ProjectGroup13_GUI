@@ -31,7 +31,7 @@ public class LoginGUI extends JFrame {
     private Control control;
 
     public LoginGUI() {
-        this.control = control;
+        this.control = new Control();
         initComponents();
         initPanels();
         initActionPerforms();
@@ -91,7 +91,7 @@ public class LoginGUI extends JFrame {
         this.setVisible(true);
     }
     
-    public void closeFrame(){
+    public void closeFrame() {
         this.dispose();
     }
 
@@ -111,9 +111,10 @@ public class LoginGUI extends JFrame {
                     //Check username and password login
                     if (userName.equalsIgnoreCase(userNameField.getText().trim()) && userPwd.equals(pwdField.getText().trim())) {
                         System.out.println("Login succeed");
-                        logArea.append("This user name:" + userNameField.getText() + " logout succeed!\n");
+                        logArea.append("This user name:" + userNameField.getText() + " login succeed!\n");
                         closeFrame();
-                        SaleProcessGUI saleProcessGUI = new SaleProcessGUI();
+                        saleProcessGUI = new SaleProcessGUI();
+
                         //When log out, this area should be able to read log out succeed.
                         
                         //When log out, this area should be able to read log out succeed. Implement this
@@ -141,3 +142,4 @@ public class LoginGUI extends JFrame {
     }
 
 }
+

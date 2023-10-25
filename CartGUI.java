@@ -76,13 +76,11 @@ public class CartGUI {
     public JPanel createCartPanel() {
         this.cartPanel = new JPanel(new BorderLayout());
 
-        this.addToCart("SA001", "Food", 2.34, "Product");
-        this.addToCart("SA002", "Foods in the", 2.34, "Product");
-
         cartTextArea = new JTextArea();
         cartTextArea.setEditable(true);
         control.setFont(cartTextArea);
 
+        this.updateCartProductList();
 
         JPanel removePanel = this.removeProductFromCart();
 
@@ -92,7 +90,6 @@ public class CartGUI {
         cartContainerPanel.add(removePanel, BorderLayout.SOUTH);
 
         this.cartPanel.add(cartContainerPanel, BorderLayout.EAST);
-        this.updateCartProductList();
 
         return this.cartPanel;
     }
@@ -111,10 +108,6 @@ public class CartGUI {
         removeAllElementButton.addActionListener((ActionEvent e) -> {
             control.removeAllElement(cartProductList, cartPanel);
             this.updateCartProductList();
-            
-            JOptionPane.showMessageDialog(cartPanel,
-                        "All products has been removed from the cart.",
-                        "Cart Cleared", JOptionPane.INFORMATION_MESSAGE);
         });
 
         removePanel.add(removeOneElementButton, BorderLayout.CENTER);
@@ -122,5 +115,4 @@ public class CartGUI {
 
         return removePanel;
     }
-
 }

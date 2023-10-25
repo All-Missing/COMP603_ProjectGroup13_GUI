@@ -1,9 +1,7 @@
 package COMP603_ProjectGroup13_GUI;
 
-import COMP603_ProjectGroup13.Cashier;
-import COMP603_ProjectGroup13.CheckOrderID;
 import COMP603_ProjectGroup13.Product;
-import COMP603_ProjectGroup13.SaleProcess;
+import COMP603_ProjectGroup13.Cashier;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -11,9 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -35,6 +30,7 @@ public class Control {
     private JPanel pageControlPanel;
     private static int NEXT_ORDER_ID = 0;
     private double bill = 0;
+    private double totalCost = 0;
     private Font font;
     private CheckOrderID cOrderID;
     private Cashier cashier;
@@ -52,9 +48,7 @@ public class Control {
     public void incrementedCartOrderId() {
         this.cartOrderID = ++Control.NEXT_ORDER_ID;
     }
-//    public int getnextCartOrderID() {
-//        return nextOrderId = this.getCartOrderID();;
-//    }
+
     public void setCartOrderID(int cartOrderID) {
         this.cartOrderID = cartOrderID;
     }
@@ -84,18 +78,13 @@ public class Control {
         mainLayout.show(this.getPageControlPanel(), cardName);
     }
 
-    public void closeFrame(JFrame frame) {
-        frame.dispose();
-    }
-    
-    public double calculateTotalCost(DefaultListModel<Product> list) {
-        double totalCosts = 0;
-        for (int i = 0; i < list.size(); i++) {
-            product = list.getElementAt(i);
-            totalCosts += product.getItemPrice();
+    public double calculateTotalCost(DefaultListModel<Product> cartProductList) {
+        this.totalCost = 0;
+        for (int i = 0; i < cartProductList.size(); i++) {
+            product = cartProductList.getElementAt(i);
+            this.totalCost += product.getItemPrice();
         }
-        this.bill = totalCosts;
-        return totalCosts;
+        return this.totalCost;
     }
 
     public JButton createButton(String buttonText) {
@@ -103,21 +92,23 @@ public class Control {
         button.setPreferredSize(new Dimension(150, 50));
         return button;
     }
-
-    public void clearButton(JButton clearButton, JTextArea area) {
-        //Register clear button
+    
+    public void closeFrame(JFrame frame) {
+        frame.dispose();
+    }
+    
+    public void clearButton(JButton clearButton, JTextArea logArea) {
         clearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                area.setText("");
+                logArea.setText("");
             }
         });
     }
 
-    //bug return button not working
     public JPanel returnButton() {
-
-        JPanel returnPanel = new JPanel();
+        
+        JPanel returnPanel = new JPanel();                
         JButton returnButton = new JButton("Return to Categories");
         returnButton.addActionListener((ActionEvent e) -> {
             this.showCard("Categories");
@@ -125,8 +116,51 @@ public class Control {
         returnPanel.add(returnButton);
 
         return returnPanel;
-    }
+}
 
+    public void removeElementIndex(JTextArea textArea, int indexAdjust, JPanel panel, DefaultListModel<Product> list) {
+        textArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
+                    int getLine = textArea.viewToModel2D(e.getPoint());
+                    try {
+                        int getIndex = textArea.getLineOfOffset(getLine);
+                        int removeIndex = getIndex - indexAdjust;
+
+                        list.removeElementAt(removeIndex);
+
+                    } catch (Exception ex) {
+                        System.out.println(ex);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(panel, "Please select an item to delete.",
+                            "Delete Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+    }
+    
+    public void removeAllElement(DefaultListModel<Product> list, JPanel panel) {
+        if (list.isEmpty()) {
+            JOptionPane.showMessageDialog(panel,
+                    "Cart is already empty.",
+                    "Empty Cart", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+
+            int response = JOptionPane.showConfirmDialog(panel,
+                    "Are you sure you want to remove all products from the cart?",
+                    "Confirm Removal", JOptionPane.YES_NO_OPTION);
+
+            if (response == JOptionPane.YES_OPTION) {
+                list.removeAllElements();
+                JOptionPane.showMessageDialog(panel,
+                        "All products has been removed from the cart.",
+                        "Cart Cleared", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+    
     public void RefundOrder(JTextArea textArea, JPanel panel, Map<String, Map<String, DefaultListModel<Product>>> listAdd, Map<String, DefaultListModel<Product>> listRemove) {
         textArea.addMouseListener(new MouseAdapter() {
             @Override
@@ -146,8 +180,8 @@ public class Control {
                         if (matcher.find()) {
                             int cartId = Integer.parseInt(matcher.group(1));
 
-                            System.out.println(cartId);
-                            Map<String, DefaultListModel<Product>> dataStoreToMove = new HashMap<>();
+                            System.out.println("Cart ID: " + cartId);
+                                Map<String, DefaultListModel<Product>> dataStoreToMove = new HashMap<>();
 
                             for (Map.Entry<String, DefaultListModel<Product>> entry : listRemove.entrySet()) {
                                 String cardOrderID = entry.getKey();
@@ -179,45 +213,5 @@ public class Control {
                 }
             }
         });
-    }
-
-    public void removeElementIndex(JTextArea textArea, int indexAdjust, JPanel panel, DefaultListModel<Product> list) {
-        textArea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
-                    int getLine = textArea.viewToModel2D(e.getPoint());
-                    try {
-                        int getIndex = textArea.getLineOfOffset(getLine);
-                        int removeIndex = getIndex - indexAdjust;
-
-                        list.removeElementAt(removeIndex);
-
-                    } catch (Exception ex) {
-                        System.out.println(ex);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(panel, "Please select an item to delete.",
-                            "Delete Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-    }
-
-    public void removeAllElement(DefaultListModel<Product> list, JPanel panel) {
-        if (list.isEmpty()) {
-            JOptionPane.showMessageDialog(panel,
-                    "Cart is already empty.",
-                    "Empty Cart", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-
-            int response = JOptionPane.showConfirmDialog(panel,
-                    "Are you sure you want to remove all products from the cart?",
-                    "Confirm Removal", JOptionPane.YES_NO_OPTION);
-
-            if (response == JOptionPane.YES_OPTION) {
-                list.removeAllElements();
-            }
-        }
-    }
+    }   
 }

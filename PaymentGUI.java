@@ -1,6 +1,5 @@
 package COMP603_ProjectGroup13_GUI;
 
-import COMP603_ProjectGroup13.SaleProcess;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import javax.swing.JButton;
@@ -22,11 +21,8 @@ public class PaymentGUI {
     public JPanel createPaymentPanel() {
         JPanel paymentPanel = new JPanel(new BorderLayout());
 
-        // test product
         JPanel paymentButtonsPanel = this.createPaymentButtonsPanel();
         JPanel checkPreviousCartPanel = saveFileRecordGUI.addCheckCartRecord();
-//        JPanel paymentContainerPanel = new JPanel(new BorderLayout());
-//        paymentContainerPanel.add(paymentPanel, BorderLayout.WEST);
 
         paymentPanel.add(paymentButtonsPanel, BorderLayout.CENTER);
         paymentPanel.add(checkPreviousCartPanel, BorderLayout.SOUTH);
@@ -48,18 +44,11 @@ public class PaymentGUI {
 
         JButton cancelCartButton = control.createButton("Cancel Cart");
         cancelCartButton.addActionListener(e -> cancelCart());
-        
-        //test
-        JButton purchaseButton = control.createButton("product");
-        purchaseButton.addActionListener(e -> cartGUI.addToCart("SA001", "Foos", 2.3, "Product"));
-
+ 
         buttonPanel.add(cardButton, BorderLayout.WEST);
         buttonPanel.add(cashButton, BorderLayout.WEST);
         buttonPanel.add(refundButton, BorderLayout.WEST);
         buttonPanel.add(cancelCartButton,BorderLayout.WEST);
-
-        //test
-        buttonPanel.add(purchaseButton);
 
         return buttonPanel;
     }
@@ -81,9 +70,7 @@ public class PaymentGUI {
                         "Payment Success", JOptionPane.INFORMATION_MESSAGE);
 
                 saveFileRecordGUI.addCashierRecord(cartOrderId, cartGUI.getCartProductList());
-                saveFileRecordGUI.updateCashierRecord();
-                
-                control.incrementedCartOrderId();
+                control.incrementedCartOrderId();                
                 
                 cartGUI.getCartProductList().removeAllElements();
                 cartGUI.updateCartProductList();
@@ -124,5 +111,6 @@ public class PaymentGUI {
             cartGUI.updateCartProductList();
         }
     }
+
     
 }

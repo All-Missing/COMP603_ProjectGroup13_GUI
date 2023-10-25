@@ -1,7 +1,6 @@
 package COMP603_ProjectGroup13_GUI;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,13 +14,14 @@ public class SaleProcessGUI {
     private PaymentGUI paymentGUI;
     private JFrame frame;
     private JPanel mainPanel;
-//    private LoginGUI loginGUI;
+    private SearchGUI searchGUI;
     private ExitGUI exitGUI;
 
     public SaleProcessGUI() {
         this.control = new Control();
         this.cartGUI = new CartGUI(control);
-//        this.loginGUI = new LoginGUI(control);
+        this.searchGUI = new SearchGUI(control);
+        this.exitGUI = new ExitGUI(control, cartGUI);
         this.exitGUI = new ExitGUI(control, cartGUI);
         this.purchaseGUI = new PurchaseGUI(control, cartGUI);
         this.paymentGUI = new PaymentGUI(control, cartGUI);
@@ -31,7 +31,7 @@ public class SaleProcessGUI {
     public void initializeFrame() {
         frame = new JFrame("Sale Process");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(900, 600);
+        frame.setSize(900, 600);        
         frame.setLocationRelativeTo(null);
         createMainPanel();
         frame.setVisible(true);
@@ -45,22 +45,30 @@ public class SaleProcessGUI {
 
         this.addSalePage();
 
+        JPanel cartPanel = cartGUI.createCartPanel();
+        mainPanel.add(cartPanel, BorderLayout.EAST);
+        
+        // Add Button Panel at the bottom
         JPanel buttonPanel = this.createButtonPanel();
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-
+        
         frame.add(mainPanel, BorderLayout.CENTER);
+
         return mainPanel;
     }
-
+    
     public void checkExit(String checkExit) {
 
         switch (checkExit) {
             case "Purchase":
                 control.showCard("Categories");
-                control.showCard("Cart");
+//                control.showCard("Cart");
                 break;
             case "Payment":
                 control.showCard("Payment");
+                break;
+            case "Search":
+                control.showCard("Search");
                 break;
             case "Exit":
                 control.showCard("Exit");
@@ -75,10 +83,12 @@ public class SaleProcessGUI {
         JPanel PurchaseButtonPanel = this.createMainControlButton("Purchase", "Purchase");
         JPanel PaymentButtonPanel = this.createMainControlButton("Payment", "Payment");
         JPanel ExitButtonPanel = this.createMainControlButton("Exit", "Exit");
+        JPanel searchButtonPanel = this.createMainControlButton("Search", "Search");
         
         buttonPanel.add(PurchaseButtonPanel);
         buttonPanel.add(PaymentButtonPanel);
         buttonPanel.add(ExitButtonPanel);
+        buttonPanel.add(searchButtonPanel);
         
         return buttonPanel;
 
@@ -100,20 +110,19 @@ public class SaleProcessGUI {
     }
 
     public void addSalePage() {
-//        JPanel salePanel = new JPanel(new BorderLayout());
-//        JPanel searchPanel = SearchGUI();
+
         JPanel purchasePanel = purchaseGUI.createPurchasePanel();
         JPanel paymentPanel = paymentGUI.createPaymentPanel();
         JPanel cartPanel = cartGUI.createCartPanel();
         JPanel exitPanel = exitGUI.createLogOutPanel(frame);
-        
-        
+        JPanel searchPanel = searchGUI.createSearchPanel();
+
         control.addPagePanel(purchasePanel, "Purchase");
         control.addPagePanel(paymentPanel, "Payment");
         control.addPagePanel(cartPanel, "Cart");
         control.addPagePanel(exitPanel, "Exit");
+        control.addPagePanel(searchPanel, "Search");
 
-//        return salePanel;
     }
 
     public static void main(String[] args) {

@@ -33,13 +33,14 @@ public class ExitGUI {
     }
 
     public JPanel createLogOutPanel(JFrame frame) {
-        JPanel exitPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel exitPanel = new JPanel(new BorderLayout());
 
         JPanel userLogOut = this.exitPanel(frame);
+//        userLogOut.setPreferredSize(new Dimension(100, 50));
         JPanel saveButton = saveFileRecordGUI.saveFileRecordsButton(saveFileRecordGUI.getCashier_Record_List());
 
         exitPanel.add(userLogOut, BorderLayout.CENTER);
-        exitPanel.add(saveButton, BorderLayout.NORTH);
+        exitPanel.add(saveButton, BorderLayout.EAST);
 
         return exitPanel;
     }
@@ -71,7 +72,7 @@ public class ExitGUI {
         JPanel northPanel = new JPanel(new BorderLayout());
 
         JPanel userNameInputPanel = this.getUserNameInput(userNameLabel, userNameField);
-        northPanel.add(userNameInputPanel, BorderLayout.CENTER);
+        northPanel.add(userNameInputPanel, BorderLayout.NORTH);
         JPanel passwordInputPanel = this.getPasswordInput(userPwdLabel, pwdField);
         northPanel.add(passwordInputPanel, BorderLayout.SOUTH);
 
@@ -83,8 +84,8 @@ public class ExitGUI {
 
         userNameLabel = new JLabel("UserName: ", SwingConstants.RIGHT);
         userNameField = new JTextField();
-        userNameField.setPreferredSize(new Dimension(300, 50));
-        userNameInputPanel.add(userNameLabel, BorderLayout.WEST);
+        userNameField.setPreferredSize(new Dimension(250, 50));
+        userNameInputPanel.add(userNameLabel, BorderLayout.CENTER);
         userNameInputPanel.add(userNameField, BorderLayout.EAST);
 
         return userNameInputPanel;
@@ -95,8 +96,8 @@ public class ExitGUI {
 
         userPwdLabel = new JLabel("Password: ", SwingConstants.RIGHT);
         pwdField = new JPasswordField();
-        pwdField.setPreferredSize(new Dimension(300, 50));
-        passwordInputPanel.add(userPwdLabel, BorderLayout.WEST);
+        pwdField.setPreferredSize(new Dimension(250, 50));
+        passwordInputPanel.add(userPwdLabel, BorderLayout.CENTER);
         passwordInputPanel.add(pwdField, BorderLayout.EAST);
 
         return passwordInputPanel;
@@ -104,7 +105,8 @@ public class ExitGUI {
 
     public JPanel schrollInterface(JTextArea logArea) {
         JPanel passwordInputPanel = new JPanel(new BorderLayout());
-        logArea = new JTextArea(10, 30);
+        logArea = new JTextArea();
+        logArea.setPreferredSize(new Dimension(250, 100));
         JScrollPane scrollPane = new JScrollPane(logArea);
         passwordInputPanel.add(scrollPane, BorderLayout.CENTER);
         return passwordInputPanel;
@@ -122,8 +124,8 @@ public class ExitGUI {
                 pwdField, logArea, frame, southPanel));
         clearButton.addActionListener(e -> control.clearButton(clearButton, logArea));
 
-        southPanel.add(logOutButton, BorderLayout.WEST);
-        southPanel.add(clearButton, BorderLayout.EAST);
+        southPanel.add(logOutButton, BorderLayout.CENTER);
+        southPanel.add(clearButton, BorderLayout.WEST);
 
         return southPanel;
     }
@@ -151,10 +153,11 @@ public class ExitGUI {
 
     public void logOutButton(JButton logOutButton, JTextField userNameField,
             JPasswordField pwdField, JTextArea logArea, JFrame frame, JPanel panel) {
+//        logOutButton = control.createButton(buttonName);
         logOutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+
                 staffRecord = new Staff_Record();
                 staffList = staffRecord.getStaff_list();
 
@@ -163,18 +166,18 @@ public class ExitGUI {
                     String userName = entry.getKey();
                     String userPwd = entry.getValue();
                     //Check username and password login
-                    if (userName.equalsIgnoreCase(userNameField.getText().trim()) && userPwd.equals(pwdField.getText().trim())) {
+                    if (userName.equalsIgnoreCase(userNameField.getText().trim()) && userPwd.equals(pwdField.getPassword())) {
                         System.out.println("Log out succeed");
                         logArea.append("This user name:" + userNameField.getText() + " login succeed!\n");
                         //When log out, this area should be able to read log out succeed.
 
                         //When log out, this area should be able to read log out succeed. Implement this
                         isLoginValid = true;
-                        
+
                         boolean saveFile = saveFileCheck(panel);
-                        
+
                         informSaveFileBeforeExit(isLoginValid, saveFile, frame, panel);
-                        
+
                         break;
                     }
                 }
@@ -183,6 +186,6 @@ public class ExitGUI {
                 }
             }
         });
-
+//        return logOutButton;
     }
 }
