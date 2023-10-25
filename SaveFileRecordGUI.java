@@ -73,8 +73,6 @@ public class SaveFileRecordGUI {
         cartRecordPanel.add(new JScrollPane(CashierRecordTextArea), BorderLayout.CENTER);
 //        cartRecordPanel.add(refundPurchase, BorderLayout.SOUTH);
 
-        this.updateCashierRecord();
-
         return cartRecordPanel;
     }
 
@@ -100,10 +98,12 @@ public class SaveFileRecordGUI {
         for (Map.Entry<String, DefaultListModel<Product>> entry : this.getCashier_Record_List().entrySet()) {
             String cartId = entry.getKey();
             DefaultListModel<Product> productLists = entry.getValue();
-
+            
             double totalCost = control.calculateTotalCost(productLists);
+            
+            System.out.print(totalCost);
 
-            content.append("Cart ID: ").append(cartId).append("\t Total Cost: $").append(totalCost).append("\n");
+            content.append("Cart ID: ").append(cartId).append("\t Total Cost: $").append(control.getBill()).append("\n");
         }
         return content.toString();
     }
@@ -141,8 +141,8 @@ public class SaveFileRecordGUI {
                     if (current_order != null && current_order.size() > 0) {
                         for (int i = 0; i < current_order.size(); i++) {
                             Product product = current_order.getElementAt(i);
-                            line = "OrderID: " + current_order_id + ", ID: " + product.getItem_id()
-                                    + ", Name: " + product.getItem() + ", Price: " + product.getItemPrice();
+                            line = "OrderID: " + current_order_id + " ID: " + product.getItem_id()
+                                    + " Name: " + product.getItem() + " Price: " + product.getItemPrice();
 
                             bw.write(line);
                             bw.newLine();

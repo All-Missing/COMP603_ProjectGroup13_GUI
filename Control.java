@@ -1,6 +1,9 @@
 package COMP603_ProjectGroup13_GUI;
 
+import COMP603_ProjectGroup13.Cashier;
+import COMP603_ProjectGroup13.CheckOrderID;
 import COMP603_ProjectGroup13.Product;
+import COMP603_ProjectGroup13.SaleProcess;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -8,6 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -24,47 +30,41 @@ public class Control {
 
     private Product product;
     private int cartOrderID;
-    private double totalCost;
     private CardLayout mainLayout;
     private SaleProcessGUI saleGUI;
     private JPanel pageControlPanel;
-    private Stack<String> pageHistory;
+    private static int NEXT_ORDER_ID = 0;
+    private double bill = 0;
     private Font font;
+    private CheckOrderID cOrderID;
+    private Cashier cashier;
 
     public Control() {
-        this.cartOrderID++;
-        this.totalCost = 0;
+        cOrderID = new CheckOrderID();
+        this.cashier = new Cashier();
+        Control.NEXT_ORDER_ID = cOrderID.checkOrderID();
+        this.cartOrderID = Control.NEXT_ORDER_ID;
         this.pageControlPanel = new JPanel();
         this.mainLayout = new CardLayout();
         this.pageControlPanel.setLayout(mainLayout);
-        this.pageHistory = new Stack<>();
     }
 
-//    public int incrementCardOrderId(int orderID) {
-//        return this.cartOrderID++;
+    public void incrementedCartOrderId() {
+        this.cartOrderID = ++Control.NEXT_ORDER_ID;
+    }
+//    public int getnextCartOrderID() {
+//        return nextOrderId = this.getCartOrderID();;
 //    }
-    public int incrementedCartOrderId(Map<String, DefaultListModel<Product>> cashier_Record_List) {
-        int currentCartId = 0;
-        for (Map.Entry<String, DefaultListModel<Product>> entry : cashier_Record_List.entrySet()) {
-            String currentCart = entry.getKey();
-            currentCartId = Integer.parseInt(currentCart);
-            for (int i = 0; i <= currentCartId; i++) {
-                this.cartOrderID = i;
-            }
-        }
-        return this.cartOrderID;
+    public void setCartOrderID(int cartOrderID) {
+        this.cartOrderID = cartOrderID;
     }
 
+    public double getBill() {
+        return this.bill;
+    }
+    
     public int getCartOrderID() {
-        return cartOrderID;
-    }
-
-    public void setCartOrderID(int orderID) {
-        this.cartOrderID = orderID;
-    }
-
-    public double getTotalCost() {
-        return this.totalCost;
+        return this.cartOrderID;
     }
 
     public void setFont(JTextArea textArea) {
@@ -83,18 +83,19 @@ public class Control {
     public void showCard(String cardName) {
         mainLayout.show(this.getPageControlPanel(), cardName);
     }
-    
+
     public void closeFrame(JFrame frame) {
         frame.dispose();
     }
-
-    public double calculateTotalCost(DefaultListModel<Product> cartProductList) {
-        this.totalCost = 0;
-        for (int i = 0; i < cartProductList.size(); i++) {
-            product = cartProductList.getElementAt(i);
-            this.totalCost += product.getItemPrice();
+    
+    public double calculateTotalCost(DefaultListModel<Product> list) {
+        double totalCosts = 0;
+        for (int i = 0; i < list.size(); i++) {
+            product = list.getElementAt(i);
+            totalCosts += product.getItemPrice();
         }
-        return this.totalCost;
+        this.bill = totalCosts;
+        return totalCosts;
     }
 
     public JButton createButton(String buttonText) {
@@ -103,30 +104,6 @@ public class Control {
         return button;
     }
 
-    // Return button should work correctly now
-    //login, purchase, payment, exit buttons
-//    public JPanel createMainButtonPanel() {
-//        JPanel buttonPanel = new JPanel();
-////        JButton loginButton = control.createButton("Login");
-//        JButton purchaseButton = this.createButton("Purchase");
-//        JButton paymentButton = this.createButton("Payment");
-//        JButton exitButton = this.createButton("Exit");
-//
-////        purchaseButton.addActionListener(e -> control.showCard("Login"));
-////        purchaseButton.addActionListener(e -> this.showCard("Purchase"));
-//        purchaseButton.addActionListener(e -> this.showCard("Categories"));
-//        paymentButton.addActionListener(e -> this.showCard("Payment"));
-//        paymentButton.addActionListener(e -> this.showCard("Exit"));
-////        exitButton.addActionListener(e -> this.);
-//
-////        buttonPanel.add(loginButton);
-//        buttonPanel.add(purchaseButton);
-//        buttonPanel.add(paymentButton);
-//        //add searching features 
-//        buttonPanel.add(exitButton);
-//
-//        return buttonPanel;
-//    }
     public void clearButton(JButton clearButton, JTextArea area) {
         //Register clear button
         clearButton.addActionListener(new ActionListener() {
@@ -136,45 +113,18 @@ public class Control {
             }
         });
     }
-    
-    
 
     //bug return button not working
     public JPanel returnButton() {
 
         JPanel returnPanel = new JPanel();
         JButton returnButton = new JButton("Return to Categories");
-//        returnButton.addActionListener(new ActionListener() {
         returnButton.addActionListener((ActionEvent e) -> {
             this.showCard("Categories");
         });
-//        returnButton.addActionListener(e -> mainLayout.show(pageControlPanel, "Categories"));
         returnPanel.add(returnButton);
 
         return returnPanel;
-    }
-
-    public void removeElementIndex(JTextArea textArea, int indexAdjust, JPanel panel, DefaultListModel<Product> list) {
-        textArea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
-                    int getLine = textArea.viewToModel2D(e.getPoint());
-                    try {
-                        int getIndex = textArea.getLineOfOffset(getLine);
-                        int removeIndex = getIndex - indexAdjust;
-
-                        list.removeElementAt(removeIndex);
-
-                    } catch (Exception ex) {
-                        System.out.println(ex);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(panel, "Please select an item to delete.",
-                            "Delete Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
     }
 
     public void RefundOrder(JTextArea textArea, JPanel panel, Map<String, Map<String, DefaultListModel<Product>>> listAdd, Map<String, DefaultListModel<Product>> listRemove) {
@@ -186,25 +136,6 @@ public class Control {
                     try {
                         String lineToRemove = String.valueOf(textArea.getLineOfOffset(getLine));
 
-//                        int highestOrderID = 0;
-//                        try {
-//                            for (Map.Entry<String, DefaultListModel<Product>> entry : listRemove.entrySet()) {
-//                                String cardOrderID = entry.getKey();
-//                            BufferedReader br = new BufferedReader(new FileReader("./file_records/BillOrder_Records.txt"));
-//                            String line = "";
-//                            while ((line = br.readLine()) != null) {
-//                                if (line.startsWith("OrderID: ")) {
-//                                    int currentShiftID = Integer.parseInt(line.split(" ")[1]);
-//                                    if (currentShiftID > highestOrderID) {
-//                                        highestOrderID = currentShiftID;
-//                                    }
-//                                }
-//                            }
-//                            }
-//                            br.close();
-//                        } catch (IOException ie) {
-//                            ie.printStackTrace();
-//                        }
                         int start = Utilities.getRowStart(textArea, getLine);
                         int end = Utilities.getRowEnd(textArea, getLine);
                         String lineText = textArea.getText(start, end - start).trim();
@@ -244,6 +175,29 @@ public class Control {
                 } else {
                     JOptionPane.showMessageDialog(panel, "Please select item and click refund button.\n"
                             + "Don't click repeatedly.",
+                            "Delete Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+    }
+
+    public void removeElementIndex(JTextArea textArea, int indexAdjust, JPanel panel, DefaultListModel<Product> list) {
+        textArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
+                    int getLine = textArea.viewToModel2D(e.getPoint());
+                    try {
+                        int getIndex = textArea.getLineOfOffset(getLine);
+                        int removeIndex = getIndex - indexAdjust;
+
+                        list.removeElementAt(removeIndex);
+
+                    } catch (Exception ex) {
+                        System.out.println(ex);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(panel, "Please select an item to delete.",
                             "Delete Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
