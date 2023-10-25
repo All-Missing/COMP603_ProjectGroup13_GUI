@@ -2,7 +2,7 @@ package COMP603_ProjectGroup13_GUI;
 
 import COMP603_ProjectGroup13.Product;
 import COMP603_ProjectGroup13.ProductList;
-//import COMP603_ProjectGroup13_DB.RetrieveCashierDB;
+import COMP603_ProjectGroup13_DB.RetrieveCashierDB;
 import COMP603_ProjectGroup13.Product;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -22,7 +22,7 @@ public class PurchaseGUI {
 
     private Map<String, String> productCategories;
     private ProductList productList;
-//    private RetrieveCashierDB retrieveDB;
+    private RetrieveCashierDB retrieveDB;
     private List<Product> productListDB;
     private HashMap<String, Product> product_records;
     private Control control;
@@ -35,7 +35,7 @@ public class PurchaseGUI {
         this.productCategories = new HashMap<>();
         this.productList = new ProductList();
         this.product_records = productList.getProduct_records();
-//        this.retrieveDB = new RetrieveCashierDB();
+        this.retrieveDB = new RetrieveCashierDB();
         this.productListDB = new ArrayList<>();
 
     }
@@ -46,21 +46,9 @@ public class PurchaseGUI {
         JPanel categoriesPanel = this.addProductsCategories();
         purchasePanel.add(categoriesPanel, BorderLayout.CENTER);
         
-        //add reserch here 
-//        JPanel reserchPanel = this.addReserchFunction();
-//        purchasePanel.add(reserchPanel, BorderLayout.SOUTH);
-//        control.addPagePanel(purchasePanel, "Purchase");
-
-
         control.addPagePanel(categoriesPanel, "Categories");
 
         return purchasePanel;
-    }
-
-    public JPanel addReserchFunction() {
-        JPanel reserchPanel = new JPanel(new BorderLayout());
-
-        return reserchPanel;
     }
 
     public JPanel addProductsCategories() {
@@ -111,8 +99,6 @@ public class PurchaseGUI {
         productContainerPanel.add(productPanel, BorderLayout.CENTER);
         productContainerPanel.add(returnPanel, BorderLayout.SOUTH);
 
-//        productPanel.add(productPanel, BorderLayout.CENTER);
-//        productPanel.add(returnPanel, BorderLayout.SOUTH);
         return productContainerPanel;
     }
 
@@ -121,14 +107,10 @@ public class PurchaseGUI {
             if (products.getItem_id().contains(categoryId)) {
                 String itemName = products.getItem();
 
-                System.out.println(itemName);
-                System.out.println("Try add product button");
-
                 JButton productButton = control.createButton(itemName);
                 productButton.addActionListener((ActionEvent e) -> {
                     SwingUtilities.invokeLater(() -> {
                         try {
-                            System.out.println("Product button is clicked");
                             cartGUI.addToCart(products.getItem_id(), products.getItem(),
                                     products.getItemPrice(), products.getCategory());
                         } catch (Exception ex) {

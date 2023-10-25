@@ -1,10 +1,12 @@
 package COMP603_ProjectGroup13_GUI;
 
 import COMP603_ProjectGroup13.Product;
+import COMP603_ProjectGroup13.Cashier;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
@@ -12,6 +14,7 @@ import java.util.Map;
 import java.util.Stack;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -22,46 +25,40 @@ public class Control {
 
     private Product product;
     private int cartOrderID;
-    private double totalCost;
     private CardLayout mainLayout;
     private SaleProcessGUI saleGUI;
     private JPanel pageControlPanel;
-    private Stack<String> pageHistory;
+    private static int NEXT_ORDER_ID = 0;
+    private double bill = 0;
+    private double totalCost = 0;
     private Font font;
+    private CheckOrderID cOrderID;
+    private Cashier cashier;
 
     public Control() {
-        this.cartOrderID++;
-        this.totalCost = 0;
+        cOrderID = new CheckOrderID();
+        this.cashier = new Cashier();
+        Control.NEXT_ORDER_ID = cOrderID.checkOrderID();
+        this.cartOrderID = Control.NEXT_ORDER_ID;
         this.pageControlPanel = new JPanel();
         this.mainLayout = new CardLayout();
         this.pageControlPanel.setLayout(mainLayout);
-        this.pageHistory = new Stack<>();
     }
 
-//    public int incrementCardOrderId(int orderID) {
-//        return this.cartOrderID++;
-//    }
-    public int incrementedCartOrderId(Map<String, DefaultListModel<Product>> cashier_Record_List) {
-        int currentCartId = 0;
-        for (Map.Entry<String, DefaultListModel<Product>> entry : cashier_Record_List.entrySet()) {
-            String currentCart = entry.getKey();
-            currentCartId = Integer.parseInt(currentCart);
-            for(int i = 0; i <= currentCartId; i++)
-               this.cartOrderID = i;            
-        }
-        return this.cartOrderID;
+    public void incrementedCartOrderId() {
+        this.cartOrderID = ++Control.NEXT_ORDER_ID;
     }
 
+    public void setCartOrderID(int cartOrderID) {
+        this.cartOrderID = cartOrderID;
+    }
+
+    public double getBill() {
+        return this.bill;
+    }
+    
     public int getCartOrderID() {
-        return cartOrderID;
-    }
-
-    public void setCartOrderID(int orderID) {
-        this.cartOrderID = orderID;
-    }
-
-    public double getTotalCost() {
-        return this.totalCost;
+        return this.cartOrderID;
     }
 
     public void setFont(JTextArea textArea) {
@@ -95,41 +92,27 @@ public class Control {
         button.setPreferredSize(new Dimension(150, 50));
         return button;
     }
-
-    // Return button should work correctly now
-    //login, purchase, payment, exit buttons
-    public JPanel createMainButtonPanel() {
-        JPanel buttonPanel = new JPanel();
-//        JButton loginButton = control.createButton("Login");
-        JButton purchaseButton = this.createButton("Purchase");
-        JButton paymentButton = this.createButton("Payment");
-        JButton exitButton = this.createButton("Exit");
-
-//        purchaseButton.addActionListener(e -> control.showCard("Login"));
-//        purchaseButton.addActionListener(e -> this.showCard("Purchase"));
-        purchaseButton.addActionListener(e -> this.showCard("Categories"));
-        paymentButton.addActionListener(e -> this.showCard("Payment"));
-        exitButton.addActionListener(e -> this.showCard("Exit"));
-
-//        buttonPanel.add(loginButton);
-        buttonPanel.add(purchaseButton);
-        buttonPanel.add(paymentButton);
-        //add searching features 
-        buttonPanel.add(exitButton);
-
-        return buttonPanel;
+    
+    public void closeFrame(JFrame frame) {
+        frame.dispose();
+    }
+    
+    public void clearButton(JButton clearButton, JTextArea logArea) {
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logArea.setText("");
+            }
+        });
     }
 
-    //bug return button not working
     public JPanel returnButton() {
         
         JPanel returnPanel = new JPanel();                
         JButton returnButton = new JButton("Return to Categories");
-//        returnButton.addActionListener(new ActionListener() {
         returnButton.addActionListener((ActionEvent e) -> {
             this.showCard("Categories");
         });
-//        returnButton.addActionListener(e -> mainLayout.show(pageControlPanel, "Categories"));
         returnPanel.add(returnButton);
 
         return returnPanel;
@@ -156,6 +139,26 @@ public class Control {
                 }
             }
         });
+    }
+    
+    public void removeAllElement(DefaultListModel<Product> list, JPanel panel) {
+        if (list.isEmpty()) {
+            JOptionPane.showMessageDialog(panel,
+                    "Cart is already empty.",
+                    "Empty Cart", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+
+            int response = JOptionPane.showConfirmDialog(panel,
+                    "Are you sure you want to remove all products from the cart?",
+                    "Confirm Removal", JOptionPane.YES_NO_OPTION);
+
+            if (response == JOptionPane.YES_OPTION) {
+                list.removeAllElements();
+                JOptionPane.showMessageDialog(panel,
+                        "All products has been removed from the cart.",
+                        "Cart Cleared", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
     }
     
     public void RefundOrder(JTextArea textArea, JPanel panel, Map<String, Map<String, DefaultListModel<Product>>> listAdd, Map<String, DefaultListModel<Product>> listRemove) {
@@ -210,23 +213,5 @@ public class Control {
                 }
             }
         });
-    }
-
-    public void removeAllElement(DefaultListModel<Product> list, JPanel panel) {
-        if (list.isEmpty()) {
-            JOptionPane.showMessageDialog(panel,
-                    "Cart is already empty.",
-                    "Empty Cart", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-
-            int response = JOptionPane.showConfirmDialog(panel,
-                    "Are you sure you want to remove all products from the cart?",
-                    "Confirm Removal", JOptionPane.YES_NO_OPTION);
-
-            if (response == JOptionPane.YES_OPTION) {
-                list.removeAllElements();
-            }
-        }
-    }
+    }   
 }
-

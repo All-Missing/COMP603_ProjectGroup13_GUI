@@ -13,7 +13,7 @@ public class CheckOrderID {
         
         int highestOrderID = 0;
         try {
-            BufferedReader br = new BufferedReader(new FileReader("./file_records/BillOrder_Records.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("./file_records/Cart_Records.txt"));
             String line = "";
             while ((line = br.readLine()) != null) {
                 if (line.startsWith("OrderID: ")) {

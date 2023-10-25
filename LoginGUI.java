@@ -85,9 +85,14 @@ public class LoginGUI extends JFrame {
         add(southPanel, BorderLayout.SOUTH);
 
         this.setSize(400, 400);
+        this.setLocationRelativeTo(null);
         this.setTitle("Staff Login");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
+    }
+    
+    public void closeFrame() {
+        this.dispose();
     }
 
     //Initialize actionListeners 
@@ -107,6 +112,7 @@ public class LoginGUI extends JFrame {
                     if (userName.equalsIgnoreCase(userNameField.getText().trim()) && userPwd.equals(pwdField.getText().trim())) {
                         System.out.println("Login succeed");
                         logArea.append("This user name:" + userNameField.getText() + " login succeed!\n");
+                        closeFrame();
                         saleProcessGUI = new SaleProcessGUI();
 
                         //When log out, this area should be able to read log out succeed.

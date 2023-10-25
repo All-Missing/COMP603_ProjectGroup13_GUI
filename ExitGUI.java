@@ -36,7 +36,7 @@ public class ExitGUI {
         JPanel exitPanel = new JPanel(new BorderLayout());
 
         JPanel userLogOut = this.exitPanel(frame);
-        userLogOut.setPreferredSize(new Dimension(400, 50));
+//        userLogOut.setPreferredSize(new Dimension(100, 50));
         JPanel saveButton = saveFileRecordGUI.saveFileRecordsButton(saveFileRecordGUI.getCashier_Record_List());
 
         exitPanel.add(userLogOut, BorderLayout.CENTER);
@@ -84,7 +84,7 @@ public class ExitGUI {
 
         userNameLabel = new JLabel("UserName: ", SwingConstants.RIGHT);
         userNameField = new JTextField();
-        userNameField.setPreferredSize(new Dimension(550, 50));
+        userNameField.setPreferredSize(new Dimension(250, 50));
         userNameInputPanel.add(userNameLabel, BorderLayout.CENTER);
         userNameInputPanel.add(userNameField, BorderLayout.EAST);
 
@@ -96,7 +96,7 @@ public class ExitGUI {
 
         userPwdLabel = new JLabel("Password: ", SwingConstants.RIGHT);
         pwdField = new JPasswordField();
-        pwdField.setPreferredSize(new Dimension(550, 50));
+        pwdField.setPreferredSize(new Dimension(250, 50));
         passwordInputPanel.add(userPwdLabel, BorderLayout.CENTER);
         passwordInputPanel.add(pwdField, BorderLayout.EAST);
 
@@ -106,7 +106,7 @@ public class ExitGUI {
     public JPanel schrollInterface(JTextArea logArea) {
         JPanel passwordInputPanel = new JPanel(new BorderLayout());
         logArea = new JTextArea();
-        logArea.setPreferredSize(new Dimension(550, 100));
+        logArea.setPreferredSize(new Dimension(250, 100));
         JScrollPane scrollPane = new JScrollPane(logArea);
         passwordInputPanel.add(scrollPane, BorderLayout.CENTER);
         return passwordInputPanel;
