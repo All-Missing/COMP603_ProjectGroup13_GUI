@@ -214,44 +214,4 @@ public class Control {
             }
         });
     }
-
-    public void removeElementIndex(JTextArea textArea, int indexAdjust, JPanel panel, DefaultListModel<Product> list) {
-        textArea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
-                    int getLine = textArea.viewToModel2D(e.getPoint());
-                    try {
-                        int getIndex = textArea.getLineOfOffset(getLine);
-                        int removeIndex = getIndex - indexAdjust;
-
-                        list.removeElementAt(removeIndex);
-
-                    } catch (Exception ex) {
-                        System.out.println(ex);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(panel, "Please select an item to delete.",
-                            "Delete Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-    }
-
-    public void removeAllElement(DefaultListModel<Product> list, JPanel panel) {
-        if (list.isEmpty()) {
-            JOptionPane.showMessageDialog(panel,
-                    "Cart is already empty.",
-                    "Empty Cart", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-
-            int response = JOptionPane.showConfirmDialog(panel,
-                    "Are you sure you want to remove all products from the cart?",
-                    "Confirm Removal", JOptionPane.YES_NO_OPTION);
-
-            if (response == JOptionPane.YES_OPTION) {
-                list.removeAllElements();
-            }
-        }
-    }
 }

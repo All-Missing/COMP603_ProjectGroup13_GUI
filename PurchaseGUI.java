@@ -43,11 +43,7 @@ public class PurchaseGUI {
     public JPanel createPurchasePanel() {
         JPanel purchasePanel = new JPanel(new BorderLayout());
 
-<<<<<<< HEAD
-        JPanel categoriesPanel = this.addProductsCategories();
-        purchasePanel.add(categoriesPanel, BorderLayout.CENTER);
-        
-=======
+
         JPanel categoriesPanel = addProductsCategories();        
         purchasePanel.add(categoriesPanel, BorderLayout.CENTER);                              
 
@@ -56,7 +52,6 @@ public class PurchaseGUI {
 //        purchasePanel.add(reserchPanel, BorderLayout.SOUTH);
 //        control.addPagePanel(purchasePanel, "Purchase");
 
->>>>>>> 496348785df373fc5d2190098c7ea85c845fde07
         control.addPagePanel(categoriesPanel, "Categories");
 
         return purchasePanel;
