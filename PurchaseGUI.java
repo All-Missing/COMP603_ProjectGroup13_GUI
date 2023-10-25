@@ -41,15 +41,15 @@ public class PurchaseGUI {
     }
 
     public JPanel createPurchasePanel() {
-        JPanel purchasePanel = new JPanel(new BorderLayout());       
+        JPanel purchasePanel = new JPanel(new BorderLayout());
+
         JPanel categoriesPanel = this.addProductsCategories();
         purchasePanel.add(categoriesPanel, BorderLayout.CENTER);
         
         control.addPagePanel(categoriesPanel, "Categories");
 
         return purchasePanel;
-    }         
-    
+    }
 
     public JPanel addProductsCategories() {
         JPanel managePanel = new JPanel(new BorderLayout());
