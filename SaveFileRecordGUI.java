@@ -4,8 +4,11 @@ import COMP603_ProjectGroup13.Product;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListModel;
@@ -14,7 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 
 public class SaveFileRecordGUI {
 
@@ -22,6 +24,7 @@ public class SaveFileRecordGUI {
     private Map<String, DefaultListModel<Product>> cashier_Record_List;
     private Map<String, Map<String, DefaultListModel<Product>>> refund_Record_List;
     private JTextArea CashierRecordTextArea;
+    private DecimalFormat df = new DecimalFormat("#.00");
     private Control control;
     private CartGUI cartGUI;
 
@@ -63,13 +66,12 @@ public class SaveFileRecordGUI {
         control.setFont(this.CashierRecordTextArea);
         this.CashierRecordTextArea.setEditable(true);
 
-        JPanel refundPurchase = this.getRefundOrder();
-                
+        this.updateCashierRecord();
+//        JPanel refundPurchase = this.getRefundOrder();
+
         this.CashierRecordTextArea.setPreferredSize(new Dimension(400, 200));
         cartRecordPanel.add(new JScrollPane(CashierRecordTextArea), BorderLayout.CENTER);
-        cartRecordPanel.add(refundPurchase, BorderLayout.SOUTH);
-
-        this.updateCashierRecord();
+//        cartRecordPanel.add(refundPurchase, BorderLayout.SOUTH);
 
         return cartRecordPanel;
     }
@@ -78,18 +80,15 @@ public class SaveFileRecordGUI {
         JPanel refundOrderPanel = new JPanel(new BorderLayout());
 
 //        JButton refundOrderButton = control.createButton("Refund");
-
 //        refundOrderButton.addActionListener((ActionEvent e) -> {
-            control.RefundOrder(CashierRecordTextArea, refundOrderPanel, refund_Record_List, cashier_Record_List);
-            this.updateCashierRecord();
+        control.RefundOrder(CashierRecordTextArea, refundOrderPanel, refund_Record_List, cashier_Record_List);
+        this.updateCashierRecord();
 
 //                    JOptionPane.showMessageDialog(refundOrderPanel, "Please selected cart for to be refund.",
 //                            "Refund Puchase", JOptionPane.ERROR_MESSAGE);
 //                }
 //            refundOrderPanel.add(refundOrderButton, BorderLayout.SOUTH);
-
 //        });
-        
         return refundOrderPanel;
     }
 
@@ -99,13 +98,70 @@ public class SaveFileRecordGUI {
         for (Map.Entry<String, DefaultListModel<Product>> entry : this.getCashier_Record_List().entrySet()) {
             String cartId = entry.getKey();
             DefaultListModel<Product> productLists = entry.getValue();
-
+            
             double totalCost = control.calculateTotalCost(productLists);
+            
+            System.out.print(totalCost);
 
-            content.append("Cart ID: ").append(cartId).append("\t Total Cost: $").append(totalCost).append("\n");
+            content.append("Cart ID: ").append(cartId).append("\t Total Cost: $").append(control.getBill()).append("\n");
         }
-
         return content.toString();
     }
 
+    public JPanel saveFileRecordsButton(Map<String, DefaultListModel<Product>> record) {
+        JPanel saveFileRecordsButton = new JPanel(new BorderLayout());
+
+        JButton saveFileButton = control.createButton("Save");
+        saveFileButton.addActionListener((ActionEvent e) -> {
+            this.saveFileRecords(record, saveFileRecordsButton);
+        });
+        saveFileRecordsButton.add(saveFileButton, BorderLayout.SOUTH);
+
+        return saveFileRecordsButton;
+    }
+
+    private void saveFileRecords(Map<String, DefaultListModel<Product>> cashier_Record_List, JPanel panel) {
+        BufferedWriter bw = null;
+        try {
+
+            bw = new BufferedWriter(new FileWriter("./file_records/Cart_Records.txt", true));
+
+            String line;
+
+            //Test if cashier_record is empty
+            if (cashier_Record_List.isEmpty()) {
+                JOptionPane.showMessageDialog(panel, "Cashier_record is empty!",
+                        "File Empty", JOptionPane.ERROR_MESSAGE);
+            } else {
+                for (Map.Entry<String, DefaultListModel<Product>> entry : cashier_Record_List.entrySet()) {
+                    String current_order_id = entry.getKey();
+                    DefaultListModel<Product> current_order = entry.getValue();
+
+                    System.out.println(current_order);
+                    if (current_order != null && current_order.size() > 0) {
+                        for (int i = 0; i < current_order.size(); i++) {
+                            Product product = current_order.getElementAt(i);
+                            line = "OrderID: " + current_order_id + " ID: " + product.getItem_id()
+                                    + " Name: " + product.getItem() + " Price: " + product.getItemPrice();
+
+                            bw.write(line);
+                            bw.newLine();
+                        }
+                    }
+                }
+//                bw.close();
+                bw.flush();
+                JOptionPane.showMessageDialog(panel, "Data saved to file successfully.",
+                        "Success save file", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found: " + ex.getMessage());
+            JOptionPane.showMessageDialog(panel, "File not found: " + ex.getMessage(),
+                    "Error save file", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ex) {
+            System.out.println("Error when saving data: " + ex.getMessage());
+            JOptionPane.showMessageDialog(panel, "Error when saving data: " + ex.getMessage(),
+                    "Error save file", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }
