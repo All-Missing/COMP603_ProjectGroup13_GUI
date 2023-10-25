@@ -29,7 +29,7 @@ public class SearchGUI extends JFrame {
     private final CashierDBManager dbManager;
     private final Connection conn;
     private Statement statement;
-    
+    private Product product;
     private List<Product> productListDB;
     private RetrieveCashierDB retrieveDB;
 //    private JPanel searchPanel;
@@ -41,17 +41,29 @@ public class SearchGUI extends JFrame {
     private JButton searchListButton;
     private JButton clearButton;
     private JButton returnButton;
-    private Control control;
+//    private Control control;
     
         
+    public SearchGUI() {
+        dbManager = new CashierDBManager();
+        conn = dbManager.getCashierDBConnection();        
+        this.retrieveDB = new RetrieveCashierDB();
+        this.product = new Product();
+        this.productListDB = retrieveDB.RetrieveProductList();
+        initComponents();
+        initPanels();
+        initActionPerforms();
+    }
+    
     public SearchGUI(Control control) {
         
         dbManager = new CashierDBManager();
         conn = dbManager.getCashierDBConnection();        
         this.retrieveDB = new RetrieveCashierDB();
         this.productListDB = retrieveDB.RetrieveProductList();
-
-//    public JPanel initComponents() {
+    }
+    
+    //    public JPanel initComponents() {
 //        JPanel getComponent = new JPanel();
 //        //Why I cant call control object to invoke createButton
 //        searchListButton = new JButton("Search List");
@@ -71,19 +83,18 @@ public class SearchGUI extends JFrame {
 //        
 //        return getComponent;
 //    }
-    }
     
     public void initComponents() {        
         //Why I cant call control object to invoke createButton
-        searchListButton = control.createButton("Search List");
-        searchItemButton = control.createButton("Search Item");
-        clearButton = control.createButton("Clear");
-        returnButton = control.createButton("Return");
+//        searchListButton = control.createButton("Search List");
+//        searchItemButton = control.createButton("Search Item");
+//        clearButton = control.createButton("Clear");
+//        returnButton = control.createButton("Return");
 
-//        this.searchListButton = new JButton("Search List");
-//        this.searchItemButton = new JButton("Search Item");
-//        this.clearButton = new JButton("Clear");
-//        this.returnButton = new JButton("Return");
+        this.searchListButton = new JButton("Search List");
+        this.searchItemButton = new JButton("Search Item");
+        this.clearButton = new JButton("Clear");
+        this.returnButton = new JButton("Return");
         this.searchLabel = new JLabel("Search:");
         this.searchTextField = new JTextField(20);
         searchTextField.setText("Enter itemID or item name...");
@@ -153,7 +164,7 @@ public class SearchGUI extends JFrame {
                 if (e.getSource() == searchListButton) {
                     searchList();
                 }   else if (e.getSource() == searchItemButton) {
-                    
+                    searchItemByID(searchTextField.getText().trim());
                 }   else if (e.getSource() == clearButton) {
                      clear(); 
                 }   else if (e.getSource() == returnButton) {
@@ -180,16 +191,34 @@ public class SearchGUI extends JFrame {
         }
     }
     
+    //This method return a product details by passing its own item_id
+    public void searchItemByID(String itemValues) {
+        boolean isFound = false;
+        for (Product p : productListDB) {
+            if (p.getItem_id().equalsIgnoreCase(itemValues) || p.getItem().equalsIgnoreCase(itemValues)) {
+                searchTextArea.append(p.getItem_id() + " " + p.getItem() + " "
+                        + p.getItemPrice() + " " + p.getCategory()+"\n");
+                isFound = true;               
+            }
+        }
+
+        if (!isFound) {
+            searchTextArea.setText("This item is not found!\n");
+        }
+        
+}
+
+    
     
     
     public void clear() {
         searchTextArea.setText("");
     } 
-    
+        
     
     public static void main(String[] args) {
-        Control control = new Control();
-        SearchGUI searchGUI = new SearchGUI(control);
-        
+//        Control control = new Control();
+//        SearchGUI searchGUI = new SearchGUI(control);
+        SearchGUI searchGUI = new SearchGUI();
     }
 }    
