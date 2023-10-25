@@ -81,7 +81,7 @@ public class PaymentGUI {
                         "Payment Success", JOptionPane.INFORMATION_MESSAGE);
 
                 saveFileRecordGUI.addCashierRecord(cartOrderId, cartGUI.getCartProductList());
-                saveFileRecordGUI.updateCashierRecord();
+//                saveFileRecordGUI.updateCashierRecord();
                 
                 control.incrementedCartOrderId();
                 

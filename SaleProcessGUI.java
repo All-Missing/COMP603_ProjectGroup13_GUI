@@ -17,6 +17,7 @@ public class SaleProcessGUI {
     private JPanel mainPanel;
 //    private LoginGUI loginGUI;
     private ExitGUI exitGUI;
+    
 
     public SaleProcessGUI() {
         this.control = new Control();

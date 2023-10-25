@@ -10,7 +10,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -45,19 +47,32 @@ public class SaveFileRecordGUI {
     }
 
     public Map<String, DefaultListModel<Product>> addCashierRecord(String cartOrderId, DefaultListModel<Product> cartProductList) {
-        this.getCashier_Record_List().put(cartOrderId, cartProductList);
-        return this.getCashier_Record_List();
+    Set<String> processedCarts = new HashSet<>();
+    if (!processedCarts.contains(cartOrderId)) {
+        double totalCost = control.calculateTotalCost(cartProductList);
+        CashierRecordTextArea.append("Cart ID: " + cartOrderId + "\t Total Cost: $" + totalCost + "\n");
+        processedCarts.add(cartOrderId);
     }
+
+    this.getCashier_Record_List().put(cartOrderId, cartProductList);
+    return this.getCashier_Record_List();
+}
 
     public Map<String, Map<String, DefaultListModel<Product>>> addRefundRecord(String refundOrderID, Map<String, DefaultListModel<Product>> cashier_Record_List) {
         this.getRefund_Record_List().put(refundOrderID, cashier_Record_List);
         return this.getRefund_Record_List();
     }
 
-    public void updateCashierRecord() {
-        String cartRecordOutput = this.cartRecordOutputString();
-        this.CashierRecordTextArea.setText(cartRecordOutput);
-    }
+//    public void updateCashierRecord() {
+//        String checkRecordOutput = "";
+//        String cartRecordOutput = this.cartRecordOutputString();
+//
+//        if (!checkRecordOutput.equalsIgnoreCase(cartRecordOutput)) {
+//            this.CashierRecordTextArea.setText(cartRecordOutput);
+//            checkRecordOutput = cartRecordOutput;
+//        }
+//
+//    }
 
     public JPanel addCheckCartRecord() {
         JPanel cartRecordPanel = new JPanel(new BorderLayout());
@@ -66,7 +81,7 @@ public class SaveFileRecordGUI {
         control.setFont(this.CashierRecordTextArea);
         this.CashierRecordTextArea.setEditable(true);
 
-        this.updateCashierRecord();
+//        this.updateCashierRecord();
 //        JPanel refundPurchase = this.getRefundOrder();
 
         this.CashierRecordTextArea.setPreferredSize(new Dimension(400, 200));
@@ -82,7 +97,7 @@ public class SaveFileRecordGUI {
 //        JButton refundOrderButton = control.createButton("Refund");
 //        refundOrderButton.addActionListener((ActionEvent e) -> {
         control.RefundOrder(CashierRecordTextArea, refundOrderPanel, refund_Record_List, cashier_Record_List);
-        this.updateCashierRecord();
+//        this.updateCashierRecord();
 
 //                    JOptionPane.showMessageDialog(refundOrderPanel, "Please selected cart for to be refund.",
 //                            "Refund Puchase", JOptionPane.ERROR_MESSAGE);
@@ -92,21 +107,25 @@ public class SaveFileRecordGUI {
         return refundOrderPanel;
     }
 
-    public String cartRecordOutputString() {
-        StringBuilder content = new StringBuilder();
-
-        for (Map.Entry<String, DefaultListModel<Product>> entry : this.getCashier_Record_List().entrySet()) {
-            String cartId = entry.getKey();
-            DefaultListModel<Product> productLists = entry.getValue();
-            
-            double totalCost = control.calculateTotalCost(productLists);
-            
-            System.out.print(totalCost);
-
-            content.append("Cart ID: ").append(cartId).append("\t Total Cost: $").append(control.getBill()).append("\n");
-        }
-        return content.toString();
-    }
+//    public String cartRecordOutputString() {
+//        StringBuilder content = new StringBuilder();
+//        Map<String, Double> cartTotalCostMap = new HashMap<>();
+//
+//        for (Map.Entry<String, DefaultListModel<Product>> entry : this.getCashier_Record_List().entrySet()) {
+//            String cartId = entry.getKey();
+//            DefaultListModel<Product> productLists = entry.getValue();
+//
+//            double totalCost = 0.0;
+//            for (int i = 0; i < productLists.size(); i++) {
+//                Product product = productLists.get(i);
+//                totalCost += product.getItemPrice();
+//            }
+//            cartTotalCostMap.put(cartId, totalCost);
+//
+//        }
+//
+//        return content.toString();
+//    }
 
     public JPanel saveFileRecordsButton(Map<String, DefaultListModel<Product>> record) {
         JPanel saveFileRecordsButton = new JPanel(new BorderLayout());
@@ -126,7 +145,6 @@ public class SaveFileRecordGUI {
 
             bw = new BufferedWriter(new FileWriter("./file_records/Cart_Records.txt", true));
 
-            String line;
 
             //Test if cashier_record is empty
             if (cashier_Record_List.isEmpty()) {
@@ -141,7 +159,7 @@ public class SaveFileRecordGUI {
                     if (current_order != null && current_order.size() > 0) {
                         for (int i = 0; i < current_order.size(); i++) {
                             Product product = current_order.getElementAt(i);
-                            line = "OrderID: " + current_order_id + " ID: " + product.getItem_id()
+                            String line = "OrderID: " + current_order_id + " ID: " + product.getItem_id()
                                     + " Name: " + product.getItem() + " Price: " + product.getItemPrice();
 
                             bw.write(line);
@@ -149,8 +167,8 @@ public class SaveFileRecordGUI {
                         }
                     }
                 }
-//                bw.close();
-                bw.flush();
+                bw.close();
+//                bw.flush();
                 JOptionPane.showMessageDialog(panel, "Data saved to file successfully.",
                         "Success save file", JOptionPane.INFORMATION_MESSAGE);
             }
