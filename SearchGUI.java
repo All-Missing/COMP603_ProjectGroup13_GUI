@@ -11,20 +11,23 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 public class SearchGUI extends JFrame {
 
     private static final int ROW_AREA = 20;
     private static final int COLUMN_AREA = 40;
-
+    private HashMap<String, Product> searchProductList;
     private final CashierDBManager dbManager;
     private final Connection conn;
     private Statement statement;
@@ -52,14 +55,14 @@ public class SearchGUI extends JFrame {
 //        initPanels();
 //        initActionPerforms();
 //    }
-
-    public SearchGUI(Control control) {
+    public SearchGUI(Control control, CartGUI cartGUI) {
         this.control = control;
+        this.cartGUI = cartGUI;
+        this.searchProductList = new HashMap<>();
         dbManager = new CashierDBManager();
         conn = dbManager.getCashierDBConnection();
         this.retrieveDB = new RetrieveCashierDB();
         this.productListDB = retrieveDB.RetrieveProductList();
-        this.cartGUI = new CartGUI(control);
         initComponents();
         initActionPerforms();
     }
@@ -122,7 +125,7 @@ public class SearchGUI extends JFrame {
                 if (e.getSource() == searchListButton) {
                     searchList();
                 } else if (e.getSource() == searchItemButton) {
-                    searchItemByID(searchTextField.getText().trim());
+//                    searchItemByID(searchTextField.getText().trim());
                 } else if (e.getSource() == clearButton) {
                     control.clearButton(clearButton, searchTextArea);
                 } else if (e.getSource() == returnButton) {
@@ -130,6 +133,36 @@ public class SearchGUI extends JFrame {
                 }
             }
         };
+
+        // Inside your SearchGUI class constructor
+        searchTextArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
+                    int getLine = searchTextArea.viewToModel2D(e.getPoint());
+                    try {
+                        int selectIndex = searchTextArea.getLineOfOffset(getLine);
+                        Product product = productListDB.get(selectIndex);
+                        
+                        int option = JOptionPane.showConfirmDialog(searchPanel, "Do you wish to add this product to cart",
+                                "Confirm adding this product", JOptionPane.YES_NO_OPTION);
+                        //Check if confirm yes
+                        if (option == JOptionPane.YES_OPTION)                                                        
+                            cartGUI.addToCart(product.getItem_id(), product.getItem(), product.getItemPrice(), product.getCategory());
+                        if (option == JOptionPane.NO_OPTION)
+                            JOptionPane.showMessageDialog(searchPanel, "Cancel selecting this product",
+                            "Select next one?", JOptionPane.ERROR_MESSAGE);
+                    } catch (Exception ex) {
+                        System.out.println(ex);
+                    }
+                } else {
+
+                    JOptionPane.showMessageDialog(searchPanel, "Please select an item to delete.",
+                            "Delete Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
         searchListButton.addActionListener(buttonAction);
         searchItemButton.addActionListener(buttonAction);
         clearButton.addActionListener(buttonAction);
@@ -137,17 +170,40 @@ public class SearchGUI extends JFrame {
     }
 
     //Create researchFunction
+//    public void searchList() {
+//
+//        for (Product product : productListDB) {
+//            String item_id = product.getItem_id();
+//            String item = product.getItem();
+//            Double item_price = product.getItemPrice();
+//            String category = product.getCategory();
+//            searchTextArea.append(item_id + " " + item + " " + item_price + " " + category + "\n");
+//            control.searchElementIndex(searchTextArea, 0, cartGUI.getCartPanel(), cartGUI.getCartProductList());
+//            cartGUI.updateCartProductList();
+//        }
+//    }
     public void searchList() {
-
+        int index = 0;
         for (Product product : productListDB) {
             String item_id = product.getItem_id();
             String item = product.getItem();
             Double item_price = product.getItemPrice();
             String category = product.getCategory();
             searchTextArea.append(item_id + " " + item + " " + item_price + " " + category + "\n");
-            control.searchElementIndex(searchTextArea, 2, cartGUI.getCartPanel(), cartGUI.getCartProductList());
-            cartGUI.updateCartProductList();
+            index++;
+            addProductList(item_id, product);
+
         }
+
+    }
+
+    public void addProductList(String item_id, Product product) {
+        this.searchProductList.put(item_id, product);
+    }
+
+    public int getSelectItemListIndex(int indexSelect) {
+
+        return indexSelect;
     }
 
     //This method return a product details by passing its own item_id
@@ -165,5 +221,5 @@ public class SearchGUI extends JFrame {
             searchTextArea.setText("This item is not found!\n");
         }
     }
-    
+
 }

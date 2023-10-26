@@ -24,7 +24,7 @@ public class SaleProcessGUI {
     public SaleProcessGUI() {
         this.control = new Control();
         this.cartGUI = new CartGUI(control);
-        this.searchGUI = new SearchGUI(control);
+        this.searchGUI = new SearchGUI(control, cartGUI);
         this.exitGUI = new ExitGUI(control, cartGUI);
 //        this.exitGUI = new ExitGUI(control, cartGUI);
         this.purchaseGUI = new PurchaseGUI(control, cartGUI);

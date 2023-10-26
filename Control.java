@@ -149,7 +149,7 @@ public class Control {
                         int getIndex = textArea.getLineOfOffset(getLine);
                         int selectIndex = getIndex - indexAdjust;
 
-                        list.add(selectIndex, product);
+                        list.removeElementAt(selectIndex);
                         
                     } catch (Exception ex) {
                         System.out.println(ex);
