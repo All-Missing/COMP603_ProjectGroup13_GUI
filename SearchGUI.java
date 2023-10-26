@@ -4,11 +4,11 @@ import COMP603_ProjectGroup13.Product;
 import COMP603_ProjectGroup13_DB.CashierDBManager;
 import COMP603_ProjectGroup13_DB.RetrieveCashierDB;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
@@ -40,6 +40,7 @@ public class SearchGUI extends JFrame {
     private JButton clearButton;
     private JButton returnButton;
     private Control control;
+    private CartGUI cartGUI;
 
     public SearchGUI() {
         dbManager = new CashierDBManager();
@@ -58,6 +59,7 @@ public class SearchGUI extends JFrame {
         conn = dbManager.getCashierDBConnection();
         this.retrieveDB = new RetrieveCashierDB();
         this.productListDB = retrieveDB.RetrieveProductList();
+        this.cartGUI = new CartGUI(control);
         initComponents();
         initActionPerforms();
     }
@@ -86,7 +88,7 @@ public class SearchGUI extends JFrame {
     public JPanel initPanels() {
 
         searchPanel = new JPanel();
-        
+
         //Setup northPanel on search Panel
         JPanel northPanel = new JPanel();
         JScrollPane scrollPane = new JScrollPane(searchTextArea);
@@ -107,7 +109,7 @@ public class SearchGUI extends JFrame {
         southPanel.add(clearButton);
         southPanel.add(returnButton);
         searchPanel.add(southPanel, BorderLayout.AFTER_LINE_ENDS);
-    
+
         return searchPanel;
     }
 
@@ -128,10 +130,38 @@ public class SearchGUI extends JFrame {
                 }
             }
         };
+
+        // Update the "Search List" button to call addElementOneClick
+        searchListButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addElementOneClick();
+            }
+        });
+
         searchListButton.addActionListener(buttonAction);
         searchItemButton.addActionListener(buttonAction);
         clearButton.addActionListener(buttonAction);
         returnButton.addActionListener(buttonAction);
+    }
+
+    public void addElementOneClick() {
+        // Add code to handle clicking a product in the searchTextArea
+        searchTextArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    int selectedRow = searchTextArea.viewToModel(e.getPoint()); // Get the selected row
+                    if (selectedRow >= 0) {
+                        // You can handle the click action here without adding the product to the cart
+                        // For example, display product details or perform a different action
+
+                        // Update the cart display if necessary
+                        cartGUI.updateCartProductList();
+                    }
+                }
+            }
+        });
     }
 
     //Create researchFunction
@@ -156,7 +186,7 @@ public class SearchGUI extends JFrame {
                 isFound = true;
             }
         }
-        
+
         if (!isFound) {
             searchTextArea.setText("This item is not found!\n");
         }

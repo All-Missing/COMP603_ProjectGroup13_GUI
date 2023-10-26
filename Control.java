@@ -2,6 +2,8 @@ package COMP603_ProjectGroup13_GUI;
 
 import COMP603_ProjectGroup13.Product;
 import COMP603_ProjectGroup13.Cashier;
+import COMP603_ProjectGroup13_DB.CashierDBManager;
+import COMP603_ProjectGroup13_DB.RetrieveCashierDB;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -10,8 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,6 +26,8 @@ import javax.swing.text.Utilities;
 public class Control {
 
     private Product product;
+    private List<Product> productListDB;
+    private RetrieveCashierDB retrieveDB;
     private int cartOrderID;
     private CardLayout mainLayout;
     private SaleProcessGUI saleGUI;
@@ -36,6 +40,8 @@ public class Control {
     private Cashier cashier;
 
     public Control() {
+        this.product = new Product();
+        this.productListDB = retrieveDB.RetrieveProductList();
         cOrderID = new CheckOrderID();
         this.cashier = new Cashier();
         Control.NEXT_ORDER_ID = cOrderID.checkOrderID();
@@ -56,7 +62,7 @@ public class Control {
     public double getBill() {
         return this.bill;
     }
-    
+
     public int getCartOrderID() {
         return this.cartOrderID;
     }
@@ -92,11 +98,11 @@ public class Control {
         button.setPreferredSize(new Dimension(150, 50));
         return button;
     }
-    
+
     public void closeFrame(JFrame frame) {
         frame.dispose();
     }
-    
+
     public void clearButton(JButton clearButton, JTextArea logArea) {
         clearButton.addActionListener(new ActionListener() {
             @Override
@@ -107,8 +113,8 @@ public class Control {
     }
 
     public JPanel returnButton() {
-        
-        JPanel returnPanel = new JPanel();                
+
+        JPanel returnPanel = new JPanel();
         JButton returnButton = new JButton("Return to Categories");
         returnButton.addActionListener((ActionEvent e) -> {
             this.showCard("Categories");
@@ -116,7 +122,24 @@ public class Control {
         returnPanel.add(returnButton);
 
         return returnPanel;
-}
+    }
+
+    public void searchElementIndex(int selectedRow, JPanel cartPanel, DefaultListModel<Product> cartProductList) {
+        try {
+            // Check if the selectedRow is a valid index
+            if (selectedRow >= 0 && selectedRow < productListDB.size()) {
+                // Get the selected product from productListDB based on the selectedRow
+                Product selectedProduct = productListDB.get(selectedRow);
+
+                // Add the selected product to the cart
+                cartProductList.addElement(selectedProduct);
+
+                // Optionally, you can update the cart display here.
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
 
     public void removeElementIndex(JTextArea textArea, int indexAdjust, JPanel panel, DefaultListModel<Product> list) {
         textArea.addMouseListener(new MouseAdapter() {
@@ -140,7 +163,7 @@ public class Control {
             }
         });
     }
-    
+
     public void removeAllElement(DefaultListModel<Product> list, JPanel panel) {
         if (list.isEmpty()) {
             JOptionPane.showMessageDialog(panel,
@@ -160,7 +183,7 @@ public class Control {
             }
         }
     }
-    
+
     public void RefundOrder(JTextArea textArea, JPanel panel, Map<String, Map<String, DefaultListModel<Product>>> listAdd, Map<String, DefaultListModel<Product>> listRemove) {
         textArea.addMouseListener(new MouseAdapter() {
             @Override
@@ -181,7 +204,7 @@ public class Control {
                             int cartId = Integer.parseInt(matcher.group(1));
 
                             System.out.println("Cart ID: " + cartId);
-                                Map<String, DefaultListModel<Product>> dataStoreToMove = new HashMap<>();
+                            Map<String, DefaultListModel<Product>> dataStoreToMove = new HashMap<>();
 
                             for (Map.Entry<String, DefaultListModel<Product>> entry : listRemove.entrySet()) {
                                 String cardOrderID = entry.getKey();
@@ -213,5 +236,5 @@ public class Control {
                 }
             }
         });
-    }   
+    }
 }

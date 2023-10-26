@@ -33,6 +33,10 @@ public class CartGUI {
     public DefaultListModel<Product> getCartProductList() {
         return this.cartProductList;
     }
+    
+    public JPanel getCartPanel() {
+        return this.cartPanel;
+    }
 
     public JList<Product> getCartList() {
         return this.cartList;
@@ -96,7 +100,7 @@ public class CartGUI {
 
     public JPanel removeProductFromCart() {
         JPanel removePanel = new JPanel(new BorderLayout());
-
+        
         JButton removeOneElementButton = control.createButton("Remove Product");
         JButton removeAllElementButton = control.createButton("Remove All Product");
 
