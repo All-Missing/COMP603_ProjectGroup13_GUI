@@ -13,14 +13,15 @@ public class PaymentGUI {
     private CartGUI cartGUI;
 
     public PaymentGUI(Control control, CartGUI cartGUI) {
-        this.saveFileRecordGUI = new SaveFileRecordGUI(cartGUI);
         this.control = control;
         this.cartGUI = cartGUI;
+        this.saveFileRecordGUI = new SaveFileRecordGUI(cartGUI);
     }
 
     public JPanel createPaymentPanel() {
         JPanel paymentPanel = new JPanel(new BorderLayout());
 
+        
         JPanel paymentButtonsPanel = this.createPaymentButtonsPanel();
         JPanel checkPreviousCartPanel = saveFileRecordGUI.addCheckCartRecord();
 
@@ -38,17 +39,17 @@ public class PaymentGUI {
 
         JButton cashButton = control.createButton("Cash");
         cashButton.addActionListener(e -> handleCardPayment());
-        
+
         JButton refundButton = control.createButton("Refund");
         cashButton.addActionListener(e -> refund());
 
         JButton cancelCartButton = control.createButton("Cancel Cart");
         cancelCartButton.addActionListener(e -> cancelCart());
- 
+
         buttonPanel.add(cardButton, BorderLayout.WEST);
         buttonPanel.add(cashButton, BorderLayout.WEST);
         buttonPanel.add(refundButton, BorderLayout.WEST);
-        buttonPanel.add(cancelCartButton,BorderLayout.WEST);
+        buttonPanel.add(cancelCartButton, BorderLayout.WEST);
 
         return buttonPanel;
     }
@@ -56,9 +57,8 @@ public class PaymentGUI {
     public void handleCardPayment() {
         JPanel cardPayment = new JPanel(new BorderLayout());
         double totalCost = control.calculateTotalCost(cartGUI.getCartProductList());
-        String cartOrderId = String.valueOf(control.getCartOrderID());
-        
-        System.out.println(cartOrderId);
+        int cartOrderId = control.getCartOrderID();
+
         String inputAmount = JOptionPane.showInputDialog(cardPayment,
                 "Total Price: $" + totalCost + "\nPayment Method: Eftpos" + "\nEnter Payment Amount:");
 
@@ -69,9 +69,9 @@ public class PaymentGUI {
                 JOptionPane.showMessageDialog(cardPayment, "Payment successful! Thank you for your purchase.",
                         "Payment Success", JOptionPane.INFORMATION_MESSAGE);
 
-                saveFileRecordGUI.addCashierRecord(cartOrderId, cartGUI.getCartProductList());
-                control.incrementedCartOrderId();                
-                
+                saveFileRecordGUI.addCashierRecord(cartOrderId, totalCost);
+                control.incrementedCartOrderId();
+
                 cartGUI.getCartProductList().removeAllElements();
                 cartGUI.updateCartProductList();
             } else {
@@ -94,7 +94,7 @@ public class PaymentGUI {
         double totalCost = control.calculateTotalCost(cartGUI.getCartProductList());
 
     }
-    
+
     public void refund() {
         this.saveFileRecordGUI.getRefundOrder();
     }
@@ -112,5 +112,4 @@ public class PaymentGUI {
         }
     }
 
-    
 }

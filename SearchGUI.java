@@ -160,7 +160,6 @@ public class SearchGUI extends JFrame {
         if (!isFound) {
             searchTextArea.setText("This item is not found!\n");
         }
-
     }
 
     public void clear() {

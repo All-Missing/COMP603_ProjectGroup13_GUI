@@ -16,13 +16,15 @@ public class SaleProcessGUI {
     private JPanel mainPanel;
     private SearchGUI searchGUI;
     private ExitGUI exitGUI;
+    private SaveFileRecordGUI SaveFileRecordGUI;
 
     public SaleProcessGUI() {
         this.control = new Control();
         this.cartGUI = new CartGUI(control);
         this.searchGUI = new SearchGUI(control);
-        this.exitGUI = new ExitGUI(control, cartGUI);
-        this.exitGUI = new ExitGUI(control, cartGUI);
+        this.SaveFileRecordGUI = new SaveFileRecordGUI(cartGUI);
+        this.exitGUI = new ExitGUI(control, cartGUI, SaveFileRecordGUI);
+//        this.exitGUI = new ExitGUI(control);
         this.purchaseGUI = new PurchaseGUI(control, cartGUI);
         this.paymentGUI = new PaymentGUI(control, cartGUI);
         initializeFrame();

@@ -1,5 +1,6 @@
 package COMP603_ProjectGroup13_GUI;
 
+import COMP603_ProjectGroup13.SaveCashierFileRecords;
 import COMP603_ProjectGroup13.Staff_Record;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -23,24 +24,29 @@ public class ExitGUI {
 
     private Control control;
     private CartGUI cartGUI;
-    private SaveFileRecordGUI saveFileRecordGUI;
+    private static SaveCashierFileRecord saveRecords;
+    private SaveFileRecordGUI saveRecordGUI;
+    private HashMap<String, Double> bill_records;
     private Staff_Record staffRecord;
     private HashMap<String, String> staffList;
 
-    public ExitGUI(Control control, CartGUI cartGUI) {
+    public ExitGUI(Control control, CartGUI cartGUI, SaveFileRecordGUI saveFileRecordGUI) {
         this.control = control;
-        this.saveFileRecordGUI = new SaveFileRecordGUI(cartGUI);
+        saveRecords = new SaveCashierFileRecord();
+        this.saveRecordGUI = new SaveFileRecordGUI(cartGUI);
+        this.bill_records = new HashMap<>();
     }
 
     public JPanel createLogOutPanel(JFrame frame) {
         JPanel exitPanel = new JPanel(new BorderLayout());
-
+        
         JPanel userLogOut = this.exitPanel(frame);
 //        userLogOut.setPreferredSize(new Dimension(100, 50));
-        JPanel saveButton = saveFileRecordGUI.saveFileRecordsButton(saveFileRecordGUI.getCashier_Record_List());
+        bill_records = saveRecordGUI.getCashier_Record_List();
+        JPanel saveButtonPanel = saveRecords.saveFileRecordsButton(bill_records);
 
         exitPanel.add(userLogOut, BorderLayout.CENTER);
-        exitPanel.add(saveButton, BorderLayout.EAST);
+        exitPanel.add(saveButtonPanel, BorderLayout.EAST);
 
         return exitPanel;
     }
@@ -142,7 +148,7 @@ public class ExitGUI {
     }
 
     public boolean saveFileCheck(JPanel panel) {
-        if (saveFileRecordGUI.getCashier_Record_List().isEmpty()) {
+        if (saveRecordGUI.getCashier_Record_List().isEmpty()) {
             JOptionPane.showMessageDialog(panel, "Check file, confirm file saved, logging out.",
                     "Confirm file save", JOptionPane.INFORMATION_MESSAGE);
             return true;

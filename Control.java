@@ -2,6 +2,8 @@ package COMP603_ProjectGroup13_GUI;
 
 import COMP603_ProjectGroup13.Product;
 import COMP603_ProjectGroup13.Cashier;
+import COMP603_ProjectGroup13.CheckOrderID;
+import COMP603_ProjectGroup13.ProductList;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -11,7 +13,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,6 +25,7 @@ import javax.swing.text.Utilities;
 public class Control {
 
     private Product product;
+    private ProductList productlist;
     private int cartOrderID;
     private CardLayout mainLayout;
     private SaleProcessGUI saleGUI;
@@ -32,13 +34,13 @@ public class Control {
     private double bill = 0;
     private double totalCost = 0;
     private Font font;
-    private CheckOrderID cOrderID;
+    private CheckOrderID checkOrderID;
     private Cashier cashier;
 
     public Control() {
-        cOrderID = new CheckOrderID();
+        checkOrderID = new CheckOrderID();
         this.cashier = new Cashier();
-        Control.NEXT_ORDER_ID = cOrderID.checkOrderID();
+        Control.NEXT_ORDER_ID = checkOrderID.checkOrderID();
         this.cartOrderID = Control.NEXT_ORDER_ID;
         this.pageControlPanel = new JPanel();
         this.mainLayout = new CardLayout();
@@ -84,6 +86,7 @@ public class Control {
             product = cartProductList.getElementAt(i);
             this.totalCost += product.getItemPrice();
         }
+        this.bill = totalCost;
         return this.totalCost;
     }
 
@@ -128,7 +131,10 @@ public class Control {
                         int getIndex = textArea.getLineOfOffset(getLine);
                         int removeIndex = getIndex - indexAdjust;
 
-                        list.removeElementAt(removeIndex);
+                        Product products = list.get(removeIndex);
+//                        list.removeElementAt(removeIndex);
+                        
+                        list.addElement(products);
 
                     } catch (Exception ex) {
                         System.out.println(ex);
