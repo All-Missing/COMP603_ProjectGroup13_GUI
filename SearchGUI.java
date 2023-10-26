@@ -42,16 +42,16 @@ public class SearchGUI extends JFrame {
     private Control control;
     private CartGUI cartGUI;
 
-    public SearchGUI() {
-        dbManager = new CashierDBManager();
-        conn = dbManager.getCashierDBConnection();
-        this.retrieveDB = new RetrieveCashierDB();
-        this.product = new Product();
-        this.productListDB = retrieveDB.RetrieveProductList();
-        initComponents();
-        initPanels();
-        initActionPerforms();
-    }
+//    public SearchGUI() {
+//        dbManager = new CashierDBManager();
+//        conn = dbManager.getCashierDBConnection();
+//        this.retrieveDB = new RetrieveCashierDB();
+//        this.product = new Product();
+//        this.productListDB = retrieveDB.RetrieveProductList();
+//        initComponents();
+//        initPanels();
+//        initActionPerforms();
+//    }
 
     public SearchGUI(Control control) {
         this.control = control;
@@ -124,44 +124,16 @@ public class SearchGUI extends JFrame {
                 } else if (e.getSource() == searchItemButton) {
                     searchItemByID(searchTextField.getText().trim());
                 } else if (e.getSource() == clearButton) {
-                    clear();
+                    control.clearButton(clearButton, searchTextArea);
                 } else if (e.getSource() == returnButton) {
                     control.showCard("Categories");
                 }
             }
         };
-
-        // Update the "Search List" button to call addElementOneClick
-        searchListButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addElementOneClick();
-            }
-        });
-
         searchListButton.addActionListener(buttonAction);
         searchItemButton.addActionListener(buttonAction);
         clearButton.addActionListener(buttonAction);
         returnButton.addActionListener(buttonAction);
-    }
-
-    public void addElementOneClick() {
-        // Add code to handle clicking a product in the searchTextArea
-        searchTextArea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 1) {
-                    int selectedRow = searchTextArea.viewToModel(e.getPoint()); // Get the selected row
-                    if (selectedRow >= 0) {
-                        // You can handle the click action here without adding the product to the cart
-                        // For example, display product details or perform a different action
-
-                        // Update the cart display if necessary
-                        cartGUI.updateCartProductList();
-                    }
-                }
-            }
-        });
     }
 
     //Create researchFunction
@@ -173,6 +145,8 @@ public class SearchGUI extends JFrame {
             Double item_price = product.getItemPrice();
             String category = product.getCategory();
             searchTextArea.append(item_id + " " + item + " " + item_price + " " + category + "\n");
+            control.searchElementIndex(searchTextArea, 2, cartGUI.getCartPanel(), cartGUI.getCartProductList());
+            cartGUI.updateCartProductList();
         }
     }
 
@@ -190,16 +164,6 @@ public class SearchGUI extends JFrame {
         if (!isFound) {
             searchTextArea.setText("This item is not found!\n");
         }
-
     }
-
-    public void clear() {
-        searchTextArea.setText("");
-    }
-
-    public static void main(String[] args) {
-//        Control control = new Control();
-//        SearchGUI searchGUI = new SearchGUI(control);
-        SearchGUI searchGUI = new SearchGUI();
-    }
+    
 }

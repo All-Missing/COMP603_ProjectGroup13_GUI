@@ -2,8 +2,6 @@ package COMP603_ProjectGroup13_GUI;
 
 import COMP603_ProjectGroup13.Product;
 import COMP603_ProjectGroup13.Cashier;
-import COMP603_ProjectGroup13_DB.CashierDBManager;
-import COMP603_ProjectGroup13_DB.RetrieveCashierDB;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -12,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -24,10 +21,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.text.Utilities;
 
 public class Control {
-
-    private Product product;
-    private List<Product> productListDB;
-    private RetrieveCashierDB retrieveDB;
+    private Product product;       
     private int cartOrderID;
     private CardLayout mainLayout;
     private SaleProcessGUI saleGUI;
@@ -39,9 +33,7 @@ public class Control {
     private CheckOrderID cOrderID;
     private Cashier cashier;
 
-    public Control() {
-        this.product = new Product();
-        this.productListDB = retrieveDB.RetrieveProductList();
+    public Control() {    
         cOrderID = new CheckOrderID();
         this.cashier = new Cashier();
         Control.NEXT_ORDER_ID = cOrderID.checkOrderID();
@@ -124,21 +116,27 @@ public class Control {
         return returnPanel;
     }
 
-    public void searchElementIndex(int selectedRow, JPanel cartPanel, DefaultListModel<Product> cartProductList) {
-        try {
-            // Check if the selectedRow is a valid index
-            if (selectedRow >= 0 && selectedRow < productListDB.size()) {
-                // Get the selected product from productListDB based on the selectedRow
-                Product selectedProduct = productListDB.get(selectedRow);
+    public void searchElementIndex(JTextArea textArea, int indexAdjust, JPanel panel, DefaultListModel<Product> list) {
+        textArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
+                    int getLine = textArea.viewToModel2D(e.getPoint());
+                    try {
+                        int getIndex = textArea.getLineOfOffset(getLine);
+                        int selectIndex = getIndex - indexAdjust;
 
-                // Add the selected product to the cart
-                cartProductList.addElement(selectedProduct);
+                        list.removeElementAt(selectIndex);
 
-                // Optionally, you can update the cart display here.
+                    } catch (Exception ex) {
+                        System.out.println(ex);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(panel, "Please select an item to cart order.",
+                            "Select Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
-        } catch (Exception ex) {
-            System.out.println(ex);
-        }
+        });
     }
 
     public void removeElementIndex(JTextArea textArea, int indexAdjust, JPanel panel, DefaultListModel<Product> list) {
@@ -149,10 +147,10 @@ public class Control {
                     int getLine = textArea.viewToModel2D(e.getPoint());
                     try {
                         int getIndex = textArea.getLineOfOffset(getLine);
-                        int removeIndex = getIndex - indexAdjust;
+                        int selectIndex = getIndex - indexAdjust;
 
-                        list.removeElementAt(removeIndex);
-
+                        list.add(selectIndex, product);
+                        
                     } catch (Exception ex) {
                         System.out.println(ex);
                     }
