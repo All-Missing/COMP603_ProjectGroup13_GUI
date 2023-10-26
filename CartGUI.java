@@ -33,6 +33,10 @@ public class CartGUI {
     public DefaultListModel<Product> getCartProductList() {
         return this.cartProductList;
     }
+    
+    public JPanel getCartPanel() {
+        return this.cartPanel;
+    }
 
     public JList<Product> getCartList() {
         return this.cartList;
@@ -47,7 +51,7 @@ public class CartGUI {
         StringBuilder cartTable = new StringBuilder();
         cartTable.append(String.format(" CartID: %-5s\n", currentCartID));
         cartTable.append(String.format(" %-35s%-10s %-5s\n", "Item", "Price", "Cost"));
-
+        
         for (int i = 0; i < this.getCartProductList().size(); i++) {
             Product products = this.getCartProductList().getElementAt(i);
             String itemName = products.getItem();
@@ -56,7 +60,18 @@ public class CartGUI {
 
             cartTable.append(String.format(" %-35s$%-10.2f$%-5.2f\n", itemName, pricePerItem, cost));
         }
-
+        
+//        int index = 0;
+//        while (!(this.cartProductList.isEmpty())) {
+//            Product products = this.getCartProductList().getElementAt(index);
+//            String itemName = products.getItem();
+//            double pricePerItem = products.getItemPrice();
+//            double cost = pricePerItem;
+//            
+//            cartTable.append(String.format(" %-35s$%-10.2f$%-5.2f\n", itemName, pricePerItem, cost));
+//            index++;
+//        }
+            
         return cartTable.toString();
     }
 
@@ -68,7 +83,8 @@ public class CartGUI {
     public DefaultListModel<Product> addToCart(String itemId, String itemName, double itemPrice, String categories) {
         this.product = new Product(itemId, itemName, itemPrice, categories);
         this.cartProductList.addElement(product);
-        System.out.println("Product is add to cart");
+//        System.out.println("Product is add to cart");
+        System.out.println(product.getItem_id());
         this.updateCartProductList();
         return cartProductList;
     }
@@ -76,7 +92,7 @@ public class CartGUI {
     public JPanel createCartPanel() {
         this.cartPanel = new JPanel(new BorderLayout());
 
-        cartTextArea = new JTextArea();
+//        cartTextArea = new JTextArea();
         cartTextArea.setEditable(true);
         control.setFont(cartTextArea);
 
@@ -96,7 +112,7 @@ public class CartGUI {
 
     public JPanel removeProductFromCart() {
         JPanel removePanel = new JPanel(new BorderLayout());
-
+        
         JButton removeOneElementButton = control.createButton("Remove Product");
         JButton removeAllElementButton = control.createButton("Remove All Product");
 

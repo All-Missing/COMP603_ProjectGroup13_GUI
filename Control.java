@@ -24,8 +24,7 @@ import javax.swing.text.Utilities;
 
 public class Control {
 
-    private Product product;
-    private ProductList productlist;
+    private Product product;       
     private int cartOrderID;
     private CardLayout mainLayout;
     private SaleProcessGUI saleGUI;
@@ -37,8 +36,9 @@ public class Control {
     private CheckOrderID checkOrderID;
     private Cashier cashier;
 
-    public Control() {
-        checkOrderID = new CheckOrderID();
+
+    public Control() {    
+        cOrderID = new CheckOrderID();
         this.cashier = new Cashier();
         Control.NEXT_ORDER_ID = checkOrderID.checkOrderID();
         this.cartOrderID = Control.NEXT_ORDER_ID;
@@ -58,7 +58,7 @@ public class Control {
     public double getBill() {
         return this.bill;
     }
-    
+
     public int getCartOrderID() {
         return this.cartOrderID;
     }
@@ -95,11 +95,11 @@ public class Control {
         button.setPreferredSize(new Dimension(150, 50));
         return button;
     }
-    
+
     public void closeFrame(JFrame frame) {
         frame.dispose();
     }
-    
+
     public void clearButton(JButton clearButton, JTextArea logArea) {
         clearButton.addActionListener(new ActionListener() {
             @Override
@@ -110,8 +110,8 @@ public class Control {
     }
 
     public JPanel returnButton() {
-        
-        JPanel returnPanel = new JPanel();                
+
+        JPanel returnPanel = new JPanel();
         JButton returnButton = new JButton("Return to Categories");
         returnButton.addActionListener((ActionEvent e) -> {
             this.showCard("Categories");
@@ -119,7 +119,30 @@ public class Control {
         returnPanel.add(returnButton);
 
         return returnPanel;
-}
+    }
+
+    public void searchElementIndex(JTextArea textArea, int indexAdjust, JPanel panel, DefaultListModel<Product> list) {
+        textArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
+                    int getLine = textArea.viewToModel2D(e.getPoint());
+                    try {
+                        int getIndex = textArea.getLineOfOffset(getLine);
+                        int selectIndex = getIndex - indexAdjust;
+
+                        list.removeElementAt(selectIndex);
+
+                    } catch (Exception ex) {
+                        System.out.println(ex);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(panel, "Please select an item to cart order.",
+                            "Select Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+    }
 
     public void removeElementIndex(JTextArea textArea, int indexAdjust, JPanel panel, DefaultListModel<Product> list) {
         textArea.addMouseListener(new MouseAdapter() {
@@ -129,13 +152,11 @@ public class Control {
                     int getLine = textArea.viewToModel2D(e.getPoint());
                     try {
                         int getIndex = textArea.getLineOfOffset(getLine);
-                        int removeIndex = getIndex - indexAdjust;
 
-                        Product products = list.get(removeIndex);
-//                        list.removeElementAt(removeIndex);
+                        int selectIndex = getIndex - indexAdjust;
+
+                        list.removeElementAt(selectIndex);
                         
-                        list.addElement(products);
-
                     } catch (Exception ex) {
                         System.out.println(ex);
                     }
@@ -146,7 +167,7 @@ public class Control {
             }
         });
     }
-    
+
     public void removeAllElement(DefaultListModel<Product> list, JPanel panel) {
         if (list.isEmpty()) {
             JOptionPane.showMessageDialog(panel,
@@ -166,7 +187,7 @@ public class Control {
             }
         }
     }
-    
+
     public void RefundOrder(JTextArea textArea, JPanel panel, Map<String, Map<String, DefaultListModel<Product>>> listAdd, Map<String, DefaultListModel<Product>> listRemove) {
         textArea.addMouseListener(new MouseAdapter() {
             @Override
@@ -187,7 +208,7 @@ public class Control {
                             int cartId = Integer.parseInt(matcher.group(1));
 
                             System.out.println("Cart ID: " + cartId);
-                                Map<String, DefaultListModel<Product>> dataStoreToMove = new HashMap<>();
+                            Map<String, DefaultListModel<Product>> dataStoreToMove = new HashMap<>();
 
                             for (Map.Entry<String, DefaultListModel<Product>> entry : listRemove.entrySet()) {
                                 String cardOrderID = entry.getKey();
@@ -219,5 +240,5 @@ public class Control {
                 }
             }
         });
-    }   
+    }
 }
