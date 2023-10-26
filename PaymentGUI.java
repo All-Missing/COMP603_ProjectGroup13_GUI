@@ -62,7 +62,7 @@ public class PaymentGUI {
                 "Total Price: $" + totalCost + "\nPayment Method: Eftpos" + "\nEnter Payment Amount:");
 
         try {
-            double paymentAmount = Double.valueOf(inputAmount);
+            double paymentAmount = Double.parseDouble(inputAmount);
 
             if (paymentAmount >= totalCost) {
                 JOptionPane.showMessageDialog(cardPayment, "Payment successful! Thank you for your purchase.",

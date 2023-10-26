@@ -82,7 +82,7 @@ public class SaveFileRecordGUI {
         CashierRecordTextArea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
                     int getLine = CashierRecordTextArea.viewToModel2D(e.getPoint());
                     try {
                         int selectIndex = CashierRecordTextArea.getLineOfOffset(getLine);
@@ -90,18 +90,21 @@ public class SaveFileRecordGUI {
                         int lineStartOffset = Utilities.getRowStart(CashierRecordTextArea, getLine);
                         int lineEndOffset = Utilities.getRowEnd(CashierRecordTextArea, getLine);
 
+                        //get line start and end point
                         String line = CashierRecordTextArea.getText(lineStartOffset, lineEndOffset - lineStartOffset);
 
                         for (Map.Entry<String, Double> entry : cashier_Record_List.entrySet()) {
                             String current_order_id = entry.getKey();
                             Double bill = entry.getValue();
 
+                            //return value from string line
                             String[] lineParts = line.split(" ");
                             if (line.startsWith("Cart ID: ")) {
                                 String orderIDArea = lineParts[2];
                                 double billArea = df.parse(lineParts[5]).doubleValue();
-                                System.out.print(orderIDArea);
-                                System.out.print(billArea);
+
+                                //check if get line orderIDArea is equal to id in cashier_Record_List
+                                //if yes run refund method
                                 if (orderIDArea.equals(current_order_id)) {
                                     int option = JOptionPane.showConfirmDialog(cartRecordPanel, "Do you wish to refund this order",
                                             "Confirm  refund order", JOptionPane.YES_NO_OPTION);
@@ -111,51 +114,56 @@ public class SaveFileRecordGUI {
                                         String inputRefundAmount = JOptionPane.showInputDialog(cartRecordPanel,
                                                 "Bill: $" + billArea + "\nEnter Refund Amount:");
 
-                                        double tolerance = 0.0001;
-                                        if (Math.abs(billArea - entry.getValue()) < tolerance) 
+                                        try {
                                             
-                                            try {
+                                            //parse user refund amoung input as a double value
                                             double refundAmount = Double.parseDouble(inputRefundAmount);
 
+                                            //check if refund is less than bill amoung
                                             if (refundAmount <= billArea) {
                                                 double current_bill = billArea - refundAmount;
 
+                                                //inform user of successfull refund. Refund amount is less than bill
                                                 JOptionPane.showMessageDialog(cartRecordPanel, "Refund successful! \nCurrent Bill Amount: " + df.format(current_bill),
                                                         "Refund Success", JOptionPane.INFORMATION_MESSAGE);
 
+                                                //replace cashier record in this key from old value to new value
                                                 cashier_Record_List.replace(current_order_id, billArea, current_bill);
                                                 updateCashierRecord();
                                             } else {
-                                                JOptionPane.showConfirmDialog(cartRecordPanel,
+                                                
+                                                //inform user of refund failure. refund amoung request is more than bill
+                                                JOptionPane.showMessageDialog(cartRecordPanel,
                                                         "Refund fail! \nRefund request amount is more than refundable amount.",
                                                         "Refund Failed", JOptionPane.ERROR_MESSAGE);
                                                 break;
                                             }
 
+                                        //check if input is numeric value
                                         } catch (NumberFormatException numex) {
                                             JOptionPane.showMessageDialog(cartRecordPanel, "Invalid input. Please enter a valid numeric amount.",
                                                     "Invalid Input", JOptionPane.ERROR_MESSAGE);
                                         }
                                     }
+                                } else {
+                                    //
+                                    JOptionPane.showMessageDialog(cartRecordPanel,
+                                            "Data check error. Please check record data return correct value.",
+                                            "Check Record", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
                         }
-
                     } catch (Exception ex) {
                         System.out.println(ex);
                     }
                 } else {
-
+                    //return when user click count is more than one
                     JOptionPane.showMessageDialog(cartRecordPanel, "Please select an item to refund.",
                             "Refund Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
-        }
-        );
-//        });
-
-        this.updateCashierRecord();
-
+        });
+        
         return cartRecordPanel;
     }
 
