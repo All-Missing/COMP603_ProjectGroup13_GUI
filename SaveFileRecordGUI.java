@@ -82,7 +82,7 @@ public class SaveFileRecordGUI {
         CashierRecordTextArea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
                     int getLine = CashierRecordTextArea.viewToModel2D(e.getPoint());
                     try {
                         int selectIndex = CashierRecordTextArea.getLineOfOffset(getLine);
@@ -127,7 +127,7 @@ public class SaveFileRecordGUI {
                                                 updateCashierRecord();
                                             } else {
                                                 JOptionPane.showConfirmDialog(cartRecordPanel,
-                                                        "Refund request amount is more than refundable amount.",
+                                                        "Refund fail! \nRefund request amount is more than refundable amount.",
                                                         "Refund Failed", JOptionPane.ERROR_MESSAGE);
                                                 break;
                                             }
