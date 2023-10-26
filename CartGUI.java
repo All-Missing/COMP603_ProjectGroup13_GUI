@@ -60,17 +60,6 @@ public class CartGUI {
 
             cartTable.append(String.format(" %-35s$%-10.2f$%-5.2f\n", itemName, pricePerItem, cost));
         }
-        
-//        int index = 0;
-//        while (!(this.cartProductList.isEmpty())) {
-//            Product products = this.getCartProductList().getElementAt(index);
-//            String itemName = products.getItem();
-//            double pricePerItem = products.getItemPrice();
-//            double cost = pricePerItem;
-//            
-//            cartTable.append(String.format(" %-35s$%-10.2f$%-5.2f\n", itemName, pricePerItem, cost));
-//            index++;
-//        }
             
         return cartTable.toString();
     }

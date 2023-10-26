@@ -19,14 +19,13 @@ public class PaymentGUI {
     }
 
     public JPanel createPaymentPanel() {
-        JPanel paymentPanel = new JPanel(new BorderLayout());
+        JPanel paymentPanel = new JPanel(new BorderLayout(3, 0));
 
-        
         JPanel paymentButtonsPanel = this.createPaymentButtonsPanel();
         JPanel checkPreviousCartPanel = saveFileRecordGUI.addCheckCartRecord();
 
-        paymentPanel.add(paymentButtonsPanel, BorderLayout.CENTER);
-        paymentPanel.add(checkPreviousCartPanel, BorderLayout.SOUTH);
+        paymentPanel.add(checkPreviousCartPanel, BorderLayout.CENTER);
+        paymentPanel.add(paymentButtonsPanel, BorderLayout.SOUTH);
 
         return paymentPanel;
     }
@@ -40,15 +39,15 @@ public class PaymentGUI {
         JButton cashButton = control.createButton("Cash");
         cashButton.addActionListener(e -> handleCardPayment());
 
-        JButton refundButton = control.createButton("Refund");
-        cashButton.addActionListener(e -> refund());
+//        JButton refundButton = control.createButton("Refund");
+//        cashButton.addActionListener(e -> refund(refundButton));
 
         JButton cancelCartButton = control.createButton("Cancel Cart");
         cancelCartButton.addActionListener(e -> cancelCart());
 
         buttonPanel.add(cardButton, BorderLayout.WEST);
         buttonPanel.add(cashButton, BorderLayout.WEST);
-        buttonPanel.add(refundButton, BorderLayout.WEST);
+//        buttonPanel.add(refundButton, BorderLayout.WEST);
         buttonPanel.add(cancelCartButton, BorderLayout.WEST);
 
         return buttonPanel;
@@ -95,8 +94,8 @@ public class PaymentGUI {
 
     }
 
-    public void refund() {
-        this.saveFileRecordGUI.getRefundOrder();
+    public void refund(JButton refundButton) {
+//        this.saveFileRecordGUI.getRefundOrder(refundButton);
     }
 
     public void cancelCart() {

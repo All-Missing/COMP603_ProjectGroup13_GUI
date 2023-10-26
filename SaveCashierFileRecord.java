@@ -43,7 +43,7 @@ public class SaveCashierFileRecord {
         BufferedWriter bw = null;
         try {
 
-            bw = new BufferedWriter(new FileWriter("./file_records/BillOrder_Records.txt", true));
+            bw = new BufferedWriter(new FileWriter("./file_records/Cart_Records.txt", true));
 
             String line;
             //Test if cashier_record is empty

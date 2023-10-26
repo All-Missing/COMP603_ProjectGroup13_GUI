@@ -38,7 +38,7 @@ public class Control {
 
 
     public Control() {    
-        cOrderID = new CheckOrderID();
+        checkOrderID = new CheckOrderID();
         this.cashier = new Cashier();
         Control.NEXT_ORDER_ID = checkOrderID.checkOrderID();
         this.cartOrderID = Control.NEXT_ORDER_ID;

@@ -18,6 +18,7 @@ public class SaleProcessGUI {
     private JPanel mainPanel;
     private SearchGUI searchGUI;
     private ExitGUI exitGUI;
+    private SaveFileRecordGUI saveFileRecordGUI;
 
     private JList<String> productListJList;
     private DefaultListModel<String> productListModel;
@@ -27,7 +28,7 @@ public class SaleProcessGUI {
         this.cartGUI = new CartGUI(control);
 
         this.searchGUI = new SearchGUI(control, cartGUI);
-        this.exitGUI = new ExitGUI(control, cartGUI);
+        this.exitGUI = new ExitGUI(control, cartGUI, saveFileRecordGUI);
 //        this.exitGUI = new ExitGUI(control, cartGUI);
         this.purchaseGUI = new PurchaseGUI(control, cartGUI);
         this.paymentGUI = new PaymentGUI(control, cartGUI);

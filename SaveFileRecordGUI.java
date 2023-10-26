@@ -1,36 +1,33 @@
 package COMP603_ProjectGroup13_GUI;
 
-import COMP603_ProjectGroup13.Product;
-import COMP603_ProjectGroup13.SaleProcess;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.text.Utilities;
 
 public class SaveFileRecordGUI {
 
     private HashMap<String, Double> cashier_Record_List;
-    private HashMap<String, Double> refund_Record_List;
     private JTextArea CashierRecordTextArea;
+    private DecimalFormat df = new DecimalFormat("#.00");
     private Control control;
     private CartGUI cartGUI;
+    private JPanel cartRecordPanel;
 
     public SaveFileRecordGUI(CartGUI cartGUI) {
         cashier_Record_List = new HashMap<>();
-        refund_Record_List = new HashMap<>();
         CashierRecordTextArea = new JTextArea();
         this.control = new Control();
         this.cartGUI = cartGUI;
@@ -40,53 +37,138 @@ public class SaveFileRecordGUI {
         return cashier_Record_List;
     }
 
-    public HashMap<String, Double> getRefund_Record_List() {
-        return refund_Record_List;
+    public void setCashier_Record_List(HashMap<String, Double> cashier_Record_List) {
+        this.cashier_Record_List = cashier_Record_List;
     }
 
     public void addCashierRecord(int cartOrderId, Double bill) {
         String str_order_id = String.valueOf(cartOrderId);
         cashier_Record_List.put(str_order_id, bill);
-        CashierRecordTextArea.append("Cart ID: " + str_order_id + "\t Total Cost: $" + bill + "\n");
+        CashierRecordTextArea.append("Cart ID: " + str_order_id + " Bill: $ " + bill + "\n");
     }
 
-    public HashMap<String, Double> addRefundRecord(HashMap<String, Double> cashier_Record_List) {
-        for (Map.Entry<String, Double> getList : cashier_Record_List.entrySet()) {
-            String orderID = String.valueOf(getList.getKey());
-            double bill = getList.getValue();
-            this.getRefund_Record_List().put(orderID, bill);
+    public void updateCashierRecord() {
+        String cashierOutput = this.cashierOutputString();
+        this.CashierRecordTextArea.setText(cashierOutput);
+    }
+
+    public String cashierOutputString() {
+        StringBuilder cashierOutput = new StringBuilder();
+
+        for (Map.Entry<String, Double> entry : cashier_Record_List.entrySet()) {
+            String current_order_id = entry.getKey();
+            Double bill = entry.getValue();
+
+            cashierOutput.append("Cart ID: " + current_order_id + " Bill: $ " + df.format(bill) + "\n");
         }
-        return this.getRefund_Record_List();
+
+        return cashierOutput.toString();
     }
 
     public JPanel addCheckCartRecord() {
-        JPanel cartRecordPanel = new JPanel(new BorderLayout());
+        cartRecordPanel = new JPanel(new GridLayout(2, 0));
 
         CashierRecordTextArea = new JTextArea();
         control.setFont(this.CashierRecordTextArea);
         this.CashierRecordTextArea.setEditable(true);
 
-//        JPanel refundPurchase = this.getRefundOrder();
+//        JButton refundPurchase = this.getRefundOrder();
+//        JButton refundButton = control.createButton("Refund");
+//        refundButton.addActionListener(e -> this.getRefundOrder());
         this.CashierRecordTextArea.setPreferredSize(new Dimension(400, 200));
         cartRecordPanel.add(new JScrollPane(CashierRecordTextArea), BorderLayout.CENTER);
-//        cartRecordPanel.add(refundPurchase, BorderLayout.SOUTH);
+//        cartRecordPanel.add(refundButton, BorderLayout.SOUTH);
+
+        CashierRecordTextArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
+                    int getLine = CashierRecordTextArea.viewToModel2D(e.getPoint());
+                    try {
+                        int selectIndex = CashierRecordTextArea.getLineOfOffset(getLine);
+
+                        int lineStartOffset = Utilities.getRowStart(CashierRecordTextArea, getLine);
+                        int lineEndOffset = Utilities.getRowEnd(CashierRecordTextArea, getLine);
+
+                        String line = CashierRecordTextArea.getText(lineStartOffset, lineEndOffset - lineStartOffset);
+
+                        for (Map.Entry<String, Double> entry : cashier_Record_List.entrySet()) {
+                            String current_order_id = entry.getKey();
+                            Double bill = entry.getValue();
+
+                            String[] lineParts = line.split(" ");
+                            if (line.startsWith("Cart ID: ")) {
+                                String orderIDArea = lineParts[2];
+                                double billArea = df.parse(lineParts[5]).doubleValue();
+                                System.out.print(orderIDArea);
+                                System.out.print(billArea);
+                                if (orderIDArea.equals(current_order_id)) {
+                                    int option = JOptionPane.showConfirmDialog(cartRecordPanel, "Do you wish to refund this order",
+                                            "Confirm  refund order", JOptionPane.YES_NO_OPTION);
+
+                                    //Check if confirm yes
+                                    if (option == JOptionPane.YES_OPTION) {
+                                        String inputRefundAmount = JOptionPane.showInputDialog(cartRecordPanel,
+                                                "Bill: $" + billArea + "\nEnter Refund Amount:");
+
+                                        double tolerance = 0.0001;
+                                        if (Math.abs(billArea - entry.getValue()) < tolerance) 
+                                            
+                                            try {
+                                            double refundAmount = Double.parseDouble(inputRefundAmount);
+
+                                            if (refundAmount <= billArea) {
+                                                double current_bill = billArea - refundAmount;
+
+                                                JOptionPane.showMessageDialog(cartRecordPanel, "Refund successful! \nCurrent Bill Amount: " + df.format(current_bill),
+                                                        "Refund Success", JOptionPane.INFORMATION_MESSAGE);
+
+                                                cashier_Record_List.replace(current_order_id, billArea, current_bill);
+                                                updateCashierRecord();
+                                            } else {
+                                                JOptionPane.showConfirmDialog(cartRecordPanel,
+                                                        "Refund request amount is more than refundable amount.",
+                                                        "Refund Failed", JOptionPane.ERROR_MESSAGE);
+                                                break;
+                                            }
+
+                                        } catch (NumberFormatException numex) {
+                                            JOptionPane.showMessageDialog(cartRecordPanel, "Invalid input. Please enter a valid numeric amount.",
+                                                    "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    } catch (Exception ex) {
+                        System.out.println(ex);
+                    }
+                } else {
+
+                    JOptionPane.showMessageDialog(cartRecordPanel, "Please select an item to refund.",
+                            "Refund Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        );
+//        });
+
+        this.updateCashierRecord();
 
         return cartRecordPanel;
     }
 
-    public JPanel getRefundOrder() {
+//    public JPanel getRefundOrder(JButton refundButton) {
+    public void getRefundOrder() {
         JPanel refundOrderPanel = new JPanel(new BorderLayout());
 
-//        JButton refundOrderButton = control.createButton("Refund");
-//        refundOrderButton.addActionListener((ActionEvent e) -> {
-//            control.RefundOrder(CashierRecordTextArea, refundOrderPanel, refund_Record_List, cashier_Record_List);
-//                    JOptionPane.showMessageDialog(refundOrderPanel, "Please selected cart for to be refund.",
-//                            "Refund Puchase", JOptionPane.ERROR_MESSAGE);
-//                }
-//            refundOrderPanel.add(refundOrderButton, BorderLayout.SOUTH);
-//        });
-        return refundOrderPanel;
+        JButton refundButton = control.createButton("Refund");
+        refundButton.addActionListener((ActionEvent e) -> {
+
+            // Inside your SearchGUI class constructor
+//        return refundOrderPanel;
+        });
     }
 
-    
 }
