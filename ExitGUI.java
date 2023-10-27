@@ -27,7 +27,7 @@ public class ExitGUI extends JFrame {
     private CartGUI cartGUI;
     private static SaveCashierFileRecord saveRecords;
     private SaveFileRecordGUI saveRecordGUI;
-    private HashMap<String, Double> bill_records;
+    private HashMap<String, Double> cashier_records;
     private Staff_Record staffRecord;
     private HashMap<String, String> staffList;
     private JLabel userNameLabel;
@@ -38,14 +38,14 @@ public class ExitGUI extends JFrame {
     private JPanel exitPanel;
     private int shift_id;
 
-    public ExitGUI(Control control, int shift_id, SaveFileRecordGUI saveRecordGUI) {
+    public ExitGUI(Control control, int shift_id, HashMap<String, Double> cashier_records) {
         this.shift_id = shift_id;
         this.control = control;
         this.cartGUI = new CartGUI(control);
         this.saveRecordGUI = saveRecordGUI;
-        this.bill_records = new HashMap<>();
+        this.cashier_records = new HashMap<>();
 //        saveRecordGUI.addCashierRecord(1, 50.0); // Example of adding a record
-        this.bill_records = saveRecordGUI.getCashier_Record_List();
+        this.cashier_records = cashier_records;
         saveRecords = new SaveCashierFileRecord();
         JPanel createExitPanel = creatExitPanel();
         this.add(createExitPanel);
@@ -135,11 +135,11 @@ public class ExitGUI extends JFrame {
         if (username.isBlank() || password.isBlank()) {
             JOptionPane.showMessageDialog(this, "Please make sure to enter you name and password before saving file.",
                     "Save File Fail", JOptionPane.ERROR_MESSAGE);
-        } else if (bill_records.isEmpty()) {
+        } else if (cashier_records.isEmpty()) {
             logArea.append("File is empty. No records to save.\n");
         } else {
             logArea.append("File is save succesfully.\n");
-            saveRecords.saveFileRecord(bill_records, String.valueOf(this.getShiftID()), password, username, exitPanel);
+            saveRecords.saveFileRecord(cashier_records, String.valueOf(this.getShiftID()), password, username, exitPanel);
         }
     }
 
@@ -177,7 +177,7 @@ public class ExitGUI extends JFrame {
                 logArea.append("User name: " + userName + " logging out...\n");
 
                 isLoginValid = true;
-                informSaveFileBeforeExit(bill_records, isLoginValid, panel);
+                informSaveFileBeforeExit(cashier_records, isLoginValid, panel);
 
                 break;
             }
