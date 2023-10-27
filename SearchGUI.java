@@ -45,16 +45,6 @@ public class SearchGUI extends JFrame {
     private Control control;
     private CartGUI cartGUI;
 
-//    public SearchGUI() {
-//        dbManager = new CashierDBManager();
-//        conn = dbManager.getCashierDBConnection();
-//        this.retrieveDB = new RetrieveCashierDB();
-//        this.product = new Product();
-//        this.productListDB = retrieveDB.RetrieveProductList();
-//        initComponents();
-//        initPanels();
-//        initActionPerforms();
-//    }
     public SearchGUI(Control control, CartGUI cartGUI) {
         this.control = control;
         this.cartGUI = cartGUI;
@@ -69,7 +59,6 @@ public class SearchGUI extends JFrame {
 
     public JPanel createSearchPanel() {
         JPanel getComponent = new JPanel(new BorderLayout());
-
         JPanel panel = this.initPanels();
         getComponent.add(panel, BorderLayout.CENTER);
 
@@ -89,9 +78,7 @@ public class SearchGUI extends JFrame {
     }
 
     public JPanel initPanels() {
-
         searchPanel = new JPanel();
-
         //Setup northPanel on search Panel
         JPanel northPanel = new JPanel();
         JScrollPane scrollPane = new JScrollPane(searchTextArea);
@@ -117,7 +104,6 @@ public class SearchGUI extends JFrame {
     }
 
     public void initActionPerforms() {
-
         ActionListener buttonAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -125,7 +111,7 @@ public class SearchGUI extends JFrame {
                 if (e.getSource() == searchListButton) {
                     searchList();
                 } else if (e.getSource() == searchItemButton) {
-//                    searchItemByID(searchTextField.getText().trim());
+                    searchItemByID(searchTextField.getText().trim());
                 } else if (e.getSource() == clearButton) {
                     control.clearButton(clearButton, searchTextArea);
                 } else if (e.getSource() == returnButton) {
@@ -134,7 +120,7 @@ public class SearchGUI extends JFrame {
             }
         };
 
-        // Inside your SearchGUI class constructor
+        //Mouse click button
         searchTextArea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -162,26 +148,12 @@ public class SearchGUI extends JFrame {
                 }
             }
         });
-
         searchListButton.addActionListener(buttonAction);
         searchItemButton.addActionListener(buttonAction);
         clearButton.addActionListener(buttonAction);
         returnButton.addActionListener(buttonAction);
     }
 
-    //Create researchFunction
-//    public void searchList() {
-//
-//        for (Product product : productListDB) {
-//            String item_id = product.getItem_id();
-//            String item = product.getItem();
-//            Double item_price = product.getItemPrice();
-//            String category = product.getCategory();
-//            searchTextArea.append(item_id + " " + item + " " + item_price + " " + category + "\n");
-//            control.searchElementIndex(searchTextArea, 0, cartGUI.getCartPanel(), cartGUI.getCartProductList());
-//            cartGUI.updateCartProductList();
-//        }
-//    }
     public void searchList() {
         int index = 0;
         for (Product product : productListDB) {
@@ -199,11 +171,6 @@ public class SearchGUI extends JFrame {
 
     public void addProductList(String item_id, Product product) {
         this.searchProductList.put(item_id, product);
-    }
-
-    public int getSelectItemListIndex(int indexSelect) {
-
-        return indexSelect;
     }
 
     //This method return a product details by passing its own item_id

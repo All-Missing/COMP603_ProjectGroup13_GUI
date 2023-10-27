@@ -29,13 +29,17 @@ public class LoginGUI extends JFrame {
     private Staff_Record staffRecord;
     private SaleProcessGUI saleProcessGUI;
     private Control control;
-
-    public LoginGUI() {
+    private int shift_id;
+    
+    public LoginGUI(int shift_id) {
+        this.shift_id = shift_id;
         this.control = new Control();
         initComponents();
         initPanels();
         initActionPerforms();
     }
+    
+    
 
     public JPanel createLoginPanel() {
         JPanel loginPanel = new JPanel();
@@ -138,7 +142,7 @@ public class LoginGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        LoginGUI guiFrame = new LoginGUI();
+        LoginGUI guiFrame = new LoginGUI(1);
     }
 
 }

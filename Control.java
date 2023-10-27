@@ -120,30 +120,7 @@ public class Control {
 
         return returnPanel;
     }
-
-    public void searchElementIndex(JTextArea textArea, int indexAdjust, JPanel panel, DefaultListModel<Product> list) {
-        textArea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-                    int getLine = textArea.viewToModel2D(e.getPoint());
-                    try {
-                        int getIndex = textArea.getLineOfOffset(getLine);
-                        int selectIndex = getIndex - indexAdjust;
-
-                        list.removeElementAt(selectIndex);
-
-                    } catch (Exception ex) {
-                        System.out.println(ex);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(panel, "Please select an item to cart order.",
-                            "Select Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-    }
-
+  
     public void removeElementIndex(JTextArea textArea, int indexAdjust, JPanel panel, DefaultListModel<Product> list) {
         textArea.addMouseListener(new MouseAdapter() {
             @Override
