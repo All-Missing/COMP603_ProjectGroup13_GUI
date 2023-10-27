@@ -29,12 +29,18 @@ public class LoginGUI extends JFrame {
     private Staff_Record staffRecord;
     private SaleProcessGUI saleProcessGUI;
     private Control control;
-
-    public LoginGUI() {
+    private int shift_id;
+    
+    public LoginGUI(int shift_id) {
+        this.shift_id = shift_id;
         this.control = new Control();
         initComponents();
         initPanels();
         initActionPerforms();
+    }
+    
+    public int getShiftID() {
+        return this.shift_id;
     }
 
     //Gather components
@@ -101,7 +107,7 @@ public class LoginGUI extends JFrame {
                     //Check username and password login
                     if (userName.equalsIgnoreCase(userNameField.getText().trim()) && userPwd.equals(pwdField.getText().trim())) {
                         System.out.println("Login succeed");
-                        logArea.append("This user name:" + userNameField.getText() + " login succeed!\n");
+                        logArea.append("ShiftID: "+shift_id+" this user name:" + userNameField.getText() + " login succeed!\n");
                         closeFrame();
                         saleProcessGUI = new SaleProcessGUI();
 
@@ -128,7 +134,7 @@ public class LoginGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        LoginGUI guiFrame = new LoginGUI();
+        LoginGUI guiFrame = new LoginGUI(1);
     }
 
 }
