@@ -28,8 +28,8 @@ public class SaleProcessGUI {
         this.control = new Control();
         this.cartGUI = new CartGUI(control);
         this.searchGUI = new SearchGUI(control, cartGUI);
-//        this.exitGUI = new ExitGUI(control, cartGUI, saveFileRecordGUI);
-//        this.exitGUI = new ExitGUI(control, cartGUI);
+        this.saveFileRecordGUI = new SaveFileRecordGUI(cartGUI);
+        this.exitGUI = new ExitGUI(control, shift_id, saveFileRecordGUI);
         this.purchaseGUI = new PurchaseGUI(control, cartGUI);
         this.paymentGUI = new PaymentGUI(control, cartGUI);
         initializeFrame();
@@ -80,7 +80,7 @@ public class SaleProcessGUI {
                 break;
             case "Exit":
                 control.closeFrame(frame);
-                ExitGUI exitGUI = new ExitGUI(control, cartGUI, shift_id);
+                exitGUI = new ExitGUI(control, shift_id, saveFileRecordGUI);
                 break;
         }
     }
