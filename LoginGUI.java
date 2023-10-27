@@ -37,16 +37,6 @@ public class LoginGUI extends JFrame {
         initActionPerforms();
     }
 
-    public JPanel createLoginPanel() {
-        JPanel loginPanel = new JPanel();
-        JPanel userLogIn = this.initComponents();
-        loginPanel.add(userLogIn, BorderLayout.CENTER);
-
-        control.addPagePanel(userLogIn, "Login");
-
-        return loginPanel;
-    }
-
     //Gather components
     public JPanel initComponents() {
         JPanel componentPanel = new JPanel();
