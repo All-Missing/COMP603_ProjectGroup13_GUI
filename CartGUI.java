@@ -33,7 +33,7 @@ public class CartGUI {
     public DefaultListModel<Product> getCartProductList() {
         return this.cartProductList;
     }
-    
+
     public JPanel getCartPanel() {
         return this.cartPanel;
     }
@@ -50,17 +50,23 @@ public class CartGUI {
         String currentCartID = String.valueOf(control.getCartOrderID());
         StringBuilder cartTable = new StringBuilder();
         cartTable.append(String.format(" CartID: %-5s\n", currentCartID));
-        cartTable.append(String.format(" %-35s%-10s %-5s\n", "Item", "Price", "Cost"));
-        
-        for (int i = 0; i < this.getCartProductList().size(); i++) {
-            Product products = this.getCartProductList().getElementAt(i);
+        cartTable.append(String.format(" %-5s\t%-35s%-10s\n", "Index", "Item", "Price"));
+
+        double totalBill = 0;
+        for (int index = 0; index < this.getCartProductList().size(); index++) {
+            Product products = this.getCartProductList().getElementAt(index);
             String itemName = products.getItem();
             double pricePerItem = products.getItemPrice();
-            double cost = pricePerItem;
+            totalBill += pricePerItem;
 
+<<<<<<< HEAD
             cartTable.append(String.format("%-35s %-35s$%-10.2f$%-5.2f\n", " ", itemName, pricePerItem, cost));
+=======
+            cartTable.append(String.format(" %-7s%-35s$%-10.2f\n", index + 1, itemName, pricePerItem));
+>>>>>>> c7c1a86db6f0b0c60c77387a121d165340023e60
         }
-            
+        cartTable.append(String.format("\n\n\n%-30s Total Bill: $" + totalBill, " "));
+
         return cartTable.toString();
     }
 
@@ -101,7 +107,7 @@ public class CartGUI {
 
     public JPanel removeProductFromCart() {
         JPanel removePanel = new JPanel(new BorderLayout());
-        
+
         JButton removeOneElementButton = control.createButton("Remove Product");
         JButton removeAllElementButton = control.createButton("Remove All Product");
 
