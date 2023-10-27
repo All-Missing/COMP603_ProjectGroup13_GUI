@@ -39,9 +39,9 @@ public class PaymentGUI {
         JButton cashButton = control.createButton("Cash");
         cashButton.addActionListener(e -> handleCardPayment());
 
-//        JButton refundButton = control.createButton("Refund");
-//        cashButton.addActionListener(e -> refund(refundButton));
-
+        JButton refundButton = control.createButton("Refund");
+        cashButton.addActionListener(e -> refund(refundButton));
+        
         JButton cancelCartButton = control.createButton("Cancel Cart");
         cancelCartButton.addActionListener(e -> cancelCart());
 
@@ -61,32 +61,37 @@ public class PaymentGUI {
         String inputAmount = JOptionPane.showInputDialog(cardPayment,
                 "Total Price: $" + totalCost + "\nPayment Method: Eftpos" + "\nEnter Payment Amount:");
 
-        try {
-            double paymentAmount = Double.parseDouble(inputAmount);
+        if (inputAmount != null) {
+            try {
+                double paymentAmount = Double.parseDouble(inputAmount);
 
-            if (paymentAmount >= totalCost) {
-                JOptionPane.showMessageDialog(cardPayment, "Payment successful! Thank you for your purchase.",
-                        "Payment Success", JOptionPane.INFORMATION_MESSAGE);
+                if (paymentAmount >= totalCost) {
+                    JOptionPane.showMessageDialog(cardPayment, "Payment successful! Thank you for your purchase.",
+                            "Payment Success", JOptionPane.INFORMATION_MESSAGE);
 
-                saveFileRecordGUI.addCashierRecord(cartOrderId, totalCost);
-                control.incrementedCartOrderId();
+                    saveFileRecordGUI.addCashierRecord(cartOrderId, totalCost);
+                    control.incrementedCartOrderId();
 
-                cartGUI.getCartProductList().removeAllElements();
-                cartGUI.updateCartProductList();
-            } else {
-                int option = JOptionPane.showConfirmDialog(cardPayment,
-                        "Insufficient payment. Do you want to try again?",
-                        "Payment Failed", JOptionPane.YES_NO_OPTION);
+                    cartGUI.getCartProductList().removeAllElements();
+                    cartGUI.updateCartProductList();
+                } else {
+                    int option = JOptionPane.showConfirmDialog(cardPayment,
+                            "Insufficient payment. Do you want to try again?",
+                            "Payment Failed", JOptionPane.YES_NO_OPTION);
 
-                if (option == JOptionPane.NO_OPTION) {
-                    JOptionPane.showMessageDialog(cardPayment, "Payment declined. Items remain in the cart.",
-                            "Payment Declined", JOptionPane.ERROR_MESSAGE);
+                    if (option == JOptionPane.NO_OPTION) {
+                        JOptionPane.showMessageDialog(cardPayment, "Payment declined. Items remain in the cart.",
+                                "Payment Declined", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(cardPayment, "Invalid input. Please enter a valid numeric amount.",
+                        "Invalid Input", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(cardPayment, "Invalid input. Please enter a valid numeric amount.",
-                    "Invalid Input", JOptionPane.ERROR_MESSAGE);
         }
+        // User canceled the input dialog
+        JOptionPane.showMessageDialog(cardPayment, "Payment canceled. Items remain in the cart.",
+                "Payment Canceled", JOptionPane.WARNING_MESSAGE);
     }
 
     public void handleCashPayment() {

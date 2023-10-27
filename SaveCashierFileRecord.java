@@ -25,39 +25,12 @@ public class SaveCashierFileRecord {
     private DecimalFormat df = new DecimalFormat("#.00");
 
     public SaveCashierFileRecord() {
-        this.control = new Control();
-        this.cartGUI = new CartGUI(control);
-//        this.saveFileRecordGUI = saveFileRecordGUI;
         this.saveRecordGUI = new SaveFileRecordGUI(cartGUI);
         this.cashier_Record = saveRecordGUI.getCashier_Record_List();
 
     }
 
-    public HashMap<String, Double> getCashier_Record() {
-        return this.cashier_Record;
-    }
-
-    public boolean saveFileCheck(JPanel panel) {
-        if (this.getCashier_Record().isEmpty()) {
-            JOptionPane.showMessageDialog(panel, "This cashier list is empty.",
-                    "Cashier list Empty", JOptionPane.INFORMATION_MESSAGE);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public void clearButton(JButton clearButton, JTextArea logArea) {
-        clearButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                logArea.setText("");
-            }
-        });
-    }
-
-    public void saveFileRecord(HashMap<String, Double> cashier_records, String shift_id, 
-            String staff_id, String staff_name, JPanel panel) {
+    public void saveFileRecord(HashMap<String, Double> cashier_records, String shift_id, String staff_id, String staff_name, JPanel panel) {
 
         //Condition 
         String aShiftID = shift_id;
@@ -96,6 +69,7 @@ public class SaveCashierFileRecord {
                 line = "\t\t---Total balance earned per shift: $ " + df.format(total_balance);
                 bw.append(line);
                 bw.newLine();
+                cashier_records.clear();
                 bw.close();
             }
         } catch (FileNotFoundException ex) {

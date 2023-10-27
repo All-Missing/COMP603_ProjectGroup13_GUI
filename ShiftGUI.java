@@ -17,7 +17,7 @@ public class ShiftGUI extends JFrame {
 
     private static final int ROW_AREA = 20;
     private static final int COLUMN_AREA = 30;
-       
+
     private JTextArea logArea;
     private JScrollPane scrollPanel;
     private JButton confirmButton;
@@ -26,9 +26,10 @@ public class ShiftGUI extends JFrame {
     private JPanel shiftPanel;
     private Control control;
     private LoginGUI loginGUI;
+    private ExitGUI exitGUI;
     private int shift_id;
     private CheckShiftID cShiftID;
-    
+
     public ShiftGUI() {
         this.control = new Control();
         cShiftID = new CheckShiftID();
@@ -44,7 +45,7 @@ public class ShiftGUI extends JFrame {
 
     public void initComponents() {
         logArea = new JTextArea(ROW_AREA, COLUMN_AREA);
-        logArea.setText("Loading Cashier Gas Station app ... please wait ...!!!\n");        
+        logArea.setText("Loading Cashier Gas Station app ... please wait ...!!!\n");
         confirmButton = control.createButton("Confirm");
         clearButton = control.createButton("Clear");
     }
@@ -96,13 +97,13 @@ public class ShiftGUI extends JFrame {
             int option = JOptionPane.showConfirmDialog(shiftPanel, "Do you wish to start a new shift",
                     "Confirm to login process....", JOptionPane.YES_NO_OPTION);
 
-            if (option == JOptionPane.YES_OPTION)
+            if (option == JOptionPane.YES_OPTION) {
                 logArea.append("User login process....");
                 control.closeFrame(this);
-                loginGUI = new LoginGUI(shift_id);                
-                shift_id = cShiftID.checkShiftID();              
+                loginGUI = new LoginGUI(shift_id);
+                shift_id = cShiftID.checkShiftID();
                 isStarNewShift = true;
-            if (option == JOptionPane.NO_OPTION) {
+            } else if (option == JOptionPane.NO_OPTION) {
                 JOptionPane.showMessageDialog(shiftPanel, "User don't wish to login!",
                         "", JOptionPane.ERROR_MESSAGE);
                 System.exit(0);
@@ -110,9 +111,11 @@ public class ShiftGUI extends JFrame {
         }
     }
 
+
+
     public static void main(String[] args) {
         ShiftGUI shiftGUI = new ShiftGUI();
-        
+
     }
 
 }
