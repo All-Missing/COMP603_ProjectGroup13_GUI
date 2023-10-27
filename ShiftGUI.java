@@ -50,7 +50,6 @@ public class ShiftGUI extends JFrame {
     }
 
     public void initPanels() {
-
         shiftPanel = new JPanel();
 
         //Create buttonPanel
@@ -87,9 +86,7 @@ public class ShiftGUI extends JFrame {
                 }
             }
         };
-
         confirmButton.addActionListener(buttonAction);
-
         clearButton.addActionListener(buttonAction);
     }
 
@@ -100,20 +97,22 @@ public class ShiftGUI extends JFrame {
                     "Confirm to login process....", JOptionPane.YES_NO_OPTION);
 
             if (option == JOptionPane.YES_OPTION)
-                loginGUI = new LoginGUI(shift_id);
+                logArea.append("User login process....");
+                control.closeFrame(this);
+                loginGUI = new LoginGUI(shift_id);                
+                shift_id = cShiftID.checkShiftID();              
                 isStarNewShift = true;
             if (option == JOptionPane.NO_OPTION) {
-                JOptionPane.showMessageDialog(shiftPanel, "User don't wish to login.",
-                        "Select next one?", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(shiftPanel, "User don't wish to login!",
+                        "", JOptionPane.ERROR_MESSAGE);
                 System.exit(0);
             }
         }
     }
 
-    
-
     public static void main(String[] args) {
         ShiftGUI shiftGUI = new ShiftGUI();
+        
     }
 
 }

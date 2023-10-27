@@ -39,7 +39,9 @@ public class LoginGUI extends JFrame {
         initActionPerforms();
     }
     
-    
+    public int getShiftID() {
+        return this.shift_id;
+    }
 
     public JPanel createLoginPanel() {
         JPanel loginPanel = new JPanel();
@@ -115,7 +117,7 @@ public class LoginGUI extends JFrame {
                     //Check username and password login
                     if (userName.equalsIgnoreCase(userNameField.getText().trim()) && userPwd.equals(pwdField.getText().trim())) {
                         System.out.println("Login succeed");
-                        logArea.append("This user name:" + userNameField.getText() + " login succeed!\n");
+                        logArea.append("ShiftID: "+shift_id+" this user name:" + userNameField.getText() + " login succeed!\n");
                         closeFrame();
                         saleProcessGUI = new SaleProcessGUI();
 
