@@ -78,7 +78,6 @@ public class ShiftGUI extends JFrame {
         ActionListener buttonAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 if (e.getSource() == confirmButton) {
                     confirmButtonAction();
                 } else if (e.getSource() == clearButton) {

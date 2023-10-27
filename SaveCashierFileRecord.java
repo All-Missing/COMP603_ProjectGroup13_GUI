@@ -56,8 +56,7 @@ public class SaveCashierFileRecord {
         });
     }
 
-    public void saveFileRecord(HashMap<String, Double> cashier_records, String shift_id, 
-            String staff_id, String staff_name, JPanel panel) {
+    public void saveFileRecord(HashMap<String, Double> cashier_records, String shift_id, String staff_id, String staff_name, JPanel panel) {
 
         //Condition 
         String aShiftID = shift_id;
@@ -67,8 +66,7 @@ public class SaveCashierFileRecord {
         saveFileRecords(cashier_records, aShiftID, aStaffID, aStaffName, panel);
     }
 
-    private void saveFileRecords(HashMap<String, Double> cashier_records, 
-            String shift_id, String staff_id, String staff_name, JPanel panel) {
+    private void saveFileRecords(HashMap<String, Double> cashier_records, String shift_id, String staff_id, String staff_name, JPanel panel) {
         double total_balance = 0;
         BufferedWriter bw = null;
         try {

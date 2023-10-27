@@ -139,8 +139,8 @@ public class ExitGUI extends JFrame {
 
         JButton saveFileButton = control.createButton("Save");
         saveFileButton.addActionListener((ActionEvent e) -> {
-            saveRecords.saveFileRecord(bill_records, String.valueOf(this.getShiftID()),
-                    this.getUserNameField().getText(), this.getPwdField().getText(), saveFileRecordsButton);
+            saveRecords.saveFileRecord(bill_records, String.valueOf(getShiftID()), getPwdField().getText(), getUserNameField().getText(), saveFileRecordsButton);
+//            System.out.println(shift_id+" "+pwdField.getText()+" "userNameField.getText());
         });
         saveFileRecordsButton.add(saveFileButton, BorderLayout.SOUTH);
 
