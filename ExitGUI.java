@@ -42,10 +42,11 @@ public class ExitGUI extends JFrame {
         this.shift_id = shift_id;
         this.control = control;
         this.cartGUI = new CartGUI(control);
-        this.saveRecordGUI = new SaveFileRecordGUI(cartGUI);
-//        this.cashier_records = new HashMap<>();
-        this.cashier_records = cashier_records;
+
+        this.saveRecordGUI = saveRecordGUI;
+        this.cashier_records = new HashMap<>();
 //        saveRecordGUI.addCashierRecord(1, 50.0); // Example of adding a record
+        this.cashier_records = cashier_records;
         saveRecords = new SaveCashierFileRecord();
         JPanel createExitPanel = creatExitPanel();
         this.add(createExitPanel);

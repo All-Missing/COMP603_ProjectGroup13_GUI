@@ -18,19 +18,21 @@ public class SaleProcessGUI {
     private JFrame frame;
     private JPanel mainPanel;
     private SearchGUI searchGUI;
-    private SaveFileRecordGUI saveFileRecordGUI;
+    private SaveFileRecordGUI saveFileRecordGUI;   
     private ExitGUI exitGUI;
     private JList<String> productListJList;
     private DefaultListModel<String> productListModel;
     private int shift_id;
     private HashMap<String, Double> cashier_records;
-
+    
     public SaleProcessGUI(int shift_id) {
+        this.cashier_records = new HashMap<>();
+        this.cashier_records = saveFileRecordGUI.getCashier_Record_List();       
         this.shift_id = shift_id;
         this.control = new Control();
         this.cartGUI = new CartGUI(control);
         this.searchGUI = new SearchGUI(control, cartGUI);
-        this.saveFileRecordGUI = new SaveFileRecordGUI(cartGUI);
+        this.saveFileRecordGUI = new SaveFileRecordGUI(cartGUI);        
         this.purchaseGUI = new PurchaseGUI(control, cartGUI);
         this.paymentGUI = new PaymentGUI(control, cartGUI);
         this.cashier_records = new HashMap<>();
