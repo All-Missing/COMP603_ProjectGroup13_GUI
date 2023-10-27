@@ -31,8 +31,6 @@ public class LoginGUI extends JFrame {
     private SaleProcessGUI saleProcessGUI;
     private Control control;
     private int shift_id;
-    private String username;
-    private String password;
 
     public LoginGUI(int shift_id) {
         this.shift_id = shift_id;
@@ -113,14 +111,10 @@ public class LoginGUI extends JFrame {
                     //Check username and password login
                     if (userName.equalsIgnoreCase(userNameField.getText().trim()) && userPwd.equals(pwdField.getText().trim())) {
                         logArea.append("ShiftID: " + shift_id + " User name: " + userName + " login succeed!\n");
-
+                        
                         JOptionPane.showMessageDialog(centerPanel, "Login success. \nStart Shift : " + getShiftID(),
                                 "Inform login succeed", JOptionPane.INFORMATION_MESSAGE);
-
-                        username = userName;
-                        password = userPwd;
-
-//                        saleProcessGUI = new SaleProcessGUI(shift_id, username, password);
+                        
                         saleProcessGUI = new SaleProcessGUI(shift_id);
                         closeFrame();
 

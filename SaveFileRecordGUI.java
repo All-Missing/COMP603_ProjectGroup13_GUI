@@ -20,7 +20,7 @@ import javax.swing.text.Utilities;
 
 public class SaveFileRecordGUI {
 
-    private HashMap<String, Double> cashier_Record_List;
+    private final HashMap<String, Double> cashier_Record_List;
     private JTextArea CashierRecordTextArea;
     private DecimalFormat df = new DecimalFormat("#.00");
     private Control control;
@@ -28,18 +28,15 @@ public class SaveFileRecordGUI {
     private JPanel cartRecordPanel;
 
     public SaveFileRecordGUI(CartGUI cartGUI) {
-        cashier_Record_List = new HashMap<>();
-        CashierRecordTextArea = new JTextArea();
         this.control = new Control();
         this.cartGUI = cartGUI;
+        CashierRecordTextArea = new JTextArea();
+        cashier_Record_List = new HashMap<>();
     }
 
     public HashMap<String, Double> getCashier_Record_List() {
         return cashier_Record_List;
     }
-    
-    
-   
 
     public void addCashierRecord(int cartOrderId, Double bill) {
         String str_order_id = String.valueOf(cartOrderId);
@@ -72,10 +69,10 @@ public class SaveFileRecordGUI {
         control.setFont(this.CashierRecordTextArea);
         this.CashierRecordTextArea.setEditable(true);
 
-        JButton refundButton = this.getOrderRefund();
-        this.CashierRecordTextArea.setPreferredSize(new Dimension(400, 300));
+//        JButton refundButton = this.getRefundOrder();
+        this.CashierRecordTextArea.setPreferredSize(new Dimension(400, 380));
         cartRecordPanel.add(new JScrollPane(CashierRecordTextArea), BorderLayout.CENTER);
-        cartRecordPanel.add(refundButton, BorderLayout.SOUTH);
+//        cartRecordPanel.add(refundButton, BorderLayout.SOUTH);
 
         CashierRecordTextArea.addMouseListener(new MouseAdapter() {
             @Override
@@ -92,7 +89,7 @@ public class SaveFileRecordGUI {
         return cartRecordPanel;
     }
 
-    public JButton getOrderRefund() {
+    public JButton getRefundOrder() {
         JButton refundButton = control.createButton("Refund");
         refundButton.addActionListener((ActionEvent e) -> {
             this.CashierRecordTextArea.setEditable(false);
@@ -105,8 +102,8 @@ public class SaveFileRecordGUI {
         int getLine = CashierRecordTextArea.viewToModel2D(e.getPoint());
         try {
             String line = extractLineDetails(getLine, CashierRecordTextArea);
-            String orderIDArea = control.extractLineValue(line, 2);
-            Double billArea = Double.parseDouble(control.extractLineValue(line, 5));
+            String orderIDArea = extractLineValue(line, 2);
+            Double billArea = Double.parseDouble(extractLineValue(line, 5));
 
             for (Map.Entry<String, Double> entry : cashier_Record_List.entrySet()) {
                 String current_order_id = entry.getKey();
@@ -141,6 +138,11 @@ public class SaveFileRecordGUI {
         int lineStartOffset = Utilities.getRowStart(textArea, getLine);
         int lineEndOffset = Utilities.getRowEnd(textArea, getLine);
         return textArea.getText(lineStartOffset, lineEndOffset - lineStartOffset);
+    }
+
+    public String extractLineValue(String line, int lineAtIndex) {
+        String[] lineParts = line.split(" ");
+        return lineParts[lineAtIndex];
     }
 
     public void refundAmount(String inputRefundAmount, String current_order_id, double billArea) {

@@ -25,7 +25,7 @@ public class ExitGUI extends JFrame {
 
     private Control control;
     private CartGUI cartGUI;
-    private static SaveCashierFileRecord saveRecords;
+    private SaveCashierFileRecord saveRecords;
     private SaveFileRecordGUI saveRecordGUI;
     private HashMap<String, Double> cashier_records;
     private Staff_Record staffRecord;

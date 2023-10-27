@@ -17,6 +17,7 @@ public class CartGUI {
 
     public DecimalFormat df = new DecimalFormat("#.00");
     private DefaultListModel<Product> cartProductList;
+    private JList<Product> cartList;
     private JTextArea cartTextArea;
     private JPanel cartPanel;
     private Product product;
@@ -26,6 +27,7 @@ public class CartGUI {
         this.control = control;
         this.cartTextArea = new JTextArea();
         this.cartProductList = new DefaultListModel<>();
+        this.cartList = new JList<>(cartProductList);
     }
 
     public DefaultListModel<Product> getCartProductList() {
@@ -34,6 +36,10 @@ public class CartGUI {
 
     public JPanel getCartPanel() {
         return this.cartPanel;
+    }
+
+    public JList<Product> getCartList() {
+        return this.cartList;
     }
 
     public JTextArea getCartTextArea() {
@@ -68,6 +74,8 @@ public class CartGUI {
     public DefaultListModel<Product> addToCart(String itemId, String itemName, double itemPrice, String categories) {
         this.product = new Product(itemId, itemName, itemPrice, categories);
         this.cartProductList.addElement(product);
+//        System.out.println("Product is add to cart");
+        System.out.println(product.getItem_id());
         this.updateCartProductList();
         return cartProductList;
     }
@@ -75,6 +83,7 @@ public class CartGUI {
     public JPanel createCartPanel() {
         this.cartPanel = new JPanel(new BorderLayout());
 
+//        cartTextArea = new JTextArea();
         cartTextArea.setEditable(true);
         control.setFont(cartTextArea);
 
