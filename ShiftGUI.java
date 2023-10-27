@@ -56,7 +56,7 @@ public class ShiftGUI extends JFrame {
         JPanel logPanel = new JPanel();
         scrollPanel = new JScrollPane(logArea);
         logPanel.add(scrollPanel);
-        logPanel.setPreferredSize(new Dimension(400, 400));
+        logPanel.setPreferredSize(new Dimension(250, 250));
 
         shiftPanel.add(logPanel, BorderLayout.NORTH);
         JPanel buttonsPanel = new JPanel();
@@ -68,7 +68,7 @@ public class ShiftGUI extends JFrame {
         this.add(shiftPanel, BorderLayout.CENTER);
         this.setTitle("Cashier App");
         this.setLocationRelativeTo(null);
-        this.setSize(500, 500);
+        this.setSize(400, 400);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setVisible(true);

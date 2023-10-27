@@ -21,11 +21,12 @@ public class SaleProcessGUI {
     private ExitGUI exitGUI;
     private JList<String> productListJList;
     private DefaultListModel<String> productListModel;
+    private int shift_id;
 
-    public SaleProcessGUI() {
+    public SaleProcessGUI(int shift_id) {
+        this.shift_id = shift_id;
         this.control = new Control();
         this.cartGUI = new CartGUI(control);
-
         this.searchGUI = new SearchGUI(control, cartGUI);
 //        this.exitGUI = new ExitGUI(control, cartGUI, saveFileRecordGUI);
 //        this.exitGUI = new ExitGUI(control, cartGUI);
@@ -39,6 +40,7 @@ public class SaleProcessGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(900, 600);
         frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
         createMainPanel();
         frame.setVisible(true);
     }
@@ -78,7 +80,7 @@ public class SaleProcessGUI {
                 break;
             case "Exit":
                 control.closeFrame(frame);
-                ExitGUI exitGUI = new ExitGUI(control, cartGUI);
+                ExitGUI exitGUI = new ExitGUI(control, cartGUI, shift_id);
                 break;
         }
     }
@@ -132,6 +134,6 @@ public class SaleProcessGUI {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new SaleProcessGUI());
+//        SwingUtilities.invokeLater(() -> new SaleProcessGUI());
     }
 }

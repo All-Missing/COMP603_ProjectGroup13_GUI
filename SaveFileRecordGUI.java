@@ -44,7 +44,7 @@ public class SaveFileRecordGUI {
     public void addCashierRecord(int cartOrderId, Double bill) {
         String str_order_id = String.valueOf(cartOrderId);
         cashier_Record_List.put(str_order_id, bill);
-        CashierRecordTextArea.append("Cart ID: " + str_order_id + " Bill: $ " + bill + "\n");
+        this.updateCashierRecord();
     }
 
     public void updateCashierRecord() {

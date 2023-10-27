@@ -30,35 +30,23 @@ public class SaveCashierFileRecord {
 //        this.saveFileRecordGUI = saveFileRecordGUI;
         this.saveRecordGUI = new SaveFileRecordGUI(cartGUI);
         this.cashier_Record = saveRecordGUI.getCashier_Record_List();
-        
+
     }
-    
+
     public HashMap<String, Double> getCashier_Record() {
         return this.cashier_Record;
     }
-    
+
     public boolean saveFileCheck(JPanel panel) {
         if (this.getCashier_Record().isEmpty()) {
-            JOptionPane.showMessageDialog(panel, "Check file, confirm file saved, logging out.",
-                    "Confirm file save", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(panel, "This cashier list is empty.",
+                    "Cashier list Empty", JOptionPane.INFORMATION_MESSAGE);
             return true;
         } else {
             return false;
         }
     }
 
-    public JPanel saveFileRecordsButton() {
-        JPanel saveFileRecordsButton = new JPanel(new BorderLayout());
-
-        JButton saveFileButton = control.createButton("Save");
-        saveFileButton.addActionListener((ActionEvent e) -> {
-            this.saveFileRecords(cashier_Record, saveFileRecordsButton);
-        });
-        saveFileRecordsButton.add(saveFileButton, BorderLayout.SOUTH);
-
-        return saveFileRecordsButton;
-    }
-    
     public void clearButton(JButton clearButton, JTextArea logArea) {
         clearButton.addActionListener(new ActionListener() {
             @Override
@@ -67,35 +55,49 @@ public class SaveCashierFileRecord {
             }
         });
     }
-     
-    public void saveFileRecords(HashMap<String, Double> cashier_Record_List, JPanel panel) {
+
+    public void saveFileRecord(HashMap<String, Double> cashier_records, String shift_id, 
+            String staff_id, String staff_name, JPanel panel) {
+
+        //Condition 
+        String aShiftID = shift_id;
+        String aStaffID = staff_id;
+        String aStaffName = staff_name;
+
+        saveFileRecords(cashier_records, aShiftID, aStaffID, aStaffName, panel);
+    }
+
+    private void saveFileRecords(HashMap<String, Double> cashier_records, 
+            String shift_id, String staff_id, String staff_name, JPanel panel) {
+        double total_balance = 0;
         BufferedWriter bw = null;
         try {
 
-            bw = new BufferedWriter(new FileWriter("./file_records/BillOrder_Records.txt", true));
+            bw = new BufferedWriter(new FileWriter("./file_records/BillOrder_records.txt", true));
 
-            String line;
+            // First line of text file indicates staffID and staff name respectively
+            String line = "---ShiftID: " + shift_id + " " + "staffID: " + staff_id + " staffName: " + staff_name;
+            bw.write(line);
+            bw.newLine();
+
             //Test if cashier_record is empty
-            if (cashier_Record_List.isEmpty()) {
-                JOptionPane.showMessageDialog(panel, "Cashier record is empty!",
-                        "File Empty", JOptionPane.ERROR_MESSAGE);
+            if (cashier_records.isEmpty()) {
+                System.out.println("Cashier_record is empty!");
             } else {
-                for (Map.Entry<String, Double> entry : cashier_Record_List.entrySet()) {
+                for (Map.Entry<String, Double> entry : cashier_records.entrySet()) {
                     String current_order_id = entry.getKey();
-                    Double bill = entry.getValue();
-                    System.out.println(current_order_id);
+                    Double current_bill = entry.getValue();
+                    total_balance += current_bill;
 
-                    line = "OrderID: " + current_order_id + " Bill: " + bill;
-
-                    bw.write(line);
+                    line = "OrderID: " + current_order_id + " Bill: $ " + df.format(current_bill);
+                    bw.append(line);
                     bw.newLine();
                 }
-
-                JOptionPane.showMessageDialog(panel, "Data saved to file successfully.",
-                        "Success save file", JOptionPane.INFORMATION_MESSAGE);
+                line = "\t\t---Total balance earned per shift: $ " + df.format(total_balance);
+                bw.append(line);
+                bw.newLine();
+                bw.close();
             }
-            bw.close();
-
         } catch (FileNotFoundException ex) {
             System.out.println("File not found: " + ex.getMessage());
             JOptionPane.showMessageDialog(panel, "File not found: " + ex.getMessage(),

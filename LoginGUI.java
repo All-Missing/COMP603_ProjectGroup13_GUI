@@ -13,8 +13,8 @@ import javax.swing.*;
 
 public class LoginGUI extends JFrame {
 
-    private static final int ROW_AREA = 10;
-    private static final int COLUMN_AREA = 20;
+    private static final int ROW_AREA = 18;
+    private static final int COLUMN_AREA = 35;
 
     private JTextArea logArea;
     private JComboBox<String> nameCombo;
@@ -26,11 +26,12 @@ public class LoginGUI extends JFrame {
     private JLabel userPwdLabel;
     private JPanel northPanel;
     private JPanel southPanel;
+    private JPanel centerPanel;
     private Staff_Record staffRecord;
     private SaleProcessGUI saleProcessGUI;
     private Control control;
     private int shift_id;
-    
+
     public LoginGUI(int shift_id) {
         this.shift_id = shift_id;
         this.control = new Control();
@@ -38,7 +39,7 @@ public class LoginGUI extends JFrame {
         initPanels();
         initActionPerforms();
     }
-    
+
     public int getShiftID() {
         return this.shift_id;
     }
@@ -70,8 +71,10 @@ public class LoginGUI extends JFrame {
         add(northPanel, BorderLayout.NORTH);
 
         //Center JPanel
+        centerPanel = new JPanel();
         JScrollPane scrollPane = new JScrollPane(logArea);
-        add(scrollPane, BorderLayout.CENTER);
+        centerPanel.add(scrollPane);
+        add(centerPanel, BorderLayout.CENTER);
 
         //South JPanel
         southPanel = new JPanel();
@@ -82,11 +85,12 @@ public class LoginGUI extends JFrame {
 
         this.setSize(400, 400);
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
         this.setTitle("Staff Login");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
     }
-    
+
     public void closeFrame() {
         this.dispose();
     }
@@ -106,13 +110,15 @@ public class LoginGUI extends JFrame {
                     String userPwd = entry.getValue();
                     //Check username and password login
                     if (userName.equalsIgnoreCase(userNameField.getText().trim()) && userPwd.equals(pwdField.getText().trim())) {
-                        System.out.println("Login succeed");
-                        logArea.append("ShiftID: "+shift_id+" this user name:" + userNameField.getText() + " login succeed!\n");
+                        logArea.append("ShiftID: " + shift_id + " User name: " + userName + " login succeed!\n");
+                        
+                        JOptionPane.showMessageDialog(centerPanel, "Login success. \nStart Shift : " + getShiftID(),
+                                "Inform login succeed", JOptionPane.INFORMATION_MESSAGE);
+                        
+                        saleProcessGUI = new SaleProcessGUI(shift_id);
                         closeFrame();
-                        saleProcessGUI = new SaleProcessGUI();
 
                         //When log out, this area should be able to read log out succeed.
-                        
                         //When log out, this area should be able to read log out succeed. Implement this
                         isLoginValid = true;
                         break;
@@ -138,4 +144,3 @@ public class LoginGUI extends JFrame {
     }
 
 }
-
