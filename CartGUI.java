@@ -59,11 +59,7 @@ public class CartGUI {
             double pricePerItem = products.getItemPrice();
             totalBill += pricePerItem;
 
-<<<<<<< HEAD
-            cartTable.append(String.format("%-35s %-35s$%-10.2f$%-5.2f\n", " ", itemName, pricePerItem, cost));
-=======
             cartTable.append(String.format(" %-7s%-35s$%-10.2f\n", index + 1, itemName, pricePerItem));
->>>>>>> c7c1a86db6f0b0c60c77387a121d165340023e60
         }
         cartTable.append(String.format("\n\n\n%-30s Total Bill: $" + totalBill, " "));
 
