@@ -39,11 +39,11 @@ public class ExitGUI extends JFrame {
         this.control = control;
         this.cartGUI = cartGUI;
         saveRecords = new SaveCashierFileRecord();
-        JPanel exitPanel = exitPanel();
+        JPanel exitPanel = creatExitPanel();
         this.add(exitPanel);
     }
 
-    public JPanel exitPanel() {
+    public JPanel creatExitPanel() {
         JPanel exitPanel = new JPanel(new BorderLayout());
 
         userNameLabel = new JLabel();

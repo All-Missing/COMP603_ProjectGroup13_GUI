@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListModel;
@@ -24,7 +25,7 @@ import javax.swing.text.Utilities;
 
 public class Control {
 
-    private Product product;       
+    private Product product;
     private int cartOrderID;
     private CardLayout mainLayout;
     private SaleProcessGUI saleGUI;
@@ -34,10 +35,10 @@ public class Control {
     private double totalCost = 0;
     private Font font;
     private CheckOrderID checkOrderID;
+    private DecimalFormat df = new DecimalFormat("#.00");
     private Cashier cashier;
 
-
-    public Control() {    
+    public Control() {
         checkOrderID = new CheckOrderID();
         this.cashier = new Cashier();
         Control.NEXT_ORDER_ID = checkOrderID.checkOrderID();
@@ -86,7 +87,7 @@ public class Control {
             product = cartProductList.getElementAt(i);
             this.totalCost += product.getItemPrice();
         }
-        this.bill = totalCost;
+        this.bill = Double.parseDouble(df.format(totalCost));
         return this.totalCost;
     }
 
@@ -120,7 +121,7 @@ public class Control {
 
         return returnPanel;
     }
-  
+
     public void removeElementIndex(JTextArea textArea, int indexAdjust, JPanel panel, DefaultListModel<Product> list) {
         textArea.addMouseListener(new MouseAdapter() {
             @Override
@@ -133,7 +134,7 @@ public class Control {
                         int selectIndex = getIndex - indexAdjust;
 
                         list.removeElementAt(selectIndex);
-                        
+
                     } catch (Exception ex) {
                         System.out.println(ex);
                     }

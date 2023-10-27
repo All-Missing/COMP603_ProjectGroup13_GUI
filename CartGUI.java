@@ -58,7 +58,7 @@ public class CartGUI {
             double pricePerItem = products.getItemPrice();
             double cost = pricePerItem;
 
-            cartTable.append(String.format(" %-35s$%-10.2f$%-5.2f\n", itemName, pricePerItem, cost));
+            cartTable.append(String.format("%-35s %-35s$%-10.2f$%-5.2f\n", " ", itemName, pricePerItem, cost));
         }
             
         return cartTable.toString();
