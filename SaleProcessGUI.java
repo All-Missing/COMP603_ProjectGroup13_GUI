@@ -1,6 +1,7 @@
 package COMP603_ProjectGroup13_GUI;
 
 import java.awt.BorderLayout;
+import java.util.HashMap;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,6 +23,7 @@ public class SaleProcessGUI {
     private JList<String> productListJList;
     private DefaultListModel<String> productListModel;
     private int shift_id;
+    private HashMap<String, Double> cashier_records;
 
     public SaleProcessGUI(int shift_id) {
         this.shift_id = shift_id;
@@ -29,9 +31,10 @@ public class SaleProcessGUI {
         this.cartGUI = new CartGUI(control);
         this.searchGUI = new SearchGUI(control, cartGUI);
         this.saveFileRecordGUI = new SaveFileRecordGUI(cartGUI);
-        this.exitGUI = new ExitGUI(control, shift_id, saveFileRecordGUI);
         this.purchaseGUI = new PurchaseGUI(control, cartGUI);
         this.paymentGUI = new PaymentGUI(control, cartGUI);
+        this.cashier_records = new HashMap<>();
+        this.cashier_records = saveFileRecordGUI.getCashier_Record_List();
         initializeFrame();
     }
 
@@ -80,7 +83,7 @@ public class SaleProcessGUI {
                 break;
             case "Exit":
                 control.closeFrame(frame);
-                exitGUI = new ExitGUI(control, shift_id, saveFileRecordGUI);
+                exitGUI = new ExitGUI(control, shift_id, cashier_records);
                 break;
         }
     }
