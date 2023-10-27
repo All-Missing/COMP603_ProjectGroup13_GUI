@@ -2,10 +2,12 @@ package COMP603_ProjectGroup13_GUI;
 
 import java.awt.BorderLayout;
 import java.util.HashMap;
+import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -18,25 +20,29 @@ public class SaleProcessGUI {
     private JFrame frame;
     private JPanel mainPanel;
     private SearchGUI searchGUI;
-    private SaveFileRecordGUI saveFileRecordGUI;   
+    private SaveFileRecordGUI saveFileRecordGUI;
+    private SaveCashierFileRecord saveCashierFileRecord;
     private ExitGUI exitGUI;
     private JList<String> productListJList;
     private DefaultListModel<String> productListModel;
     private int shift_id;
+    private String username;
+    private String password;
     private HashMap<String, Double> cashier_records;
-    
+
+//    public SaleProcessGUI(int shift_id, String username, String password) {
     public SaleProcessGUI(int shift_id) {
-        this.cashier_records = new HashMap<>();
-        this.cashier_records = saveFileRecordGUI.getCashier_Record_List();       
         this.shift_id = shift_id;
+//        this.username = username;
+//        this.password = password;
         this.control = new Control();
         this.cartGUI = new CartGUI(control);
         this.searchGUI = new SearchGUI(control, cartGUI);
-        this.saveFileRecordGUI = new SaveFileRecordGUI(cartGUI);        
+        this.saveFileRecordGUI = new SaveFileRecordGUI(cartGUI);
+        this.saveCashierFileRecord = new SaveCashierFileRecord();
         this.purchaseGUI = new PurchaseGUI(control, cartGUI);
         this.paymentGUI = new PaymentGUI(control, cartGUI);
-        this.cashier_records = new HashMap<>();
-        this.cashier_records = saveFileRecordGUI.getCashier_Record_List();
+//        this.cashier_records = saveFileRecordGUI.getCashier_Record_List();
         initializeFrame();
     }
 
@@ -48,6 +54,10 @@ public class SaleProcessGUI {
         frame.setResizable(false);
         createMainPanel();
         frame.setVisible(true);
+    }
+
+    public HashMap<String, Double> getCashier_Records() {
+        return this.cashier_records;
     }
 
     public JPanel createMainPanel() {
@@ -84,8 +94,11 @@ public class SaleProcessGUI {
                 control.showCard("Search");
                 break;
             case "Exit":
+//                saveCashierFileRecord.saveFileRecord(cashier_records, String.valueOf(shift_id), password, username, mainPanel);
+//                JOptionPane.showMessageDialog(mainPanel, "File is save. Exiting",
+//                "Save & Exit", JOptionPane.INFORMATION_MESSAGE);
                 control.closeFrame(frame);
-                exitGUI = new ExitGUI(control, shift_id, cashier_records);
+                exitGUI = new ExitGUI(control);
                 break;
         }
     }
@@ -96,7 +109,7 @@ public class SaleProcessGUI {
         JPanel PurchaseButtonPanel = this.createMainControlButton("Purchase", "Purchase");
         JPanel PaymentButtonPanel = this.createMainControlButton("Payment", "Payment");
         JPanel searchButtonPanel = this.createMainControlButton("Search", "Search");
-        JPanel ExitButtonPanel = this.createMainControlButton("Exit", "Exit");
+        JPanel ExitButtonPanel = this.createMainControlButton("Save & Exit", "Exit");
 
         buttonPanel.add(PurchaseButtonPanel);
         buttonPanel.add(PaymentButtonPanel);
@@ -126,6 +139,7 @@ public class SaleProcessGUI {
 
         JPanel purchasePanel = purchaseGUI.createPurchasePanel();
         JPanel paymentPanel = paymentGUI.createPaymentPanel();
+//        JPanel paymentPanel = paymentGUI.createPaymentPanel(shift_id, username, password);
         JPanel cartPanel = cartGUI.createCartPanel();
 //        JPanel exitPanel = exitGUI.createLogOutPanel(frame);
         JPanel searchPanel = searchGUI.createSearchPanel();
@@ -139,6 +153,16 @@ public class SaleProcessGUI {
     }
 
     public static void main(String[] args) {
+//        HashMap<String, Double> list = new HashMap<>();
+//        SaleProcessGUI sale = new SaleProcessGUI(1, "k", "d");
+//        list = sale.getCashier_Records();
+//        for (Map.Entry<String, Double> getlist : list.entrySet()) {
+//            String id = getlist.getKey();
+//            double bill = getlist.getValue();
+//
+//            System.out.println(id);
+//            System.out.println(bill);
+//        }
 //        SwingUtilities.invokeLater(() -> new SaleProcessGUI());
     }
 }

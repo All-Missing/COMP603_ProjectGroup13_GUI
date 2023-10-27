@@ -110,8 +110,6 @@ public class ShiftGUI extends JFrame {
         }
     }
 
-
-
     public static void main(String[] args) {
         ShiftGUI shiftGUI = new ShiftGUI();
 

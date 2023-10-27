@@ -36,24 +36,28 @@ public class ExitGUI extends JFrame {
     private JPasswordField pwdField;
     private JTextArea logArea;
     private JPanel exitPanel;
-    private int shift_id;
+        private int shift_id;
 
-    public ExitGUI(Control control, int shift_id, HashMap<String, Double> cashier_records) {
-        this.shift_id = shift_id;
+
+//    public ExitGUI(Control control, int shift_id, HashMap<String, Double> cashier_records) {
+    public ExitGUI(Control control) {
+//        this.shift_id = shift_id;
         this.control = control;
         this.cartGUI = new CartGUI(control);
-
-        this.saveRecordGUI = saveRecordGUI;
-        this.cashier_records = new HashMap<>();
-//        saveRecordGUI.addCashierRecord(1, 50.0); // Example of adding a record
-        this.cashier_records = cashier_records;
+//        this.cashier_records = cashier_records;
         saveRecords = new SaveCashierFileRecord();
+
+//        this.cashier_records = new HashMap<>();
+//        saveRecordGUI.addCashierRecord(1, 50.0); // Example of adding a record
         JPanel createExitPanel = creatExitPanel();
         this.add(createExitPanel);
     }
 
     public int getShiftID() {
         return this.shift_id;
+    }
+    public HashMap<String, Double> getCashier_records() {
+        return this.cashier_records;
     }
 
     public JPanel creatExitPanel() {
@@ -136,11 +140,11 @@ public class ExitGUI extends JFrame {
         if (username.isBlank() || password.isBlank()) {
             JOptionPane.showMessageDialog(this, "Please make sure to enter you name and password before saving file.",
                     "Save File Fail", JOptionPane.ERROR_MESSAGE);
-        } else if (cashier_records.isEmpty()) {
+        } else if (this.getCashier_records().isEmpty()) {
             logArea.append("File is empty. No records to save.\n");
         } else {
             logArea.append("File is save succesfully.\n");
-            saveRecords.saveFileRecord(cashier_records, String.valueOf(this.getShiftID()), password, username, exitPanel);
+            saveRecords.saveFileRecord(getCashier_records(), String.valueOf(this.getShiftID()), password, username, exitPanel);
         }
     }
 

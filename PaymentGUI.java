@@ -9,17 +9,21 @@ import javax.swing.JPanel;
 public class PaymentGUI {
 
     private SaveFileRecordGUI saveFileRecordGUI;
+    private SaveCashierFileRecord saveCashierFileRecord;
     private Control control;
     private CartGUI cartGUI;
+    private JPanel paymentPanel;
 
     public PaymentGUI(Control control, CartGUI cartGUI) {
         this.control = control;
         this.cartGUI = cartGUI;
         this.saveFileRecordGUI = new SaveFileRecordGUI(cartGUI);
+        this.saveCashierFileRecord = new SaveCashierFileRecord();
     }
 
+//    public JPanel createPaymentPanel(int shift_id, String username, String password) {
     public JPanel createPaymentPanel() {
-        JPanel paymentPanel = new JPanel(new BorderLayout(3, 0));
+        paymentPanel = new JPanel(new BorderLayout());
 
         JPanel paymentButtonsPanel = this.createPaymentButtonsPanel();
         JPanel checkPreviousCartPanel = saveFileRecordGUI.addCheckCartRecord();
@@ -30,6 +34,7 @@ public class PaymentGUI {
         return paymentPanel;
     }
 
+//    public JPanel createPaymentButtonsPanel(int shift_id, String username, String password) {
     public JPanel createPaymentButtonsPanel() {
         JPanel buttonPanel = new JPanel(new GridLayout(2, 3));
 
@@ -39,16 +44,16 @@ public class PaymentGUI {
         JButton cashButton = control.createButton("Cash");
         cashButton.addActionListener(e -> handleCardPayment());
 
-        JButton refundButton = control.createButton("Refund");
-        cashButton.addActionListener(e -> refund(refundButton));
-        
         JButton cancelCartButton = control.createButton("Cancel Cart");
         cancelCartButton.addActionListener(e -> cancelCart());
+        
+//        JButton saveButton = control.createButton("Save");
+//        saveButton.addActionListener(e -> saveRecords(shift_id, username, password));
 
         buttonPanel.add(cardButton, BorderLayout.WEST);
         buttonPanel.add(cashButton, BorderLayout.WEST);
-//        buttonPanel.add(refundButton, BorderLayout.WEST);
         buttonPanel.add(cancelCartButton, BorderLayout.WEST);
+//        buttonPanel.add(saveButton, BorderLayout.WEST);
 
         return buttonPanel;
     }
@@ -99,9 +104,10 @@ public class PaymentGUI {
 
     }
 
-    public void refund(JButton refundButton) {
-//        this.saveFileRecordGUI.getRefundOrder(refundButton);
-    }
+//    public void saveRecords(int shift_id, String username, String password) {
+//            saveCashierFileRecord.saveFileRecord(saveFileRecordGUI.getCashier_Record_List(), 
+//                    String.valueOf(shift_id), password, username, paymentPanel);
+//    }
 
     public void cancelCart() {
         JPanel cancelCart = new JPanel(new BorderLayout());
