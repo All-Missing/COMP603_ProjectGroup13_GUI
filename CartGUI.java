@@ -21,7 +21,7 @@ public class CartGUI {
     private DefaultListModel<Product> cartProductList;
 
     public CartGUI(Control control) {
-        this.control = new Control();
+        this.control = control;
         this.cartTextArea = new JTextArea();
         this.cartProductList = new DefaultListModel<>();
     }
