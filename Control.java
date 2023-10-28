@@ -29,12 +29,12 @@ public class Control {
     private static int NEXT_ORDER_ID = 0;
     private double totalCost = 0; //calculate the cost of item in cart
     private Font font;
-    private CheckOrderID checkOrderID;
+    private CheckOrderIDGUI checkOrderIDGUI;
     private DecimalFormat df = new DecimalFormat("#0.00");
 
     public Control() {
-        checkOrderID = new CheckOrderID();
-        Control.NEXT_ORDER_ID = checkOrderID.checkOrderID();
+        checkOrderIDGUI = new CheckOrderIDGUI();
+        Control.NEXT_ORDER_ID = checkOrderIDGUI.checkOrderID();
         this.cartOrderID = Control.NEXT_ORDER_ID;
         this.pageControlPanel = new JPanel();
         this.mainLayout = new CardLayout();
@@ -82,7 +82,6 @@ public class Control {
         return Double.parseDouble(df.format(this.totalCost));
     }
 
-    //
     public JButton createButton(String buttonText) {
         JButton button = new JButton(buttonText);
         button.setPreferredSize(new Dimension(150, 50));

@@ -1,13 +1,10 @@
 package COMP603_ProjectGroup13_GUI;
 
-import COMP603_ProjectGroup13.*;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class CheckOrderIDTest {
+public class CheckOrderIDGUI {
 
     public int checkOrderID() {
         
@@ -29,7 +26,7 @@ public class CheckOrderIDTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return highestOrderID;
+        return highestOrderID + 1;
     }
     
            

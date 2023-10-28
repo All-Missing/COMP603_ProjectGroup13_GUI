@@ -5,6 +5,7 @@ import COMP603_ProjectGroup13.Product;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JButton;
@@ -14,26 +15,28 @@ import javax.swing.SwingUtilities;
 
 public class PurchaseGUI {
 
-    private Map<String, String> productCategories;
-    private ProductList productList;
-    private HashMap<String, Product> product_records;
     private Control control;
     private CartGUI cartGUI;
+    private ProductList productList;
+    private Map<String, String> productCategories;
+    private HashMap<String, Product> product_records;
+    private DecimalFormat df = new DecimalFormat("#0.00");
+    private JPanel purchasePanel;
 
     public PurchaseGUI(Control control, CartGUI cartGUI) {
         this.control = control;
-        this.cartGUI = cartGUI;        
+        this.cartGUI = cartGUI;
         this.productCategories = new HashMap<>();
         this.productList = new ProductList();
         this.product_records = productList.getProduct_records();
     }
 
     public JPanel createPurchasePanel() {
-        JPanel purchasePanel = new JPanel(new BorderLayout());
+        purchasePanel = new JPanel(new BorderLayout());
 
         JPanel categoriesPanel = this.addProductsCategories();
         purchasePanel.add(categoriesPanel, BorderLayout.CENTER);
-        
+
         control.addPagePanel(categoriesPanel, "Categories");
 
         return purchasePanel;
@@ -93,8 +96,12 @@ public class PurchaseGUI {
                 productButton.addActionListener((ActionEvent e) -> {
                     SwingUtilities.invokeLater(() -> {
                         try {
-                            cartGUI.addToCart(products.getItem_id(), products.getItem(),
-                                    products.getItemPrice(), products.getCategory());
+                            if (categoryId.equalsIgnoreCase("FU")) {
+                                IfFuel(true, products.getItem_id(), products.getItem(), products.getCategory(), products.getItemPrice());
+                            } else {
+                                cartGUI.addToCart(products.getItem_id(), products.getItem(),
+                                        products.getItemPrice(), products.getCategory());
+                            }
                         } catch (Exception ex) {
                             JOptionPane.showMessageDialog(addProductPanel, "No product found from this categories.",
                                     "No Product Found", JOptionPane.ERROR_MESSAGE);
@@ -105,5 +112,29 @@ public class PurchaseGUI {
             }
         }
         return addProductPanel;
+    }
+
+    public void IfFuel(boolean isFuel, String id, String name,
+            String category, Double FuelCostPerLiter) {
+
+        String input = JOptionPane.showInputDialog(purchasePanel,
+                "Fuel Cost Per Liter: $" + FuelCostPerLiter + "\nEnter Amount: $");
+
+        if (input != null) {
+            try {
+                double amountBought = Double.parseDouble(input);
+
+                if (isFuel) {
+                    Double LiterAmount = amountBought / FuelCostPerLiter;
+                    JOptionPane.showMessageDialog(purchasePanel, "Amount of Liters: " + df.format(LiterAmount) + "L\n",
+                            "Amount of Liters", JOptionPane.INFORMATION_MESSAGE);
+                    cartGUI.addToCart(id, name, amountBought, category);
+                }
+            } catch (NumberFormatException e) {
+                //input is not numeric
+                JOptionPane.showMessageDialog(purchasePanel, "Invalid input. Please enter a valid numeric amount.",
+                        "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 }
