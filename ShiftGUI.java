@@ -2,12 +2,10 @@ package COMP603_ProjectGroup13_GUI;
 
 import COMP603_ProjectGroup13.CheckShiftID;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -15,18 +13,15 @@ import javax.swing.JTextArea;
 
 public class ShiftGUI extends JFrame {
 
-    private static final int ROW_AREA = 20;
-    private static final int COLUMN_AREA = 30;
+
 
     private JTextArea logArea;
     private JScrollPane scrollPanel;
     private JButton confirmButton;
-    private JButton noButton;
     private JButton clearButton;
     private JPanel shiftPanel;
     private Control control;
     private LoginGUI loginGUI;
-    private ExitGUI exitGUI;
     private int shift_id;
     private CheckShiftID cShiftID;
 
@@ -44,8 +39,9 @@ public class ShiftGUI extends JFrame {
     }
 
     public void initComponents() {
-        logArea = new JTextArea(ROW_AREA, COLUMN_AREA);
-        logArea.setText("Loading Cashier Gas Station app ... please wait ...!!!\n");
+        logArea = new JTextArea(15, 30);
+        logArea.setEditable(false);
+        logArea.setText("Loading Cashier Gas Station app...\nPlease wait...");
         confirmButton = control.createButton("Confirm");
         clearButton = control.createButton("Clear");
     }
@@ -57,7 +53,6 @@ public class ShiftGUI extends JFrame {
         JPanel logPanel = new JPanel();
         scrollPanel = new JScrollPane(logArea);
         logPanel.add(scrollPanel);
-        logPanel.setPreferredSize(new Dimension(250, 250));
 
         shiftPanel.add(logPanel, BorderLayout.NORTH);
         JPanel buttonsPanel = new JPanel();
@@ -79,7 +74,6 @@ public class ShiftGUI extends JFrame {
         ActionListener buttonAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 if (e.getSource() == confirmButton) {
                     confirmButtonAction();
                 } else if (e.getSource() == clearButton) {
@@ -110,8 +104,6 @@ public class ShiftGUI extends JFrame {
             }
         }
     }
-
-
 
     public static void main(String[] args) {
         ShiftGUI shiftGUI = new ShiftGUI();

@@ -1,11 +1,8 @@
 package COMP603_ProjectGroup13_GUI;
 
-import COMP603_ProjectGroup13.SaveCashierFileRecords;
 import COMP603_ProjectGroup13.Staff_Record;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JButton;
@@ -17,17 +14,11 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class ExitGUI extends JFrame {
 
     private Control control;
-    private CartGUI cartGUI;
-    private static SaveCashierFileRecord saveRecords;
-    private SaveFileRecordGUI saveRecordGUI;
-    private HashMap<String, Double> bill_records;
     private Staff_Record staffRecord;
     private HashMap<String, String> staffList;
     private JLabel userNameLabel;
@@ -37,22 +28,12 @@ public class ExitGUI extends JFrame {
     private JTextArea logArea;
     private JPanel exitPanel;
     private int shift_id;
+    private ShiftGUI shiftGUI;
 
-    public ExitGUI(Control control, int shift_id, SaveFileRecordGUI saveRecordGUI) {
-        this.shift_id = shift_id;
-        this.control = control;
-        this.cartGUI = new CartGUI(control);
-        this.saveRecordGUI = saveRecordGUI;
-        this.bill_records = new HashMap<>();
-//        saveRecordGUI.addCashierRecord(1, 50.0); // Example of adding a record
-        this.bill_records = saveRecordGUI.getCashier_Record_List();
-        saveRecords = new SaveCashierFileRecord();
+    public ExitGUI() {
+        this.control = new Control();
         JPanel createExitPanel = creatExitPanel();
         this.add(createExitPanel);
-    }
-
-    public int getShiftID() {
-        return this.shift_id;
     }
 
     public JPanel creatExitPanel() {
@@ -101,7 +82,6 @@ public class ExitGUI extends JFrame {
 
     public JPanel schrollInterface(JTextArea logArea) {
         JPanel outputArea = new JPanel(new BorderLayout());
-//        logArea = new JTextArea();
         JScrollPane scrollPane = new JScrollPane(logArea);
         outputArea.add(scrollPane, BorderLayout.CENTER);
         return outputArea;
@@ -109,51 +89,21 @@ public class ExitGUI extends JFrame {
 
     public JPanel buttonInterface(JTextField userNameField,
             JPasswordField pwdField, JTextArea logArea) {
+
         //South JPanel
         JPanel southPanel = new JPanel(new BorderLayout());
 
         JButton logOutButton = control.createButton("Log Out");
         JButton clearButton = control.createButton("Clear");
-        JButton saveButton = control.createButton("Save");
 
         logOutButton.addActionListener(e -> logOutButton(userNameField,
                 pwdField, logArea, southPanel));
         clearButton.addActionListener(e -> control.clearButton(clearButton, logArea));
-        saveButton.addActionListener(e -> this.saveFile());
 
         southPanel.add(clearButton, BorderLayout.WEST);
         southPanel.add(logOutButton, BorderLayout.CENTER);
-        southPanel.add(saveButton, BorderLayout.EAST);
 
         return southPanel;
-    }
-
-    public void saveFile() {
-        String username = userNameField.getText().trim();
-        String password = new String(pwdField.getPassword()).trim();
-
-        if (username.isBlank() || password.isBlank()) {
-            JOptionPane.showMessageDialog(this, "Please make sure to enter you name and password before saving file.",
-                    "Save File Fail", JOptionPane.ERROR_MESSAGE);
-        } else if (bill_records.isEmpty()) {
-            logArea.append("File is empty. No records to save.\n");
-        } else {
-            logArea.append("File is save succesfully.\n");
-            saveRecords.saveFileRecord(bill_records, String.valueOf(this.getShiftID()), password, username, exitPanel);
-        }
-    }
-
-    public void informSaveFileBeforeExit(HashMap<String, Double> cashier_records, boolean isLoginValid, JPanel panel) {
-        if (isLoginValid) {
-            if (cashier_records.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Log out success!",
-                        "Confirm log out", JOptionPane.INFORMATION_MESSAGE);
-                control.closeFrame(this);
-                ShiftGUI shiftGUI = new ShiftGUI();
-            } else {
-                logArea.append("Fail to log out. Please save file before logging out.\n\n");
-            }
-        }
     }
 
     public void closeFrame() {
@@ -177,7 +127,12 @@ public class ExitGUI extends JFrame {
                 logArea.append("User name: " + userName + " logging out...\n");
 
                 isLoginValid = true;
-                informSaveFileBeforeExit(bill_records, isLoginValid, panel);
+
+                JOptionPane.showMessageDialog(this, "Log out success!",
+                        "Confirm log out", JOptionPane.INFORMATION_MESSAGE);
+
+                closeFrame();
+                shiftGUI = new ShiftGUI();
 
                 break;
             }
@@ -188,11 +143,7 @@ public class ExitGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-//        Control control = new Control();
-//        CartGUI cartGUI = new CartGUI(control);
-//        SaveFileRecordGUI saveRecordGUI = new SaveFileRecordGUI(cartGUI);
-//        SwingUtilities.invokeLater(() -> {
-//            ExitGUI exitGUI = new ExitGUI(control, 1, saveRecordGUI);
-//        });
+        ExitGUI exitGUI = new ExitGUI();
+
     }
 }

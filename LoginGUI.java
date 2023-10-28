@@ -5,16 +5,12 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.*;
 
 public class LoginGUI extends JFrame {
-
-    private static final int ROW_AREA = 18;
-    private static final int COLUMN_AREA = 35;
 
     private JTextArea logArea;
     private JComboBox<String> nameCombo;
@@ -31,6 +27,8 @@ public class LoginGUI extends JFrame {
     private SaleProcessGUI saleProcessGUI;
     private Control control;
     private int shift_id;
+    private String username;
+    private String password;
 
     public LoginGUI(int shift_id) {
         this.shift_id = shift_id;
@@ -51,7 +49,7 @@ public class LoginGUI extends JFrame {
         userPwdLabel = new JLabel("Password:", SwingConstants.RIGHT);
         userNameField = new JTextField();
         pwdField = new JPasswordField();
-        logArea = new JTextArea(ROW_AREA, COLUMN_AREA);
+        logArea = new JTextArea(18, 40);
         loginButton = new JButton("Login");
         clearButton = new JButton("Clear");
 
@@ -115,11 +113,12 @@ public class LoginGUI extends JFrame {
                         JOptionPane.showMessageDialog(centerPanel, "Login success. \nStart Shift : " + getShiftID(),
                                 "Inform login succeed", JOptionPane.INFORMATION_MESSAGE);
                         
-                        saleProcessGUI = new SaleProcessGUI(shift_id);
+                        username = userName;
+                        password = userPwd;
+                        
                         closeFrame();
+                        saleProcessGUI = new SaleProcessGUI(shift_id, username, password);
 
-                        //When log out, this area should be able to read log out succeed.
-                        //When log out, this area should be able to read log out succeed. Implement this
                         isLoginValid = true;
                         break;
                     }
