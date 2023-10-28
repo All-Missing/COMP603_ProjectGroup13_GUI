@@ -127,8 +127,6 @@ public class SaveFileRecordGUI {
         }
     }
 
-   
-
     public void refundAmount(String inputRefundAmount, String current_order_id, double billArea) {
         try {
             //parse user refund amount input as a double value

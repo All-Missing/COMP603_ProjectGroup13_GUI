@@ -2,7 +2,6 @@ package COMP603_ProjectGroup13_GUI;
 
 import COMP603_ProjectGroup13.CheckShiftID;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
