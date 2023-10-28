@@ -127,17 +127,15 @@ public class SearchGUI extends JFrame {
                 if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
                     int getLine = searchTextArea.viewToModel2D(e.getPoint());
                     try {
-                        int selectIndex = searchTextArea.getLineOfOffset(getLine);
-                        Product product = productListDB.get(selectIndex);
-                        
-                        int option = JOptionPane.showConfirmDialog(searchPanel, "Do you wish to add this product to cart",
-                                "Confirm adding this product", JOptionPane.YES_NO_OPTION);
-                        //Check if confirm yes
-                        if (option == JOptionPane.YES_OPTION)                                                        
-                            cartGUI.addToCart(product.getItem_id(), product.getItem(), product.getItemPrice(), product.getCategory());
-                        if (option == JOptionPane.NO_OPTION)
-                            JOptionPane.showMessageDialog(searchPanel, "Cancel selecting this product",
-                            "Select next one?", JOptionPane.ERROR_MESSAGE);
+                        String line = control.extractLineDetails(getLine, searchTextArea);
+                        String orderIDArea = control.extractLineValue(line, 0);
+
+                        for (Product product : productListDB) {
+                            String item_id = product.getItem_id();
+                            if (orderIDArea.equals(item_id)) {
+                                confirmAddItem();
+                            }
+                        }
                     } catch (Exception ex) {
                         System.out.println(ex);
                     }
@@ -154,6 +152,19 @@ public class SearchGUI extends JFrame {
         returnButton.addActionListener(buttonAction);
     }
 
+    public void confirmAddItem() {
+        int option = JOptionPane.showConfirmDialog(searchPanel, "Do you wish to add this product to cart",
+                "Confirm adding this product", JOptionPane.YES_NO_OPTION);
+        //Check if confirm yes
+        if (option == JOptionPane.YES_OPTION) {
+            cartGUI.addToCart(product.getItem_id(), product.getItem(), product.getItemPrice(), product.getCategory());
+        }
+        if (option == JOptionPane.NO_OPTION) {
+            JOptionPane.showMessageDialog(searchPanel, "Cancel selecting this product",
+                    "Select next one?", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     public void searchList() {
         int index = 0;
         for (Product product : productListDB) {
@@ -164,9 +175,7 @@ public class SearchGUI extends JFrame {
             searchTextArea.append(item_id + " " + item + " " + item_price + " " + category + "\n");
             index++;
             addProductList(item_id, product);
-
         }
-
     }
 
     public void addProductList(String item_id, Product product) {
@@ -183,7 +192,6 @@ public class SearchGUI extends JFrame {
                 isFound = true;
             }
         }
-
         if (!isFound) {
             searchTextArea.setText("This item is not found!\n");
         }

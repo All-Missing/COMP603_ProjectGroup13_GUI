@@ -11,49 +11,41 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class SaleProcessGUI {
+public class SaleProcessGUI extends JFrame{
 
     private Control control;
     private CartGUI cartGUI;
     private PurchaseGUI purchaseGUI;
     private PaymentGUI paymentGUI;
-    private JFrame frame;
+//    private JFrame frame;
     private JPanel mainPanel;
     private SearchGUI searchGUI;
-    private SaveFileRecordGUI saveFileRecordGUI;
-    private SaveCashierFileRecord saveCashierFileRecord;
     private ExitGUI exitGUI;
-    private JList<String> productListJList;
-    private DefaultListModel<String> productListModel;
     private int shift_id;
     private String username;
     private String password;
     private HashMap<String, Double> cashier_records;
 
-//    public SaleProcessGUI(int shift_id, String username, String password) {
-    public SaleProcessGUI(int shift_id) {
+    public SaleProcessGUI(int shift_id, String username, String password) {
         this.shift_id = shift_id;
-//        this.username = username;
-//        this.password = password;
+        this.username = username;
+        this.password = password;
         this.control = new Control();
         this.cartGUI = new CartGUI(control);
         this.searchGUI = new SearchGUI(control, cartGUI);
-        this.saveFileRecordGUI = new SaveFileRecordGUI(cartGUI);
-        this.saveCashierFileRecord = new SaveCashierFileRecord();
         this.purchaseGUI = new PurchaseGUI(control, cartGUI);
         this.paymentGUI = new PaymentGUI(control, cartGUI);
-//        this.cashier_records = saveFileRecordGUI.getCashier_Record_List();
         initializeFrame();
     }
 
     public void initializeFrame() {
-        frame = new JFrame("Sale Process");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(900, 600);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
+        this.setTitle("Sale Process");
+        this.setSize(900, 600);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         createMainPanel();
-        frame.setVisible(true);
+        this.setVisible(true);
     }
 
     public HashMap<String, Double> getCashier_Records() {
@@ -75,7 +67,7 @@ public class SaleProcessGUI {
         JPanel buttonPanel = this.createButtonPanel();
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        frame.add(mainPanel, BorderLayout.CENTER);
+        this.add(mainPanel, BorderLayout.CENTER);
 
         return mainPanel;
     }
@@ -94,10 +86,8 @@ public class SaleProcessGUI {
                 control.showCard("Search");
                 break;
             case "Exit":
-//                saveCashierFileRecord.saveFileRecord(cashier_records, String.valueOf(shift_id), password, username, mainPanel);
-//                JOptionPane.showMessageDialog(mainPanel, "File is save. Exiting",
-//                "Save & Exit", JOptionPane.INFORMATION_MESSAGE);
-                control.closeFrame(frame);
+                paymentGUI.saveFile(shift_id, username, password);
+                control.closeFrame(this);
                 exitGUI = new ExitGUI(control);
                 break;
         }
@@ -117,7 +107,6 @@ public class SaleProcessGUI {
         buttonPanel.add(ExitButtonPanel);
 
         return buttonPanel;
-
     }
 
     public JPanel createMainControlButton(String buttonName, String checkExitString) {
@@ -126,7 +115,6 @@ public class SaleProcessGUI {
         JButton button = control.createButton(buttonName);
 
         button.addActionListener(e -> {
-//            control.showCard("Exit");
             this.checkExit(checkExitString);
         });
 
@@ -136,33 +124,18 @@ public class SaleProcessGUI {
     }
 
     public void addSalePage() {
-
         JPanel purchasePanel = purchaseGUI.createPurchasePanel();
         JPanel paymentPanel = paymentGUI.createPaymentPanel();
-//        JPanel paymentPanel = paymentGUI.createPaymentPanel(shift_id, username, password);
         JPanel cartPanel = cartGUI.createCartPanel();
-//        JPanel exitPanel = exitGUI.createLogOutPanel(frame);
         JPanel searchPanel = searchGUI.createSearchPanel();
 
         control.addPagePanel(purchasePanel, "Purchase");
         control.addPagePanel(paymentPanel, "Payment");
         control.addPagePanel(cartPanel, "Cart");
-//        control.addPagePanel(exitPanel, "Exit");
         control.addPagePanel(searchPanel, "Search");
-
     }
 
     public static void main(String[] args) {
-//        HashMap<String, Double> list = new HashMap<>();
-//        SaleProcessGUI sale = new SaleProcessGUI(1, "k", "d");
-//        list = sale.getCashier_Records();
-//        for (Map.Entry<String, Double> getlist : list.entrySet()) {
-//            String id = getlist.getKey();
-//            double bill = getlist.getValue();
-//
-//            System.out.println(id);
-//            System.out.println(bill);
-//        }
-//        SwingUtilities.invokeLater(() -> new SaleProcessGUI());
+        SaleProcessGUI sale = new SaleProcessGUI(1, "k", "d");
     }
 }

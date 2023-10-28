@@ -22,7 +22,7 @@ public class SaveCashierFileRecord {
     private SaveFileRecordGUI saveRecordGUI;
     private Control control;
     private CartGUI cartGUI;
-    private DecimalFormat df = new DecimalFormat("#.00");
+    private DecimalFormat df = new DecimalFormat("#0.00");
 
     public SaveCashierFileRecord() {
         this.saveRecordGUI = new SaveFileRecordGUI(cartGUI);

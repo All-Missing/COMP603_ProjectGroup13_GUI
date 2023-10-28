@@ -5,7 +5,6 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JFrame;
@@ -31,6 +30,8 @@ public class LoginGUI extends JFrame {
     private SaleProcessGUI saleProcessGUI;
     private Control control;
     private int shift_id;
+    private String username;
+    private String password;
 
     public LoginGUI(int shift_id) {
         this.shift_id = shift_id;
@@ -115,11 +116,12 @@ public class LoginGUI extends JFrame {
                         JOptionPane.showMessageDialog(centerPanel, "Login success. \nStart Shift : " + getShiftID(),
                                 "Inform login succeed", JOptionPane.INFORMATION_MESSAGE);
                         
-                        saleProcessGUI = new SaleProcessGUI(shift_id);
+                        username = userName;
+                        password = userPwd;
+                        
                         closeFrame();
+                        saleProcessGUI = new SaleProcessGUI(shift_id, username, password);
 
-                        //When log out, this area should be able to read log out succeed.
-                        //When log out, this area should be able to read log out succeed. Implement this
                         isLoginValid = true;
                         break;
                     }

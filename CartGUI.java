@@ -8,40 +8,29 @@ import java.text.DecimalFormat;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class CartGUI {
 
-    public DecimalFormat df = new DecimalFormat("#.00");
-    private DefaultListModel<Product> cartProductList;
-    private JList<Product> cartList;
-    private JTextArea cartTextArea;
+    public DecimalFormat df = new DecimalFormat("#0.00");
     private JPanel cartPanel;
-    private Product product;
     private Control control;
+    private Product product;
+    private JTextArea cartTextArea;
+    private DefaultListModel<Product> cartProductList;
 
     public CartGUI(Control control) {
         this.control = control;
         this.cartTextArea = new JTextArea();
         this.cartProductList = new DefaultListModel<>();
-        this.cartList = new JList<>(cartProductList);
     }
 
     public DefaultListModel<Product> getCartProductList() {
         return this.cartProductList;
     }
-
-    public JPanel getCartPanel() {
-        return this.cartPanel;
-    }
-
-    public JList<Product> getCartList() {
-        return this.cartList;
-    }
-
+    
     public JTextArea getCartTextArea() {
         return this.cartTextArea;
     }
@@ -71,19 +60,16 @@ public class CartGUI {
         this.cartTextArea.setText(cartOutput);
     }
 
-    public DefaultListModel<Product> addToCart(String itemId, String itemName, double itemPrice, String categories) {
+    public void addToCart(String itemId, String itemName, double itemPrice, String categories) {
         this.product = new Product(itemId, itemName, itemPrice, categories);
         this.cartProductList.addElement(product);
-//        System.out.println("Product is add to cart");
         System.out.println(product.getItem_id());
         this.updateCartProductList();
-        return cartProductList;
     }
 
     public JPanel createCartPanel() {
         this.cartPanel = new JPanel(new BorderLayout());
 
-//        cartTextArea = new JTextArea();
         cartTextArea.setEditable(true);
         control.setFont(cartTextArea);
 

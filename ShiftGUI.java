@@ -21,12 +21,10 @@ public class ShiftGUI extends JFrame {
     private JTextArea logArea;
     private JScrollPane scrollPanel;
     private JButton confirmButton;
-    private JButton noButton;
     private JButton clearButton;
     private JPanel shiftPanel;
     private Control control;
     private LoginGUI loginGUI;
-    private ExitGUI exitGUI;
     private int shift_id;
     private CheckShiftID cShiftID;
 
@@ -109,8 +107,6 @@ public class ShiftGUI extends JFrame {
             }
         }
     }
-
-
 
     public static void main(String[] args) {
         ShiftGUI shiftGUI = new ShiftGUI();

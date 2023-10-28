@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.Utilities;
 
 public class Control {
@@ -28,19 +29,16 @@ public class Control {
     private Product product;
     private int cartOrderID;
     private CardLayout mainLayout;
-    private SaleProcessGUI saleGUI;
     private JPanel pageControlPanel;
     private static int NEXT_ORDER_ID = 0;
     private double bill = 0;
     private double totalCost = 0;
     private Font font;
     private CheckOrderID checkOrderID;
-    private DecimalFormat df = new DecimalFormat("#.00");
-    private Cashier cashier;
+    private DecimalFormat df = new DecimalFormat("#0.00");
 
     public Control() {
         checkOrderID = new CheckOrderID();
-        this.cashier = new Cashier();
         Control.NEXT_ORDER_ID = checkOrderID.checkOrderID();
         this.cartOrderID = Control.NEXT_ORDER_ID;
         this.pageControlPanel = new JPanel();
@@ -89,6 +87,17 @@ public class Control {
         }
         this.bill = Double.parseDouble(df.format(totalCost));
         return this.totalCost;
+    }
+
+    public String extractLineValue(String line, int lineAtIndex) {
+        String[] lineParts = line.split(" ");
+        return lineParts[lineAtIndex];
+    }
+
+    public String extractLineDetails(int getLine, JTextArea textArea) throws BadLocationException {
+        int lineStartOffset = Utilities.getRowStart(textArea, getLine);
+        int lineEndOffset = Utilities.getRowEnd(textArea, getLine);
+        return textArea.getText(lineStartOffset, lineEndOffset - lineStartOffset);
     }
 
     public JButton createButton(String buttonText) {
