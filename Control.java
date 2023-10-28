@@ -10,8 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,8 +27,7 @@ public class Control {
     private CardLayout mainLayout;
     private JPanel pageControlPanel;
     private static int NEXT_ORDER_ID = 0;
-    private double bill = 0;
-    private double totalCost = 0;
+    private double totalCost = 0; //calculate the cost of item in cart
     private Font font;
     private CheckOrderID checkOrderID;
     private DecimalFormat df = new DecimalFormat("#0.00");
@@ -44,6 +41,7 @@ public class Control {
         this.pageControlPanel.setLayout(mainLayout);
     }
 
+    //close frame
     public void closeFrame(JFrame frame) {
         frame.dispose();
     }
@@ -61,10 +59,6 @@ public class Control {
         this.cartOrderID = ++Control.NEXT_ORDER_ID;
     }
 
-    public double getBill() {
-        return this.bill;
-    }
-
     public JPanel getPageControlPanel() {
         return this.pageControlPanel;
     }
@@ -73,20 +67,22 @@ public class Control {
         this.pageControlPanel.add(panel, panelName);
     }
 
+    //show PageControlPanel base on cardName
     public void showCard(String cardName) {
         mainLayout.show(this.getPageControlPanel(), cardName);
     }
 
+    //calculate the total cost of item in cart_product_list
     public double calculateTotalCost(DefaultListModel<Product> cartProductList) {
         this.totalCost = 0;
         for (int i = 0; i < cartProductList.size(); i++) {
             product = cartProductList.getElementAt(i);
             this.totalCost += product.getItemPrice();
         }
-        this.bill = totalCost;
         return Double.parseDouble(df.format(this.totalCost));
     }
 
+    //
     public JButton createButton(String buttonText) {
         JButton button = new JButton(buttonText);
         button.setPreferredSize(new Dimension(150, 50));

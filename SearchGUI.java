@@ -44,8 +44,8 @@ public class SearchGUI extends JFrame {
     private Control control;
     private CartGUI cartGUI;
 
-    public SearchGUI(CartGUI cartGUI) {
-        this.control = new Control();
+    public SearchGUI(Control control, CartGUI cartGUI) {
+        this.control = control;
         this.cartGUI = cartGUI;
         this.searchProductList = new HashMap<>();
         dbManager = new CashierDBManager();

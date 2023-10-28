@@ -13,7 +13,6 @@ import javax.swing.*;
 public class LoginGUI extends JFrame {
 
     private JTextArea logArea;
-    private JComboBox<String> nameCombo;
     private JTextField userNameField;
     private JPasswordField pwdField;
     private JButton loginButton;
@@ -49,7 +48,7 @@ public class LoginGUI extends JFrame {
         userPwdLabel = new JLabel("Password:", SwingConstants.RIGHT);
         userNameField = new JTextField();
         pwdField = new JPasswordField();
-        logArea = new JTextArea(18, 40);
+        logArea = new JTextArea(18, 38);
         loginButton = new JButton("Login");
         clearButton = new JButton("Clear");
 

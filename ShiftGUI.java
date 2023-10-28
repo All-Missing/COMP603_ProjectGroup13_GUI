@@ -2,6 +2,8 @@ package COMP603_ProjectGroup13_GUI;
 
 import COMP603_ProjectGroup13.CheckShiftID;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -13,12 +15,11 @@ import javax.swing.JTextArea;
 
 public class ShiftGUI extends JFrame {
 
-
-
     private JTextArea logArea;
     private JScrollPane scrollPanel;
     private JButton confirmButton;
     private JButton clearButton;
+    private JButton noButton;
     private JPanel shiftPanel;
     private Control control;
     private LoginGUI loginGUI;
@@ -39,11 +40,12 @@ public class ShiftGUI extends JFrame {
     }
 
     public void initComponents() {
-        logArea = new JTextArea(15, 30);
+        logArea = new JTextArea(15, 40);
         logArea.setEditable(false);
         logArea.setText("Loading Cashier Gas Station app...\nPlease wait...");
         confirmButton = control.createButton("Confirm");
         clearButton = control.createButton("Clear");
+        noButton = control.createButton("Exit");
     }
 
     public void initPanels() {
@@ -55,16 +57,17 @@ public class ShiftGUI extends JFrame {
         logPanel.add(scrollPanel);
 
         shiftPanel.add(logPanel, BorderLayout.NORTH);
-        JPanel buttonsPanel = new JPanel();
+        JPanel buttonsPanel = new JPanel(new GridLayout(1, 3));
         buttonsPanel.add(confirmButton);
         buttonsPanel.add(clearButton);
+        buttonsPanel.add(noButton);
         shiftPanel.add(buttonsPanel, BorderLayout.CENTER);
 
         //Create logPanel        
         this.add(shiftPanel, BorderLayout.CENTER);
         this.setTitle("Cashier App");
+        this.setSize(500, 370);
         this.setLocationRelativeTo(null);
-        this.setSize(400, 400);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setVisible(true);
@@ -78,11 +81,16 @@ public class ShiftGUI extends JFrame {
                     confirmButtonAction();
                 } else if (e.getSource() == clearButton) {
                     logArea.setText("");
+                } else if (e.getSource() == noButton) {
+                    JOptionPane.showMessageDialog(shiftPanel, "User don't wish to login! End Program...",
+                            "End Program", JOptionPane.INFORMATION_MESSAGE);
+                    System.exit(0);
                 }
             }
         };
         confirmButton.addActionListener(buttonAction);
         clearButton.addActionListener(buttonAction);
+        noButton.addActionListener(buttonAction);
     }
 
     public void confirmButtonAction() {
@@ -99,7 +107,7 @@ public class ShiftGUI extends JFrame {
                 isStarNewShift = true;
             } else if (option == JOptionPane.NO_OPTION) {
                 JOptionPane.showMessageDialog(shiftPanel, "User don't wish to login!",
-                        "", JOptionPane.ERROR_MESSAGE);
+                        "End Program", JOptionPane.INFORMATION_MESSAGE);
                 System.exit(0);
             }
         }

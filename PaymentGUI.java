@@ -54,23 +54,25 @@ public class PaymentGUI {
     }
 
     public void paymentProcess(String paymentType) {
-        JPanel cardPayment = new JPanel(new BorderLayout());
         double totalCost = control.calculateTotalCost(cartGUI.getCartProductList());
         int cartOrderId = control.getCartOrderID();
 
-        String inputAmount = JOptionPane.showInputDialog(cardPayment,
+        //take user input
+        String inputAmount = JOptionPane.showInputDialog(paymentPanel,
                 "Total Price: $" + totalCost + "\nPayment Method: " + paymentType + "\nEnter Payment Amount:");
-        
+
         if (inputAmount != null) {
             try {
                 double paymentAmount = Double.parseDouble(inputAmount);
+
+                //if cash return change. if card payment return 0 due to no change
+                double change = paymentAmount - totalCost;
 
                 switch (paymentType) {
                     case "Eftpos":
                         this.checkPayment(paymentAmount, cartOrderId, totalCost, 0.00);
                         break;
                     case "Cash":
-                        double change = paymentAmount - totalCost;
                         this.checkPayment(paymentAmount, cartOrderId, totalCost, change);
                         break;
                     default:
@@ -78,21 +80,21 @@ public class PaymentGUI {
                 }
             } catch (NumberFormatException e) {
                 //input is not numeric
-                JOptionPane.showMessageDialog(cardPayment, "Invalid input. Please enter a valid numeric amount.",
+                JOptionPane.showMessageDialog(paymentPanel, "Invalid input. Please enter a valid numeric amount.",
                         "Invalid Input", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             // User canceled the input dialog
-            JOptionPane.showMessageDialog(cardPayment, "Payment fail. Items remain in the cart.",
-                    "Payment fail", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(paymentPanel, "Payment cancelled. Items remain in the cart.",
+                    "Payment cancelled", JOptionPane.INFORMATION_MESSAGE);
         }
-
     }
 
     //check if payment is success or fail
     public void checkPayment(double paymentAmount, int cartOrderId, double totalCost, double change) {
 
         if (paymentAmount >= totalCost) {
+            //return success payment prompt
             JOptionPane.showMessageDialog(paymentPanel, "Payment successful! Thank you for your purchase.\n"
                     + "Change: " + df.format(change),
                     "Payment Success", JOptionPane.INFORMATION_MESSAGE);
@@ -110,35 +112,46 @@ public class PaymentGUI {
 
             if (option == JOptionPane.NO_OPTION) {
                 JOptionPane.showMessageDialog(paymentPanel, "Payment declined. Items remain in the cart.",
-                        "Payment Declined", JOptionPane.ERROR_MESSAGE);
+                        "Payment Declined", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+
+    public void cancelCart() {
+        //prompt user cart is empty
+        if (cartGUI.getCartProductList().isEmpty()) {
+            JOptionPane.showMessageDialog(paymentPanel,
+                    "Cart is empty. No item to cancelled",
+                    "Cart Empty", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            int cancelCartPrompt = JOptionPane.showConfirmDialog(paymentPanel,
+                    "Are you sure you want to cancel this purchase?",
+                    "Confirm Cancel", JOptionPane.YES_NO_OPTION);
+
+            if (cancelCartPrompt == JOptionPane.YES_OPTION) {
+                cartGUI.getCartProductList().clear();
+                cartGUI.updateCartProductList();
+                //click no mean cancel to remove item
+            } else {
+                JOptionPane.showMessageDialog(paymentPanel,
+                        "Cancel to remove item from cart. Items remain in the cart.",
+                        "Confirm Cancel", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
 
     public void saveFile(int shift_id, String username, String password) {
+        //file empty, don't require save function
         if (saveFileRecordGUI.getCashier_Record_List().isEmpty()) {
             JOptionPane.showMessageDialog(paymentPanel, "File is Empty. No records to save.",
                     "Save & Exit", JOptionPane.INFORMATION_MESSAGE);
+            //save if there is record found in cashier_record_list
         } else {
             saveCashierFileRecord.saveFileRecord(saveFileRecordGUI.getCashier_Record_List(),
                     String.valueOf(shift_id), password, username, paymentPanel);
 
-            JOptionPane.showMessageDialog(paymentPanel, "File is save. Exiting",
+            JOptionPane.showMessageDialog(paymentPanel, "File is save. Exiting...",
                     "Save & Exit", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-
-    public void cancelCart() {
-        JPanel cancelCart = new JPanel(new BorderLayout());
-
-        int cancelCartPrompt = JOptionPane.showConfirmDialog(cancelCart,
-                "Are you sure you want to cancel this purchase?",
-                "Confirm Cancel", JOptionPane.YES_NO_OPTION);
-
-        if (cancelCartPrompt == JOptionPane.YES_OPTION) {
-            cartGUI.getCartProductList().clear();
-            cartGUI.updateCartProductList();
-        }
-    }
-
 }

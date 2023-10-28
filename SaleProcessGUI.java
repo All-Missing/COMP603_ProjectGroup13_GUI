@@ -1,12 +1,12 @@
 package COMP603_ProjectGroup13_GUI;
 
 import java.awt.BorderLayout;
-import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class SaleProcessGUI extends JFrame{
+public class SaleProcessGUI extends JFrame {
 
     private Control control;
     private CartGUI cartGUI;
@@ -25,9 +25,9 @@ public class SaleProcessGUI extends JFrame{
         this.password = password;
         this.control = new Control();
         this.cartGUI = new CartGUI(control);
-        this.searchGUI = new SearchGUI(cartGUI);
         this.purchaseGUI = new PurchaseGUI(control, cartGUI);
         this.paymentGUI = new PaymentGUI(control, cartGUI);
+        this.searchGUI = new SearchGUI(control, cartGUI);
         initializeFrame();
     }
 
@@ -47,7 +47,7 @@ public class SaleProcessGUI extends JFrame{
         mainPanel.add(pageControlPanel, BorderLayout.CENTER);
 
         this.addSalePage();
-        
+
         //call cart panel
         JPanel cartPanel = cartGUI.createCartPanel();
         mainPanel.add(cartPanel, BorderLayout.EAST);
@@ -75,10 +75,23 @@ public class SaleProcessGUI extends JFrame{
                 control.showCard("Search");
                 break;
             case "Exit":
-                paymentGUI.saveFile(shift_id, username, password);
-                control.closeFrame(this);
-                exitGUI = new ExitGUI();
+                this.exitingSaleProcess();
                 break;
+        }
+    }
+
+    public void exitingSaleProcess() {
+        int confirmExit = JOptionPane.showConfirmDialog(mainPanel,
+                "Are you sure you want to exit?",
+                "Confirm exiting", JOptionPane.YES_NO_OPTION);
+
+        if (confirmExit == JOptionPane.YES_OPTION) {
+            paymentGUI.saveFile(shift_id, username, password);
+            control.closeFrame(this);
+            exitGUI = new ExitGUI();
+        } else if (confirmExit == JOptionPane.NO_OPTION) {
+            JOptionPane.showConfirmDialog(mainPanel, "Cancel Exiting. Continue purchase.",
+                    "Confirm exiting", JOptionPane.YES_NO_OPTION);
         }
     }
 

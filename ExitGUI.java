@@ -14,7 +14,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class ExitGUI extends JFrame {
 

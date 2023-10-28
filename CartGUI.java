@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.text.DecimalFormat;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -34,39 +33,19 @@ public class CartGUI {
     public JTextArea getCartTextArea() {
         return this.cartTextArea;
     }
-
-    public String cartOutputString() {
-        String currentCartID = String.valueOf(control.getCartOrderID());
-        StringBuilder cartTable = new StringBuilder();
-        cartTable.append(String.format(" CartID: %-5s\n", currentCartID));
-        cartTable.append(String.format(" %-5s\t%-35s%-10s\n", "Index", "Item", "Price"));
-
-        double totalBill = 0;
-        for (int index = 0; index < this.getCartProductList().size(); index++) {
-            Product products = this.getCartProductList().getElementAt(index);
-            String itemName = products.getItem();
-            double pricePerItem = products.getItemPrice();
-            totalBill += pricePerItem;
-
-            cartTable.append(String.format(" %-7s%-35s$%-10.2f\n", index + 1, itemName, pricePerItem));
-        }
-        cartTable.append(String.format("\n\n\n%-30s Total Bill: $" + totalBill, " "));
-
-        return cartTable.toString();
-    }
-
+    
     public void updateCartProductList() {
         String cartOutput = this.cartOutputString();
         this.cartTextArea.setText(cartOutput);
     }
-
+    
     public void addToCart(String itemId, String itemName, double itemPrice, String categories) {
         this.product = new Product(itemId, itemName, itemPrice, categories);
         this.cartProductList.addElement(product);
         System.out.println(product.getItem_id());
         this.updateCartProductList();
     }
-
+    
     public JPanel createCartPanel() {
         this.cartPanel = new JPanel(new BorderLayout());
 
@@ -85,6 +64,26 @@ public class CartGUI {
         this.cartPanel.add(cartContainerPanel, BorderLayout.EAST);
 
         return this.cartPanel;
+    }
+
+    public String cartOutputString() {
+        String currentCartID = String.valueOf(control.getCartOrderID());
+        StringBuilder cartTable = new StringBuilder();
+        cartTable.append(String.format(" CartID: %-5s\n", currentCartID));
+        cartTable.append(String.format(" %-5s\t%-35s%-10s\n", "Index", "Item", "Price"));
+
+        double totalBill = 0;
+        for (int index = 0; index < this.getCartProductList().size(); index++) {
+            Product products = this.getCartProductList().getElementAt(index);
+            String itemName = products.getItem();
+            double pricePerItem = products.getItemPrice();
+            totalBill += pricePerItem;
+
+            cartTable.append(String.format(" %-7s%-35s$%-10.2f\n", index + 1, itemName, pricePerItem));
+        }
+        cartTable.append(String.format("\n\n\n%-30s Total Bill: $" + df.format(totalBill), " "));
+
+        return cartTable.toString();
     }
 
     public JPanel removeProductFromCart() {

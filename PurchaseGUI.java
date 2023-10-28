@@ -40,7 +40,6 @@ public class PurchaseGUI {
     }
 
     public JPanel addProductsCategories() {
-        JPanel managePanel = new JPanel(new BorderLayout());
         JPanel categoriesPanel = new JPanel(new GridLayout(4, 2));
 
         productCategories.put("PI", "Pies");
@@ -68,9 +67,6 @@ public class PurchaseGUI {
             });
             categoriesPanel.add(categoryButton);
         }
-
-        managePanel.add(categoriesPanel, BorderLayout.CENTER);
-
         return categoriesPanel;
     }
 
@@ -110,5 +106,4 @@ public class PurchaseGUI {
         }
         return addProductPanel;
     }
-
 }
