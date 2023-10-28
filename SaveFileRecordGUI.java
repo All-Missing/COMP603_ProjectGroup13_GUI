@@ -2,7 +2,6 @@ package COMP603_ProjectGroup13_GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -15,8 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Utilities;
 
 public class SaveFileRecordGUI {
 
@@ -24,12 +21,10 @@ public class SaveFileRecordGUI {
     private JTextArea CashierRecordTextArea;
     private DecimalFormat df = new DecimalFormat("#0.00");
     private Control control;
-    private CartGUI cartGUI;
     private JPanel cartRecordPanel;
 
-    public SaveFileRecordGUI(CartGUI cartGUI) {
+    public SaveFileRecordGUI() {
         this.control = new Control();
-        this.cartGUI = cartGUI;
         CashierRecordTextArea = new JTextArea();
         cashier_Record_List = new HashMap<>();
     }
@@ -69,10 +64,8 @@ public class SaveFileRecordGUI {
         control.setFont(this.CashierRecordTextArea);
         this.CashierRecordTextArea.setEditable(false);
 
-        JButton refundButton = this.getRefundOrder();
         this.CashierRecordTextArea.setPreferredSize(new Dimension(400, 380));
         cartRecordPanel.add(new JScrollPane(CashierRecordTextArea), BorderLayout.CENTER);
-        cartRecordPanel.add(refundButton, BorderLayout.SOUTH);
 
         CashierRecordTextArea.addMouseListener(new MouseAdapter() {
             @Override

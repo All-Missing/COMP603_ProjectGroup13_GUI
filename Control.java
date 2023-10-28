@@ -1,9 +1,7 @@
 package COMP603_ProjectGroup13_GUI;
 
 import COMP603_ProjectGroup13.Product;
-import COMP603_ProjectGroup13.Cashier;
 import COMP603_ProjectGroup13.CheckOrderID;
-import COMP603_ProjectGroup13.ProductList;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -46,25 +44,25 @@ public class Control {
         this.pageControlPanel.setLayout(mainLayout);
     }
 
+    public void closeFrame(JFrame frame) {
+        frame.dispose();
+    }
+    
+    public void setFont(JTextArea textArea) {
+        font = new Font(Font.MONOSPACED, Font.PLAIN, 12);
+        textArea.setFont(font);
+    }
+    
+    public int getCartOrderID() {
+        return this.cartOrderID;
+    }
+    
     public void incrementedCartOrderId() {
         this.cartOrderID = ++Control.NEXT_ORDER_ID;
     }
 
-    public void setCartOrderID(int cartOrderID) {
-        this.cartOrderID = cartOrderID;
-    }
-
     public double getBill() {
         return this.bill;
-    }
-
-    public int getCartOrderID() {
-        return this.cartOrderID;
-    }
-
-    public void setFont(JTextArea textArea) {
-        font = new Font(Font.MONOSPACED, Font.PLAIN, 12);
-        textArea.setFont(font);
     }
 
     public JPanel getPageControlPanel() {
@@ -85,29 +83,14 @@ public class Control {
             product = cartProductList.getElementAt(i);
             this.totalCost += product.getItemPrice();
         }
-        this.bill = Double.parseDouble(df.format(totalCost));
-        return this.totalCost;
-    }
-
-    public String extractLineValue(String line, int lineAtIndex) {
-        String[] lineParts = line.split(" ");
-        return lineParts[lineAtIndex];
-    }
-
-    public String extractLineDetails(int getLine, JTextArea textArea) throws BadLocationException {
-        int lineStartOffset = Utilities.getRowStart(textArea, getLine);
-        int lineEndOffset = Utilities.getRowEnd(textArea, getLine);
-        return textArea.getText(lineStartOffset, lineEndOffset - lineStartOffset);
+        this.bill = totalCost;
+        return Double.parseDouble(df.format(this.totalCost));
     }
 
     public JButton createButton(String buttonText) {
         JButton button = new JButton(buttonText);
         button.setPreferredSize(new Dimension(150, 50));
         return button;
-    }
-
-    public void closeFrame(JFrame frame) {
-        frame.dispose();
     }
 
     public void clearButton(JButton clearButton, JTextArea logArea) {
@@ -131,6 +114,17 @@ public class Control {
         return returnPanel;
     }
 
+    public String extractLineValue(String line, int lineAtIndex) {
+        String[] lineParts = line.split(" ");
+        return lineParts[lineAtIndex];
+    }
+
+    public String extractLineDetails(int getLine, JTextArea textArea) throws BadLocationException {
+        int lineStartOffset = Utilities.getRowStart(textArea, getLine);
+        int lineEndOffset = Utilities.getRowEnd(textArea, getLine);
+        return textArea.getText(lineStartOffset, lineEndOffset - lineStartOffset);
+    }
+    
     public void removeElementIndex(JTextArea textArea, int indexAdjust, JPanel panel, DefaultListModel<Product> list) {
         textArea.addMouseListener(new MouseAdapter() {
             @Override
@@ -173,59 +167,5 @@ public class Control {
                         "Cart Cleared", JOptionPane.INFORMATION_MESSAGE);
             }
         }
-    }
-
-    public void RefundOrder(JTextArea textArea, JPanel panel, Map<String, Map<String, DefaultListModel<Product>>> listAdd, Map<String, DefaultListModel<Product>> listRemove) {
-        textArea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
-                    int getLine = textArea.viewToModel2D(e.getPoint());
-                    try {
-                        String lineToRemove = String.valueOf(textArea.getLineOfOffset(getLine));
-
-                        int start = Utilities.getRowStart(textArea, getLine);
-                        int end = Utilities.getRowEnd(textArea, getLine);
-                        String lineText = textArea.getText(start, end - start).trim();
-
-                        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("Cart ID: (\\d+)");
-                        java.util.regex.Matcher matcher = pattern.matcher(lineText);
-
-                        if (matcher.find()) {
-                            int cartId = Integer.parseInt(matcher.group(1));
-
-                            System.out.println("Cart ID: " + cartId);
-                            Map<String, DefaultListModel<Product>> dataStoreToMove = new HashMap<>();
-
-                            for (Map.Entry<String, DefaultListModel<Product>> entry : listRemove.entrySet()) {
-                                String cardOrderID = entry.getKey();
-                                DefaultListModel<Product> product = entry.getValue();
-                                if (cardOrderID.trim().equalsIgnoreCase(String.valueOf(cartId))) {
-                                    dataStoreToMove.put(cardOrderID, product);
-                                }
-                            }
-
-                            for (Map.Entry<String, DefaultListModel<Product>> entry : dataStoreToMove.entrySet()) {
-                                String cardorderID = entry.getKey();
-                                DefaultListModel<Product> products = entry.getValue();
-                                if (cardorderID.trim().equalsIgnoreCase(String.valueOf(cartId))) {
-
-                                    Map<String, DefaultListModel<Product>> addMap = listAdd.get(String.valueOf(cartId));
-                                    listAdd.put(cardorderID, addMap);
-                                }
-                            }
-
-                            listRemove.remove(String.valueOf(cartId));
-                        }
-                    } catch (Exception ex) {
-                        System.out.println(ex);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(panel, "Please select item and click refund button.\n"
-                            + "Don't click repeatedly.",
-                            "Delete Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
     }
 }

@@ -15,8 +15,7 @@ import javax.swing.JTextArea;
 
 public class ShiftGUI extends JFrame {
 
-    private static final int ROW_AREA = 20;
-    private static final int COLUMN_AREA = 30;
+
 
     private JTextArea logArea;
     private JScrollPane scrollPanel;
@@ -42,8 +41,9 @@ public class ShiftGUI extends JFrame {
     }
 
     public void initComponents() {
-        logArea = new JTextArea(ROW_AREA, COLUMN_AREA);
-        logArea.setText("Loading Cashier Gas Station app ... please wait ...!!!\n");
+        logArea = new JTextArea(15, 30);
+        logArea.setEditable(false);
+        logArea.setText("Loading Cashier Gas Station app...\nPlease wait...");
         confirmButton = control.createButton("Confirm");
         clearButton = control.createButton("Clear");
     }
@@ -55,7 +55,6 @@ public class ShiftGUI extends JFrame {
         JPanel logPanel = new JPanel();
         scrollPanel = new JScrollPane(logArea);
         logPanel.add(scrollPanel);
-        logPanel.setPreferredSize(new Dimension(250, 250));
 
         shiftPanel.add(logPanel, BorderLayout.NORTH);
         JPanel buttonsPanel = new JPanel();

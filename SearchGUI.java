@@ -31,7 +31,6 @@ public class SearchGUI extends JFrame {
     private final CashierDBManager dbManager;
     private final Connection conn;
     private Statement statement;
-    private Product product;
     private List<Product> productListDB;
     private RetrieveCashierDB retrieveDB;
     private JTextArea searchTextArea;
@@ -45,8 +44,8 @@ public class SearchGUI extends JFrame {
     private Control control;
     private CartGUI cartGUI;
 
-    public SearchGUI(Control control, CartGUI cartGUI) {
-        this.control = control;
+    public SearchGUI(CartGUI cartGUI) {
+        this.control = new Control();
         this.cartGUI = cartGUI;
         this.searchProductList = new HashMap<>();
         dbManager = new CashierDBManager();
@@ -133,7 +132,7 @@ public class SearchGUI extends JFrame {
                         for (Product product : productListDB) {
                             String item_id = product.getItem_id();
                             if (orderIDArea.equals(item_id)) {
-                                confirmAddItem();
+                                confirmAddItem(product.getItem_id(), product.getItem(), product.getItemPrice(), product.getCategory());
                             }
                         }
                     } catch (Exception ex) {
@@ -152,12 +151,12 @@ public class SearchGUI extends JFrame {
         returnButton.addActionListener(buttonAction);
     }
 
-    public void confirmAddItem() {
+    public void confirmAddItem(String Item_id, String Item, double ItemPrice, String Category) {
         int option = JOptionPane.showConfirmDialog(searchPanel, "Do you wish to add this product to cart",
                 "Confirm adding this product", JOptionPane.YES_NO_OPTION);
         //Check if confirm yes
         if (option == JOptionPane.YES_OPTION) {
-            cartGUI.addToCart(product.getItem_id(), product.getItem(), product.getItemPrice(), product.getCategory());
+            cartGUI.addToCart(Item_id, Item, ItemPrice, Category);
         }
         if (option == JOptionPane.NO_OPTION) {
             JOptionPane.showMessageDialog(searchPanel, "Cancel selecting this product",

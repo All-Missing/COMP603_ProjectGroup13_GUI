@@ -1,9 +1,5 @@
 package COMP603_ProjectGroup13_GUI;
 
-import COMP603_ProjectGroup13.SaleProcess;
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -11,23 +7,17 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 
 public class SaveCashierFileRecord {
 
-    private final HashMap<String, Double> cashier_Record;
     private SaveFileRecordGUI saveRecordGUI;
     private Control control;
     private CartGUI cartGUI;
     private DecimalFormat df = new DecimalFormat("#0.00");
 
     public SaveCashierFileRecord() {
-        this.saveRecordGUI = new SaveFileRecordGUI(cartGUI);
-        this.cashier_Record = saveRecordGUI.getCashier_Record_List();
-
     }
 
     public void saveFileRecord(HashMap<String, Double> cashier_records, String shift_id, String staff_id, String staff_name, JPanel panel) {
@@ -55,6 +45,8 @@ public class SaveCashierFileRecord {
             //Test if cashier_record is empty
             if (cashier_records.isEmpty()) {
                 System.out.println("Cashier_record is empty!");
+                JOptionPane.showMessageDialog(panel, "Cashier is empty. No file record found.",
+                    "Cashier record empty", JOptionPane.ERROR_MESSAGE);
             } else {
                 for (Map.Entry<String, Double> entry : cashier_records.entrySet()) {
                     String current_order_id = entry.getKey();

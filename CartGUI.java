@@ -22,7 +22,7 @@ public class CartGUI {
     private DefaultListModel<Product> cartProductList;
 
     public CartGUI(Control control) {
-        this.control = control;
+        this.control = new Control();
         this.cartTextArea = new JTextArea();
         this.cartProductList = new DefaultListModel<>();
     }

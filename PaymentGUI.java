@@ -1,7 +1,6 @@
 package COMP603_ProjectGroup13_GUI;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.text.DecimalFormat;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -19,7 +18,7 @@ public class PaymentGUI {
     public PaymentGUI(Control control, CartGUI cartGUI) {
         this.control = control;
         this.cartGUI = cartGUI;
-        this.saveFileRecordGUI = new SaveFileRecordGUI(cartGUI);
+        this.saveFileRecordGUI = new SaveFileRecordGUI();
         this.saveCashierFileRecord = new SaveCashierFileRecord();
     }
 
@@ -61,9 +60,10 @@ public class PaymentGUI {
 
         String inputAmount = JOptionPane.showInputDialog(cardPayment,
                 "Total Price: $" + totalCost + "\nPayment Method: " + paymentType + "\nEnter Payment Amount:");
-        try {
-            double paymentAmount = Double.parseDouble(inputAmount);
-            if (inputAmount != null) {
+        
+        if (inputAmount != null) {
+            try {
+                double paymentAmount = Double.parseDouble(inputAmount);
 
                 switch (paymentType) {
                     case "Eftpos":
@@ -76,16 +76,17 @@ public class PaymentGUI {
                     default:
                         break;
                 }
-            } else {
-                // User canceled the input dialog
-                JOptionPane.showMessageDialog(cardPayment, "Payment fail. Items remain in the cart.",
-                        "Payment fail", JOptionPane.WARNING_MESSAGE);
+            } catch (NumberFormatException e) {
+                //input is not numeric
+                JOptionPane.showMessageDialog(cardPayment, "Invalid input. Please enter a valid numeric amount.",
+                        "Invalid Input", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (NumberFormatException e) {
-            //input is not numeric
-            JOptionPane.showMessageDialog(cardPayment, "Invalid input. Please enter a valid numeric amount.",
-                    "Invalid Input", JOptionPane.ERROR_MESSAGE);
+        } else {
+            // User canceled the input dialog
+            JOptionPane.showMessageDialog(cardPayment, "Payment fail. Items remain in the cart.",
+                    "Payment fail", JOptionPane.WARNING_MESSAGE);
         }
+
     }
 
     //check if payment is success or fail

@@ -2,14 +2,9 @@ package COMP603_ProjectGroup13_GUI;
 
 import java.awt.BorderLayout;
 import java.util.HashMap;
-import java.util.Map;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 public class SaleProcessGUI extends JFrame{
 
@@ -17,14 +12,12 @@ public class SaleProcessGUI extends JFrame{
     private CartGUI cartGUI;
     private PurchaseGUI purchaseGUI;
     private PaymentGUI paymentGUI;
-//    private JFrame frame;
     private JPanel mainPanel;
     private SearchGUI searchGUI;
     private ExitGUI exitGUI;
     private int shift_id;
     private String username;
     private String password;
-    private HashMap<String, Double> cashier_records;
 
     public SaleProcessGUI(int shift_id, String username, String password) {
         this.shift_id = shift_id;
@@ -32,7 +25,7 @@ public class SaleProcessGUI extends JFrame{
         this.password = password;
         this.control = new Control();
         this.cartGUI = new CartGUI(control);
-        this.searchGUI = new SearchGUI(control, cartGUI);
+        this.searchGUI = new SearchGUI(cartGUI);
         this.purchaseGUI = new PurchaseGUI(control, cartGUI);
         this.paymentGUI = new PaymentGUI(control, cartGUI);
         initializeFrame();
@@ -43,13 +36,8 @@ public class SaleProcessGUI extends JFrame{
         this.setSize(900, 600);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         createMainPanel();
         this.setVisible(true);
-    }
-
-    public HashMap<String, Double> getCashier_Records() {
-        return this.cashier_records;
     }
 
     public JPanel createMainPanel() {
@@ -59,7 +47,8 @@ public class SaleProcessGUI extends JFrame{
         mainPanel.add(pageControlPanel, BorderLayout.CENTER);
 
         this.addSalePage();
-
+        
+        //call cart panel
         JPanel cartPanel = cartGUI.createCartPanel();
         mainPanel.add(cartPanel, BorderLayout.EAST);
 
@@ -88,7 +77,7 @@ public class SaleProcessGUI extends JFrame{
             case "Exit":
                 paymentGUI.saveFile(shift_id, username, password);
                 control.closeFrame(this);
-                exitGUI = new ExitGUI(control);
+                exitGUI = new ExitGUI();
                 break;
         }
     }

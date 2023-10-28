@@ -1,19 +1,13 @@
 package COMP603_ProjectGroup13_GUI;
 
-import COMP603_ProjectGroup13.Product;
 import COMP603_ProjectGroup13.ProductList;
-import COMP603_ProjectGroup13_DB.RetrieveCashierDB;
 import COMP603_ProjectGroup13.Product;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -22,12 +16,9 @@ public class PurchaseGUI {
 
     private Map<String, String> productCategories;
     private ProductList productList;
-    private RetrieveCashierDB retrieveDB;
-    private List<Product> productListDB;
     private HashMap<String, Product> product_records;
     private Control control;
     private CartGUI cartGUI;
-    private SearchGUI searchGUI;
 
     public PurchaseGUI(Control control, CartGUI cartGUI) {
         this.control = control;
@@ -35,9 +26,6 @@ public class PurchaseGUI {
         this.productCategories = new HashMap<>();
         this.productList = new ProductList();
         this.product_records = productList.getProduct_records();
-        this.retrieveDB = new RetrieveCashierDB();
-        this.productListDB = new ArrayList<>();
-
     }
 
     public JPanel createPurchasePanel() {
@@ -71,8 +59,6 @@ public class PurchaseGUI {
             JButton categoryButton = control.createButton(categoryName);
             categoryButton.addActionListener((ActionEvent e) -> {
                 try {
-                    System.out.println("Categories button is clicked");
-                    System.out.println(categoryId);
                     JPanel productPanel = this.addProductPanel(categoryId);
                     control.addPagePanel(productPanel, "Product");
                     control.showCard("Product");
@@ -89,20 +75,20 @@ public class PurchaseGUI {
     }
 
     public JPanel addProductPanel(String categoryId) {
-        JPanel productPanel = new JPanel(new GridLayout(0, 2));
+        JPanel productPanel = new JPanel(new BorderLayout());
 
-        this.createProductButton(productPanel, categoryId);
+        JPanel addProductPanel = this.createProductButton(categoryId);
 
         JPanel returnPanel = control.returnButton(); // Invoke the returnButton method
 
-        JPanel productContainerPanel = new JPanel();
-        productContainerPanel.add(productPanel, BorderLayout.CENTER);
-        productContainerPanel.add(returnPanel, BorderLayout.SOUTH);
+        productPanel.add(addProductPanel, BorderLayout.CENTER);
+        productPanel.add(returnPanel, BorderLayout.SOUTH);
 
-        return productContainerPanel;
+        return productPanel;
     }
 
-    public void createProductButton(JPanel panel, String categoryId) {
+    public JPanel createProductButton(String categoryId) {
+        JPanel addProductPanel = new JPanel(new GridLayout(0, 2));
         for (Product products : product_records.values()) {
             if (products.getItem_id().contains(categoryId)) {
                 String itemName = products.getItem();
@@ -114,14 +100,15 @@ public class PurchaseGUI {
                             cartGUI.addToCart(products.getItem_id(), products.getItem(),
                                     products.getItemPrice(), products.getCategory());
                         } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(panel, "No product found from this categories.",
+                            JOptionPane.showMessageDialog(addProductPanel, "No product found from this categories.",
                                     "No Product Found", JOptionPane.ERROR_MESSAGE);
                         }
                     });
                 });
-                panel.add(productButton);
+                addProductPanel.add(productButton);
             }
         }
+        return addProductPanel;
     }
 
 }

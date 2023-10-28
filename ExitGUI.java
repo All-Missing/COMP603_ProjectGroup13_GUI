@@ -28,9 +28,10 @@ public class ExitGUI extends JFrame {
     private JTextArea logArea;
     private JPanel exitPanel;
     private int shift_id;
+    private ShiftGUI shiftGUI;
 
-    public ExitGUI(Control control) {
-        this.control = control;
+    public ExitGUI() {
+        this.control = new Control();
         JPanel createExitPanel = creatExitPanel();
         this.add(createExitPanel);
     }
@@ -131,7 +132,7 @@ public class ExitGUI extends JFrame {
                         "Confirm log out", JOptionPane.INFORMATION_MESSAGE);
 
                 closeFrame();
-                ShiftGUI shiftGUI = new ShiftGUI();
+                shiftGUI = new ShiftGUI();
 
                 break;
             }
@@ -142,8 +143,7 @@ public class ExitGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        Control control = new Control();
-        ExitGUI exitGUI = new ExitGUI(control);
+        ExitGUI exitGUI = new ExitGUI();
 
     }
 }
